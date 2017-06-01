@@ -1,0 +1,467 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		9B00F3039823FEA3769E8A94 /* libPods-NIPlayer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D93917337B905F823F762552 /* libPods-NIPlayer.a */; };
+		B8F1B5BC1EE07470004A1E26 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B8F1B5BB1EE07470004A1E26 /* main.m */; };
+		B8F1B5BF1EE07470004A1E26 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B8F1B5BE1EE07470004A1E26 /* AppDelegate.m */; };
+		B8F1B5C21EE07470004A1E26 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B8F1B5C11EE07470004A1E26 /* ViewController.m */; };
+		B8F1B5C51EE07470004A1E26 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B8F1B5C31EE07470004A1E26 /* Main.storyboard */; };
+		B8F1B5C71EE07470004A1E26 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B8F1B5C61EE07470004A1E26 /* Assets.xcassets */; };
+		B8F1B5CA1EE07470004A1E26 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B8F1B5C81EE07470004A1E26 /* LaunchScreen.storyboard */; };
+		B8F1B5E61EE074B8004A1E26 /* NIAVPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = B8F1B5D31EE074B8004A1E26 /* NIAVPlayer.m */; };
+		B8F1B5E71EE074B8004A1E26 /* NIPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = B8F1B5D51EE074B8004A1E26 /* NIPlayer.m */; };
+		B8F1B5E81EE074B8004A1E26 /* NIPlayerControl.m in Sources */ = {isa = PBXBuildFile; fileRef = B8F1B5D71EE074B8004A1E26 /* NIPlayerControl.m */; };
+		B8F1B5E91EE074B8004A1E26 /* NIPlayerSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = B8F1B5D91EE074B8004A1E26 /* NIPlayerSlider.m */; };
+		B8F1B5EA1EE074B8004A1E26 /* VideoPlayController.m in Sources */ = {isa = PBXBuildFile; fileRef = B8F1B5DC1EE074B8004A1E26 /* VideoPlayController.m */; };
+		B8F1B5EB1EE074B8004A1E26 /* VideoPlayer.bundle in Resources */ = {isa = PBXBuildFile; fileRef = B8F1B5DD1EE074B8004A1E26 /* VideoPlayer.bundle */; };
+		B8F1B5EC1EE074B8004A1E26 /* VideoPlaySlider.m in Sources */ = {isa = PBXBuildFile; fileRef = B8F1B5DF1EE074B8004A1E26 /* VideoPlaySlider.m */; };
+		B8F1B5ED1EE074B8004A1E26 /* ZNBrightnessView.m in Sources */ = {isa = PBXBuildFile; fileRef = B8F1B5E11EE074B8004A1E26 /* ZNBrightnessView.m */; };
+		B8F1B5EE1EE074B8004A1E26 /* ZNPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = B8F1B5E31EE074B8004A1E26 /* ZNPlayer.m */; };
+		B8F1B5EF1EE074B8004A1E26 /* ZNVideoPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = B8F1B5E51EE074B8004A1E26 /* ZNVideoPlayer.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		5A34C09D930CEECE98A98447 /* Pods-NIPlayer.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NIPlayer.release.xcconfig"; path = "Pods/Target Support Files/Pods-NIPlayer/Pods-NIPlayer.release.xcconfig"; sourceTree = "<group>"; };
+		B8F1B5B71EE07470004A1E26 /* NIPlayer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NIPlayer.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		B8F1B5BB1EE07470004A1E26 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		B8F1B5BD1EE07470004A1E26 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		B8F1B5BE1EE07470004A1E26 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		B8F1B5C01EE07470004A1E26 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		B8F1B5C11EE07470004A1E26 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		B8F1B5C41EE07470004A1E26 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		B8F1B5C61EE07470004A1E26 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		B8F1B5C91EE07470004A1E26 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		B8F1B5CB1EE07470004A1E26 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B8F1B5D21EE074B8004A1E26 /* NIAVPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIAVPlayer.h; sourceTree = "<group>"; };
+		B8F1B5D31EE074B8004A1E26 /* NIAVPlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIAVPlayer.m; sourceTree = "<group>"; };
+		B8F1B5D41EE074B8004A1E26 /* NIPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIPlayer.h; sourceTree = "<group>"; };
+		B8F1B5D51EE074B8004A1E26 /* NIPlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIPlayer.m; sourceTree = "<group>"; };
+		B8F1B5D61EE074B8004A1E26 /* NIPlayerControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIPlayerControl.h; sourceTree = "<group>"; };
+		B8F1B5D71EE074B8004A1E26 /* NIPlayerControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIPlayerControl.m; sourceTree = "<group>"; };
+		B8F1B5D81EE074B8004A1E26 /* NIPlayerSlider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIPlayerSlider.h; sourceTree = "<group>"; };
+		B8F1B5D91EE074B8004A1E26 /* NIPlayerSlider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIPlayerSlider.m; sourceTree = "<group>"; };
+		B8F1B5DB1EE074B8004A1E26 /* VideoPlayController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoPlayController.h; sourceTree = "<group>"; };
+		B8F1B5DC1EE074B8004A1E26 /* VideoPlayController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoPlayController.m; sourceTree = "<group>"; };
+		B8F1B5DD1EE074B8004A1E26 /* VideoPlayer.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = VideoPlayer.bundle; sourceTree = "<group>"; };
+		B8F1B5DE1EE074B8004A1E26 /* VideoPlaySlider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoPlaySlider.h; sourceTree = "<group>"; };
+		B8F1B5DF1EE074B8004A1E26 /* VideoPlaySlider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoPlaySlider.m; sourceTree = "<group>"; };
+		B8F1B5E01EE074B8004A1E26 /* ZNBrightnessView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZNBrightnessView.h; sourceTree = "<group>"; };
+		B8F1B5E11EE074B8004A1E26 /* ZNBrightnessView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZNBrightnessView.m; sourceTree = "<group>"; };
+		B8F1B5E21EE074B8004A1E26 /* ZNPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZNPlayer.h; sourceTree = "<group>"; };
+		B8F1B5E31EE074B8004A1E26 /* ZNPlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZNPlayer.m; sourceTree = "<group>"; };
+		B8F1B5E41EE074B8004A1E26 /* ZNVideoPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZNVideoPlayer.h; sourceTree = "<group>"; };
+		B8F1B5E51EE074B8004A1E26 /* ZNVideoPlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZNVideoPlayer.m; sourceTree = "<group>"; };
+		D01EA5CA1EF3575BAAF9CE72 /* Pods-NIPlayer.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NIPlayer.debug.xcconfig"; path = "Pods/Target Support Files/Pods-NIPlayer/Pods-NIPlayer.debug.xcconfig"; sourceTree = "<group>"; };
+		D93917337B905F823F762552 /* libPods-NIPlayer.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-NIPlayer.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		B8F1B5B41EE07470004A1E26 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9B00F3039823FEA3769E8A94 /* libPods-NIPlayer.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		569B9C15D18F7C8F78326E5C /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				D93917337B905F823F762552 /* libPods-NIPlayer.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		B8F1B5AE1EE07470004A1E26 = {
+			isa = PBXGroup;
+			children = (
+				B8F1B5B91EE07470004A1E26 /* NIPlayer */,
+				B8F1B5B81EE07470004A1E26 /* Products */,
+				FE426067A8F38E45000AC022 /* Pods */,
+				569B9C15D18F7C8F78326E5C /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		B8F1B5B81EE07470004A1E26 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				B8F1B5B71EE07470004A1E26 /* NIPlayer.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		B8F1B5B91EE07470004A1E26 /* NIPlayer */ = {
+			isa = PBXGroup;
+			children = (
+				B8F1B5D11EE074B8004A1E26 /* NIPlayer */,
+				B8F1B5DA1EE074B8004A1E26 /* znplayer */,
+				B8F1B5BD1EE07470004A1E26 /* AppDelegate.h */,
+				B8F1B5BE1EE07470004A1E26 /* AppDelegate.m */,
+				B8F1B5C01EE07470004A1E26 /* ViewController.h */,
+				B8F1B5C11EE07470004A1E26 /* ViewController.m */,
+				B8F1B5C31EE07470004A1E26 /* Main.storyboard */,
+				B8F1B5C61EE07470004A1E26 /* Assets.xcassets */,
+				B8F1B5C81EE07470004A1E26 /* LaunchScreen.storyboard */,
+				B8F1B5CB1EE07470004A1E26 /* Info.plist */,
+				B8F1B5BA1EE07470004A1E26 /* Supporting Files */,
+			);
+			path = NIPlayer;
+			sourceTree = "<group>";
+		};
+		B8F1B5BA1EE07470004A1E26 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				B8F1B5BB1EE07470004A1E26 /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		B8F1B5D11EE074B8004A1E26 /* NIPlayer */ = {
+			isa = PBXGroup;
+			children = (
+				B8F1B5D21EE074B8004A1E26 /* NIAVPlayer.h */,
+				B8F1B5D31EE074B8004A1E26 /* NIAVPlayer.m */,
+				B8F1B5D41EE074B8004A1E26 /* NIPlayer.h */,
+				B8F1B5D51EE074B8004A1E26 /* NIPlayer.m */,
+				B8F1B5D61EE074B8004A1E26 /* NIPlayerControl.h */,
+				B8F1B5D71EE074B8004A1E26 /* NIPlayerControl.m */,
+				B8F1B5D81EE074B8004A1E26 /* NIPlayerSlider.h */,
+				B8F1B5D91EE074B8004A1E26 /* NIPlayerSlider.m */,
+			);
+			path = NIPlayer;
+			sourceTree = "<group>";
+		};
+		B8F1B5DA1EE074B8004A1E26 /* znplayer */ = {
+			isa = PBXGroup;
+			children = (
+				B8F1B5DB1EE074B8004A1E26 /* VideoPlayController.h */,
+				B8F1B5DC1EE074B8004A1E26 /* VideoPlayController.m */,
+				B8F1B5DD1EE074B8004A1E26 /* VideoPlayer.bundle */,
+				B8F1B5DE1EE074B8004A1E26 /* VideoPlaySlider.h */,
+				B8F1B5DF1EE074B8004A1E26 /* VideoPlaySlider.m */,
+				B8F1B5E01EE074B8004A1E26 /* ZNBrightnessView.h */,
+				B8F1B5E11EE074B8004A1E26 /* ZNBrightnessView.m */,
+				B8F1B5E21EE074B8004A1E26 /* ZNPlayer.h */,
+				B8F1B5E31EE074B8004A1E26 /* ZNPlayer.m */,
+				B8F1B5E41EE074B8004A1E26 /* ZNVideoPlayer.h */,
+				B8F1B5E51EE074B8004A1E26 /* ZNVideoPlayer.m */,
+			);
+			path = znplayer;
+			sourceTree = "<group>";
+		};
+		FE426067A8F38E45000AC022 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				D01EA5CA1EF3575BAAF9CE72 /* Pods-NIPlayer.debug.xcconfig */,
+				5A34C09D930CEECE98A98447 /* Pods-NIPlayer.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		B8F1B5B61EE07470004A1E26 /* NIPlayer */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B8F1B5CE1EE07470004A1E26 /* Build configuration list for PBXNativeTarget "NIPlayer" */;
+			buildPhases = (
+				B4DBF5E8FE8B232486CF0617 /* [CP] Check Pods Manifest.lock */,
+				B8F1B5B31EE07470004A1E26 /* Sources */,
+				B8F1B5B41EE07470004A1E26 /* Frameworks */,
+				B8F1B5B51EE07470004A1E26 /* Resources */,
+				46D7B045A793F98EB43BA8BB /* [CP] Embed Pods Frameworks */,
+				D2083944596416F271CEF7CD /* [CP] Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = NIPlayer;
+			productName = NIPlayer;
+			productReference = B8F1B5B71EE07470004A1E26 /* NIPlayer.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		B8F1B5AF1EE07470004A1E26 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0830;
+				ORGANIZATIONNAME = zhouen;
+				TargetAttributes = {
+					B8F1B5B61EE07470004A1E26 = {
+						CreatedOnToolsVersion = 8.3.2;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = B8F1B5B21EE07470004A1E26 /* Build configuration list for PBXProject "NIPlayer" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = B8F1B5AE1EE07470004A1E26;
+			productRefGroup = B8F1B5B81EE07470004A1E26 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				B8F1B5B61EE07470004A1E26 /* NIPlayer */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		B8F1B5B51EE07470004A1E26 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B8F1B5CA1EE07470004A1E26 /* LaunchScreen.storyboard in Resources */,
+				B8F1B5C71EE07470004A1E26 /* Assets.xcassets in Resources */,
+				B8F1B5EB1EE074B8004A1E26 /* VideoPlayer.bundle in Resources */,
+				B8F1B5C51EE07470004A1E26 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		46D7B045A793F98EB43BA8BB /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-NIPlayer/Pods-NIPlayer-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		B4DBF5E8FE8B232486CF0617 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		D2083944596416F271CEF7CD /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-NIPlayer/Pods-NIPlayer-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		B8F1B5B31EE07470004A1E26 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B8F1B5C21EE07470004A1E26 /* ViewController.m in Sources */,
+				B8F1B5EA1EE074B8004A1E26 /* VideoPlayController.m in Sources */,
+				B8F1B5BF1EE07470004A1E26 /* AppDelegate.m in Sources */,
+				B8F1B5E61EE074B8004A1E26 /* NIAVPlayer.m in Sources */,
+				B8F1B5BC1EE07470004A1E26 /* main.m in Sources */,
+				B8F1B5E71EE074B8004A1E26 /* NIPlayer.m in Sources */,
+				B8F1B5EF1EE074B8004A1E26 /* ZNVideoPlayer.m in Sources */,
+				B8F1B5E81EE074B8004A1E26 /* NIPlayerControl.m in Sources */,
+				B8F1B5E91EE074B8004A1E26 /* NIPlayerSlider.m in Sources */,
+				B8F1B5EC1EE074B8004A1E26 /* VideoPlaySlider.m in Sources */,
+				B8F1B5ED1EE074B8004A1E26 /* ZNBrightnessView.m in Sources */,
+				B8F1B5EE1EE074B8004A1E26 /* ZNPlayer.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		B8F1B5C31EE07470004A1E26 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				B8F1B5C41EE07470004A1E26 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		B8F1B5C81EE07470004A1E26 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				B8F1B5C91EE07470004A1E26 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		B8F1B5CC1EE07470004A1E26 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		B8F1B5CD1EE07470004A1E26 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		B8F1B5CF1EE07470004A1E26 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = D01EA5CA1EF3575BAAF9CE72 /* Pods-NIPlayer.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = NIPlayer/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = org.zn.niplayer.NIPlayer;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		B8F1B5D01EE07470004A1E26 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5A34C09D930CEECE98A98447 /* Pods-NIPlayer.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = NIPlayer/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = org.zn.niplayer.NIPlayer;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		B8F1B5B21EE07470004A1E26 /* Build configuration list for PBXProject "NIPlayer" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B8F1B5CC1EE07470004A1E26 /* Debug */,
+				B8F1B5CD1EE07470004A1E26 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B8F1B5CE1EE07470004A1E26 /* Build configuration list for PBXNativeTarget "NIPlayer" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B8F1B5CF1EE07470004A1E26 /* Debug */,
+				B8F1B5D01EE07470004A1E26 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = B8F1B5AF1EE07470004A1E26 /* Project object */;
+}
