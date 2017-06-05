@@ -220,10 +220,10 @@
     //快进
     self.progressSlider = [[NIPlayerSlider alloc]init];
     [_progressSlider setThumbImage:BUNDLE_IMAGE(@"fullplayer_progress_point") forState:UIControlStateNormal];
-//    _progressSlider.minimumTrackTintColor = [UIColor ];
-    _progressSlider.maximumTrackTintColor = [UIColor greenColor];
-    _progressSlider.cacheTrackTintColor = [UIColor yellowColor];
-//    [_progressSlider addTarget:self action:@selector(playProgressChange:) forControlEvents:UIControlEventValueChanged];
+    _progressSlider.minimumTrackTintColor = HEX_COLOR(0xF1B795);
+    _progressSlider.maximumTrackTintColor = [UIColor blackColor];
+    _progressSlider.cacheTrackTintColor = [UIColor lightGrayColor];
+    [_progressSlider addTarget:self action:@selector(playProgressChange:) forControlEvents:UIControlEventValueChanged];
     _progressSlider.value = 0.2;
     [self.bottomBar addSubview:_progressSlider];
     [self.progressSlider mas_makeConstraints:^(MASConstraintMaker *make) {
