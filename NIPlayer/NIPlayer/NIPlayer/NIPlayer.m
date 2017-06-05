@@ -12,6 +12,7 @@
 #import "NIPlayerControl.h"
 
 @interface NIPlayer ()<NIPlayerControlDelegate>
+@property (nonatomic, assign) BOOL isFullScreen;
 @property (nonatomic, strong) NIAVPlayer *avPlayer;
 @property (nonatomic, strong) NIPlayerControl *playerControl;
 
@@ -36,6 +37,9 @@
 
 //////////////////////////////////////////////////////////////////////////////
 #pragma mark ------ Protocol
+- (void)playerControl:(UIView *)control backAction:(UIButton *)sender {
+    [self fullScreen:nil];
+}
 - (void)playerControl:(UIView *)control fullScreenAction:(UIButton *)sender {
     [self fullScreen:sender];
 }
@@ -117,11 +121,11 @@
     UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
     if (orientation == UIInterfaceOrientationLandscapeRight ||
         orientation ==UIInterfaceOrientationLandscapeLeft) {
-//        self.isFullScreen = YES;
-        self.playerControl.fullScreenButton.selected = YES;
+        self.isFullScreen = YES;
+        self.playerControl.isFullScreen = _isFullScreen;
     } else {
-//        self.isFullScreen = NO;
-        self.playerControl.fullScreenButton.selected = NO;
+        self.isFullScreen = NO;
+        self.playerControl.isFullScreen = _isFullScreen;
     }
     
 }

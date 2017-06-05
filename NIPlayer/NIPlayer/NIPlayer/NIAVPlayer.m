@@ -93,14 +93,17 @@
     _statusBlock = block;
 #warning 需要处理中文路径过会再处理
     NSURL *url;
+    int type = 0; //0 本地视频、1 网络视频
     strUrl = [strUrl lowercaseString];
     if ([strUrl hasPrefix:@"http://"] || [strUrl hasPrefix:@"https://"]) {
         url = [NSURL URLWithString:strUrl];
+        type = 1;
     } else { //本地视频 需要完整路径
         url = [NSURL fileURLWithPath:strUrl];
     }
 
-    [self p_initPlayer:url];
+    
+    [self p_initPlayer:url type:type];
     [_player play];
     
     if (block) {
@@ -163,14 +166,20 @@
 }
 
 //创建AVPlyer
-- (void)p_initPlayer:(NSURL *)url {
+- (void)p_initPlayer:(NSURL *)url type:(int)type{
     if (self.player) {
         //新视频重建播放器有利于内存更好的释放
         [self releasePlayer];
         
     }
     
-    self.playerItem = [AVPlayerItem playerItemWithURL:url];
+    if (type == 0) {
+        AVAsset *movieAsset = [AVURLAsset URLAssetWithURL:url options:nil];
+        self.playerItem = [AVPlayerItem playerItemWithAsset:movieAsset];
+    } else {
+        self.playerItem = [AVPlayerItem playerItemWithURL:url];
+    }
+    
     self.player = [AVPlayer playerWithPlayerItem:_playerItem];
     self.playerLayer = [AVPlayerLayer playerLayerWithPlayer:self.player];
     
@@ -274,6 +283,7 @@
             
             NSLog(@"AVPlayerItemStatusReadyToPlay");
             self.isCanPlay = YES;
+            [self.player play];
             _statusBlock(NIAVPlayerStatusReadyToPlay);
             
             break;

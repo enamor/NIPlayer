@@ -21,7 +21,12 @@
     
     NIPlayer *avPlayer = [[NIPlayer alloc] init];
     [self.view addSubview:avPlayer];
-    [avPlayer playWithUrl:@"http://bos.nj.bpc.baidu.com/tieba-smallvideo/11772_3c435014fb2dd9a5fd56a57cc369f6a0.mp4"];
+    
+    NSString *url = @"http://bos.nj.bpc.baidu.com/tieba-smallvideo/11772_3c435014fb2dd9a5fd56a57cc369f6a0.mp4";
+//    NSString *url = @"test.mp4";
+    
+//    NSString *url = [[NSBundle mainBundle] pathForResource:@"test.mp4" ofType:nil];
+    [avPlayer playWithUrl:url];
     
     CGFloat wid = [UIScreen mainScreen].bounds.size.width;
     CGFloat hei = [UIScreen mainScreen].bounds.size.height;
@@ -31,7 +36,8 @@
         make.left.right.equalTo(self.view);
         make.height.mas_equalTo(avPlayer.mas_width).multipliedBy(rate);
     }];
-    // Do any additional setup after loading the view, typically from a nib.
+    
+
 }
 
 
