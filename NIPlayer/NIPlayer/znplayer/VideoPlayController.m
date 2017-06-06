@@ -136,7 +136,7 @@ typedef NS_ENUM(NSInteger, PanDirection){
 }
 
 - (BOOL)shouldAutorotate {
-    return YES;
+    return NO;
 }
 
 #pragma mark ------ setter getter

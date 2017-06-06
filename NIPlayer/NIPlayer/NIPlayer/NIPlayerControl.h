@@ -13,10 +13,13 @@
 - (void)playerControl:(UIView *)control fullScreenAction:(UIButton *)sender ;
 - (void)playerControl:(UIView *)control playAction:(UIButton *)sender ;
 - (void)playerControl:(UIView *)control nextAction:(UIButton *)sender ;
+- (void)playerControl:(UIView *)control seekAction:(UISlider *)sender ;
 
 @end
+
 @interface NIPlayerControl : UIView
-@property (nonatomic, strong) UIButton  *fullScreenBtn;
+@property (nonatomic, strong) UIButton *fullScreenBtn;
+@property (nonatomic, readonly, strong) UIButton *playButton;
 @property (nonatomic, strong) NIPlayerSlider *progressSlider;
 
 @property (nonatomic, assign) BOOL isFullScreen;

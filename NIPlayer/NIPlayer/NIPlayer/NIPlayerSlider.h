@@ -9,5 +9,11 @@
 #import <UIKit/UIKit.h>
 
 @interface NIPlayerSlider : UISlider
-@property(nullable, nonatomic,strong) UIColor *cacheTrackTintColor;
+@property(nullable, nonatomic, strong) UIColor *cacheTrackTintColor;
+@property (nonatomic, nonatomic, assign) CGFloat cacheValue;
+@end
+
+
+@interface NICacheSlider : UISlider
+
 @end

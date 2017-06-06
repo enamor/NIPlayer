@@ -21,7 +21,7 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        self.continuous = YES ;
+        self.continuous = NO ;
         self.maximumTrackTintColor = [UIColor clearColor];
         [self p_initUI];
     }
@@ -30,12 +30,10 @@
 
 
 - (void)p_initUI {
-    self.cacheSlider = [[UISlider alloc] init];
+    self.cacheSlider = [[NICacheSlider alloc] init];
     _cacheSlider.thumbTintColor = [UIColor clearColor];
     [self addSubview:_cacheSlider];
     _cacheSlider.userInteractionEnabled = NO;
-    _cacheSlider.minimumTrackTintColor = [UIColor redColor];
-    _cacheSlider.value = 0.9;
     
     [self.cacheSlider mas_makeConstraints:^(MASConstraintMaker *make) {
         make.edges.equalTo(self);
@@ -52,10 +50,27 @@
     _cacheSlider.maximumTrackTintColor = maximumTrackTintColor;
 }
 
+- (void)setCacheValue:(CGFloat)cacheValue {
+    _cacheValue = cacheValue;
+    self.cacheSlider.value = _cacheValue;
+}
+
+
 - (CGRect)thumbRectForBounds:(CGRect)bounds trackRect:(CGRect)rect value:(float)value {
     rect.origin.x = rect.origin.x - 3 ;
     rect.size.width = rect.size.width + 6;
     return [super thumbRectForBounds:bounds trackRect:rect value:value];
 }
+
+@end
+
+@implementation NICacheSlider
+
+- (CGRect)thumbRectForBounds:(CGRect)bounds trackRect:(CGRect)rect value:(float)value {
+    rect.origin.x = rect.origin.x - 11 ;
+    rect.size.width = rect.size.width + 22;
+    return CGRectInset ([super thumbRectForBounds:bounds trackRect:rect value:value], 11 , 11);
+}
+
 @end
 

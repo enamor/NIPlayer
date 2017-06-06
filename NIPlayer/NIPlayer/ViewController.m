@@ -22,8 +22,9 @@
     NIPlayer *avPlayer = [[NIPlayer alloc] init];
     [self.view addSubview:avPlayer];
     
-    NSString *url = @"http://bos.nj.bpc.baidu.com/tieba-smallvideo/11772_3c435014fb2dd9a5fd56a57cc369f6a0.mp4";
-//    NSString *url = @"test.mp4";
+//    NSString *url = @"http://bos.nj.bpc.baidu.com/tieba-smallvideo/11772_3c435014fb2dd9a5fd56a57cc369f6a0.mp4";
+    
+    NSString *url = @"http://baobab.wdjcdn.com/1456665467509qingshu.mp4";
     
 //    NSString *url = [[NSBundle mainBundle] pathForResource:@"test.mp4" ofType:nil];
     [avPlayer playWithUrl:url];
@@ -45,6 +46,11 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+- (BOOL)shouldAutorotate {
+    return YES;
+}
+
 
 
 @end

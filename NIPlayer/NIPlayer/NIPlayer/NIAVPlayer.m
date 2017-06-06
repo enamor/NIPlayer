@@ -72,11 +72,16 @@
         
     } else if ([keyPath isEqualToString:@"loadedTimeRanges"]) {
         
-        // 计算缓冲进度
-        //            NSTimeInterval timeInterval = [self availableDuration];
-        //            CMTime duration             = self.playerItem.duration;
-        //            CGFloat totalDuration       = CMTimeGetSeconds(duration);
-        //            [self.controlView zf_playerSetProgress:timeInterval / totalDuration];
+        NSArray *array = _playerItem.loadedTimeRanges;
+        CMTimeRange timeRange = [array.firstObject CMTimeRangeValue];//本次缓冲时间范围
+        float startSeconds = CMTimeGetSeconds(timeRange.start);
+        float durationSeconds = CMTimeGetSeconds(timeRange.duration);
+        NSTimeInterval totalBuffer = startSeconds + durationSeconds;//缓冲总长度
+        self.loadRange = totalBuffer;
+        CGFloat value = totalBuffer/self.totalTime;
+        if (_progressBlock) {
+            _progressBlock(value,NIAVPlayerProgressCache);
+        }
         
     } else if ([keyPath isEqualToString:@"playbackBufferEmpty"]) {
         
@@ -134,9 +139,10 @@
 
 /** 拖动视频进度 */
 - (void)seekTo:(NSTimeInterval)time {
+    if (!self.isCanPlay) return;
     [self pause];
     [self startToSeek];
-    
+
     __weak typeof(self)weakSelf = self;
     [self.player seekToTime:CMTimeMake(time, 1.0) completionHandler:^(BOOL finished) {
         [weakSelf endSeek];
@@ -226,8 +232,9 @@
     NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
     [center addObserver:self selector:@selector(videoPlayEnd:) name:AVPlayerItemDidPlayToEndTimeNotification object:nil];
     [center addObserver:self selector:@selector(videoPlayError:) name:AVPlayerItemPlaybackStalledNotification object:nil];
-    [center addObserver:self selector:@selector(videoPlayEnterBack:) name:UIApplicationDidEnterBackgroundNotification object:nil];
+    [center addObserver:self selector:@selector(videoPlayEnterBack:) name:UIApplicationWillResignActiveNotification object:nil];
     [center addObserver:self selector:@selector(videoPlayBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
+    [center addObserver:self selector:@selector(videoPlayWillEnterForeground:) name:UIApplicationWillEnterForegroundNotification object:nil];
 }
 - (void)p_removeNotificatObserver {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
@@ -240,12 +247,14 @@
         if (CMTIME_IS_INDEFINITE(weakSelf.playerItem.duration)) {
             return ;
         }
+        if (weakSelf.isSeeking) {
+            return;
+        }
         float f = CMTimeGetSeconds(time);
         float max = CMTimeGetSeconds(weakSelf.playerItem.duration);
-#warning todo
-//        if (weakSelf.progressBlock) {
-//            weakSelf.progressBlock(f/max);
-//        }
+        if (weakSelf.progressBlock) {
+            weakSelf.progressBlock(f/max , NIAVPlayerProgressPlay);
+        }
     }];
     
 }
@@ -280,7 +289,8 @@
     if (!_statusBlock) return;
     switch (status) {
         case AVPlayerItemStatusReadyToPlay:   // 准备好播放
-            
+            [self setNeedsLayout];
+            [self layoutIfNeeded];
             NSLog(@"AVPlayerItemStatusReadyToPlay");
             self.isCanPlay = YES;
             [self.player play];
@@ -324,6 +334,7 @@
 /** 进入后台 */
 - (void)videoPlayEnterBack:(NSNotification *)notic {
     NSLog(@"进入后台");
+    [self pause];
     if (_statusBlock) {
         _statusBlock(NIAVPlayerStatusEnterBack);
     }
@@ -331,10 +342,19 @@
 /** 返回前台 */
 - (void)videoPlayBecomeActive:(NSNotification *)notic {
     NSLog(@"返回前台");
+    [self play];
     if (_statusBlock) {
         _statusBlock(NIAVPlayerStatusBecomeActive);
     }
 }
+
+- (void)videoPlayWillEnterForeground:(NSNotification *)notic {
+    NSLog(@"返回前台");
+    if (_statusBlock) {
+        _statusBlock(NIAVPlayerStatusWillEnterForeground);
+    }
+}
+
 
 
 /** 跳动中不监听 */

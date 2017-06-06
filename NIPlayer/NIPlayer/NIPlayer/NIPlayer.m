@@ -10,6 +10,8 @@
 #import <Masonry.h>
 #import "NIAVPlayer.h"
 #import "NIPlayerControl.h"
+#import "NIPlayerMacro.h"
+
 
 @interface NIPlayer ()<NIPlayerControlDelegate>
 @property (nonatomic, assign) BOOL isFullScreen;
@@ -24,6 +26,7 @@
 - (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
+        APP_DELEGATE.allowRotation = 1;
         [self p_initUI];
         [self p_initObserver];
     }
@@ -54,6 +57,10 @@
     }
     
 }
+- (void)playerControl:(UIView *)control seekAction:(UISlider *)sender {
+    NSTimeInterval seekTime = sender.value * self.avPlayer.totalTime;
+    [self.avPlayer seekTo:seekTime];
+}
 #pragma mark ------ UITextFieldDelegate
 #pragma mark ------ UITableViewDataSource
 #pragma mark ------ UITableViewDelegate
@@ -66,9 +73,55 @@
 
 #pragma mark ------ Public
 - (void)playWithUrl:(NSString *)url {
+    __weak typeof(self) weakSelf = self;
     [self.avPlayer playWithUrl:url statusBlock:^(NIAVPlayerStatus status) {
+        switch (status) {
+            case NIAVPlayerStatusLoading: {
+                
+                break;
+            }
+            case NIAVPlayerStatusReadyToPlay: {
+
+                
+                break;
+            }
+            case NIAVPlayerStatusPlayEnd: {
+                self.playerControl.playButton.selected = NO;
+                [self.avPlayer pause];
+                break;
+            }
+            case NIAVPlayerStatusCacheData: {
+                
+                break;
+            }
+            case NIAVPlayerStatusCacheEnd: {
+                
+                break;
+            }
+            case NIAVPlayerStatusPlayStop: {
+                [self.avPlayer pause];
+                break;
+            }
+            case NIAVPlayerStatusItemFailed: {
+                
+                break;
+            }
+            case NIAVPlayerStatusEnterBack: {
+                APP_DELEGATE.allowRotation = 10;
+                break;
+            }
+                
+            case NIAVPlayerStatusBecomeActive: {
+                APP_DELEGATE.allowRotation = 1;
+                break;
+            }
+                
+            default:
+                break;
+        }
         
     }];
+    
 }
 
 #pragma mark ------ IBAction
@@ -108,6 +161,16 @@
 - (void)p_initObserver {
     //监听屏幕方向
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(p_initScreenOrientationChanged:) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
+    
+    //监听播放进度、缓冲进度
+    __weak typeof(self) weakSelf = self;
+    self.avPlayer.progressBlock = ^(CGFloat value, NIAVPlayerProgressType type) {
+        if (type == NIAVPlayerProgressCache) {
+            weakSelf.playerControl.progressSlider.cacheValue = value;
+        } else {
+            weakSelf.playerControl.progressSlider.value = value;
+        }
+    };
 }
 
 - (void)p_removeObserver {

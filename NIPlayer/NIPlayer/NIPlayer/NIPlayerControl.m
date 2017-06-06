@@ -21,7 +21,7 @@
 @property (nonatomic, strong) UILabel *titleLabel;
 @property (nonatomic, strong) UIButton *fullBackBtn;
 @property (nonatomic, strong) UIButton *miniBackBtn;
-@property (nonatomic, strong) UIButton *playButton;
+@property (nonatomic, readwrite, strong) UIButton *playButton;
 @property (nonatomic, strong) UIButton *nextButton;
 @property (nonatomic, strong) UIButton *anthologyBtn;
 @property (nonatomic, strong) UIButton *definitBtn;
@@ -202,7 +202,6 @@
     }];
     
     //清晰度
-    //选集
     self.definitBtn = [UIButton buttonWithTitle:@"高清" fontSize:14 textColor:[UIColor whiteColor]];
     [_bottomBar addSubview:_definitBtn];
     _definitBtn.hidden = YES;
@@ -215,16 +214,13 @@
     }];
     
     
-    
-    
     //快进
     self.progressSlider = [[NIPlayerSlider alloc]init];
     [_progressSlider setThumbImage:BUNDLE_IMAGE(@"fullplayer_progress_point") forState:UIControlStateNormal];
     _progressSlider.minimumTrackTintColor = HEX_COLOR(0xF1B795);
     _progressSlider.maximumTrackTintColor = [UIColor blackColor];
     _progressSlider.cacheTrackTintColor = [UIColor lightGrayColor];
-    [_progressSlider addTarget:self action:@selector(playProgressChange:) forControlEvents:UIControlEventValueChanged];
-    _progressSlider.value = 0.2;
+    [_progressSlider addTarget:self action:@selector(seekAction:) forControlEvents:UIControlEventValueChanged];
     [self.bottomBar addSubview:_progressSlider];
     [self.progressSlider mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerY.equalTo(self.bottomBar);
@@ -291,6 +287,11 @@
     }
 }
 
+- (void)seekAction:(UISlider *)sender {
+    if ([_controlDelegate respondsToSelector:@selector(playerControl:seekAction:)]) {
+        [_controlDelegate playerControl:self seekAction:sender];
+    }
+}
 //////////////////////////////////////////////////////////////////////////////
 #pragma mark ------ getter setter
 - (void)setIsFullScreen:(BOOL)isFullScreen {
