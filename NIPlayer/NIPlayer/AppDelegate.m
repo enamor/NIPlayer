@@ -7,6 +7,8 @@
 //
 
 #import "AppDelegate.h"
+#import "VideoListViewController.h"
+#import "ViewController.h"
 
 @interface AppDelegate ()
 
@@ -16,7 +18,7 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    // Override point for customization after application launch.
+    [self setupWindow];
     return YES;
 }
 
@@ -48,14 +50,38 @@
 }
 
 - (UIInterfaceOrientationMask)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window {
-    if (self.allowRotation == 0) {
+    
+    if (self.allowRotationType == AllowRotationMaskPortrait) {
         return UIInterfaceOrientationMaskPortrait;
-    }else if (self.allowRotation == 1) {
+    }else if (self.allowRotationType == AllowRotationMaskAllButUpsideDown) {
         return  UIInterfaceOrientationMaskAllButUpsideDown;
     }else {
         return UIInterfaceOrientationMaskLandscapeLeft | UIInterfaceOrientationMaskLandscapeRight;
     }
 }
 
+
+-(void)setupWindow{
+    _window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    [_window makeKeyAndVisible];
+    //背景色
+    _window.backgroundColor = [UIColor whiteColor];
+    
+    VideoListViewController *firstVC = [[VideoListViewController alloc] init];
+    firstVC.title = @"first";
+    ViewController *secondVC = [[ViewController alloc] init];
+    secondVC.title = @"second";
+    UITabBarController *rootVc = [[UITabBarController alloc] init];
+    
+    
+    UINavigationController *one = [[UINavigationController alloc]initWithRootViewController:firstVC];
+    
+    UINavigationController *two = [[UINavigationController alloc]initWithRootViewController:secondVC];
+    
+    [rootVc addChildViewController:one];
+    [rootVc addChildViewController:two];
+    
+    _window.rootViewController = rootVc;
+}
 
 @end

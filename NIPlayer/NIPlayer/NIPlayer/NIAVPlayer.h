@@ -45,6 +45,7 @@ typedef void(^NIAVPlayerProgressBlock)(CGFloat value ,NIAVPlayerProgressType typ
 
 
 @property (nonatomic, copy) NIAVPlayerProgressBlock progressBlock;
+@property (nonatomic, copy) NIAVPlayerStatusBlock statusBlock;
 
 
 @property (nonatomic, assign) NIAVPlayerVideoGravity videoGravity;
@@ -69,7 +70,7 @@ typedef void(^NIAVPlayerProgressBlock)(CGFloat value ,NIAVPlayerProgressType typ
 - (void)seekTo:(NSTimeInterval)time;
 
 /** 播放视频 */
-- (void)playWithUrl:(NSString *)strUrl statusBlock:(NIAVPlayerStatusBlock)block;
+- (void)playWithUrl:(NSString *)strUrl;
 
 /** 彻底释放播放器 */
 - (void)releasePlayer;

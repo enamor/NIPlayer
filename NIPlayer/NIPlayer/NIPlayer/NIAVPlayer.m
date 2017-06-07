@@ -9,8 +9,6 @@
 #import "NIAVPlayer.h"
 
 @interface NIAVPlayer ()
-
-@property (nonatomic, copy) NIAVPlayerStatusBlock statusBlock;
 /** 播放器 */
 @property (nonatomic, strong) AVPlayer *player;
 @property (nonatomic, strong) AVPlayerLayer *playerLayer;
@@ -34,7 +32,7 @@
 - (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
-        self.backgroundColor = [UIColor lightGrayColor];
+        self.backgroundColor = [UIColor blackColor];
         
         self.isCanPlay = NO;
         self.needBuffer = NO;
@@ -94,8 +92,7 @@
 
 #pragma mark ------ Public
 #pragma 播放视频
-- (void)playWithUrl:(NSString *)strUrl statusBlock:(NIAVPlayerStatusBlock)block{
-    _statusBlock = block;
+- (void)playWithUrl:(NSString *)strUrl {
 #warning 需要处理中文路径过会再处理
     NSURL *url;
     int type = 0; //0 本地视频、1 网络视频
@@ -111,7 +108,7 @@
     [self p_initPlayer:url type:type];
     [_player play];
     
-    if (block) {
+    if (_statusBlock) {
         _statusBlock(NIAVPlayerStatusLoading);
     }
     
@@ -188,6 +185,7 @@
     
     self.player = [AVPlayer playerWithPlayerItem:_playerItem];
     self.playerLayer = [AVPlayerLayer playerLayerWithPlayer:self.player];
+    _playerLayer.backgroundColor = [UIColor blackColor].CGColor;
     
     //设置模式
     NSString *mode;

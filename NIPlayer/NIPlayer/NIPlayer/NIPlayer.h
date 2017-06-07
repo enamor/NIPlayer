@@ -9,6 +9,10 @@
 #import <UIKit/UIKit.h>
 
 @interface NIPlayer : UIView
-
 - (void)playWithUrl:(NSString *)url;
+
+- (void)playWithUrl:(NSString *)url onView:(UIView *)view;
+
+- (void)play;
+- (void)pause;
 @end

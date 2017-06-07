@@ -37,7 +37,6 @@
         make.left.right.equalTo(self.view);
         make.height.mas_equalTo(avPlayer.mas_width).multipliedBy(rate);
     }];
-    
 
 }
 

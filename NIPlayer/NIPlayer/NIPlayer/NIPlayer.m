@@ -18,6 +18,9 @@
 @property (nonatomic, strong) NIAVPlayer *avPlayer;
 @property (nonatomic, strong) NIPlayerControl *playerControl;
 
+@property (nonatomic, strong) UIView *superView;
+@property (nonatomic, assign) BOOL isPlayOnView;
+
 @end
 @implementation NIPlayer
 
@@ -26,7 +29,7 @@
 - (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
-        APP_DELEGATE.allowRotation = 1;
+        APP_DELEGATE.allowRotationType = AllowRotationMaskAllButUpsideDown;
         [self p_initUI];
         [self p_initObserver];
     }
@@ -41,7 +44,10 @@
 //////////////////////////////////////////////////////////////////////////////
 #pragma mark ------ Protocol
 - (void)playerControl:(UIView *)control backAction:(UIButton *)sender {
-    [self fullScreen:nil];
+    if (_isFullScreen) {
+        [self fullScreen:_playerControl.fullScreenBtn];
+    }
+    
 }
 - (void)playerControl:(UIView *)control fullScreenAction:(UIButton *)sender {
     [self fullScreen:sender];
@@ -73,55 +79,22 @@
 
 #pragma mark ------ Public
 - (void)playWithUrl:(NSString *)url {
-    __weak typeof(self) weakSelf = self;
-    [self.avPlayer playWithUrl:url statusBlock:^(NIAVPlayerStatus status) {
-        switch (status) {
-            case NIAVPlayerStatusLoading: {
-                
-                break;
-            }
-            case NIAVPlayerStatusReadyToPlay: {
-
-                
-                break;
-            }
-            case NIAVPlayerStatusPlayEnd: {
-                self.playerControl.playButton.selected = NO;
-                [self.avPlayer pause];
-                break;
-            }
-            case NIAVPlayerStatusCacheData: {
-                
-                break;
-            }
-            case NIAVPlayerStatusCacheEnd: {
-                
-                break;
-            }
-            case NIAVPlayerStatusPlayStop: {
-                [self.avPlayer pause];
-                break;
-            }
-            case NIAVPlayerStatusItemFailed: {
-                
-                break;
-            }
-            case NIAVPlayerStatusEnterBack: {
-                APP_DELEGATE.allowRotation = 10;
-                break;
-            }
-                
-            case NIAVPlayerStatusBecomeActive: {
-                APP_DELEGATE.allowRotation = 1;
-                break;
-            }
-                
-            default:
-                break;
-        }
-        
-    }];
+    [self.avPlayer playWithUrl:url];
     
+}
+
+- (void)playWithUrl:(NSString *)url onView:(UIView *)view {
+    self.superView = view;
+    self.isPlayOnView = YES;
+    [self playWithUrl:url];
+}
+
+- (void)play {
+    [self.avPlayer play];
+}
+
+- (void)pause {
+    [self.avPlayer pause];
 }
 
 #pragma mark ------ IBAction
@@ -130,22 +103,14 @@
 //////////////////////////////////////////////////////////////////////////////
 #pragma mark ------ Private
 - (void)p_initUI {
+    self.backgroundColor = [UIColor blackColor];
     self.avPlayer = [[NIAVPlayer alloc] init];
     [self addSubview:_avPlayer];
     
-    CGFloat wid = [UIScreen mainScreen].bounds.size.width;
-    CGFloat hei = [UIScreen mainScreen].bounds.size.height;
-    CGFloat rate = wid < hei ? (wid/hei) : (hei/wid);
-
-    
     [self.avPlayer mas_makeConstraints:^(MASConstraintMaker *make) {
         make.edges.equalTo(self);
-//        make.top.equalTo(self);
-//        make.left.right.equalTo(self);
-//        make.height.mas_equalTo(self.avPlayer.mas_width).multipliedBy(rate);
     }];
     
-
     self.playerControl = [[NIPlayerControl alloc] init];
     _playerControl.controlDelegate = self;
     [_avPlayer addSubview:_playerControl];
@@ -171,6 +136,58 @@
             weakSelf.playerControl.progressSlider.value = value;
         }
     };
+    
+    //监听播放状态
+    self.avPlayer.statusBlock = ^(NIAVPlayerStatus status) {
+        switch (status) {
+            case NIAVPlayerStatusLoading: {
+                
+                break;
+            }
+            case NIAVPlayerStatusReadyToPlay: {
+                
+                
+                break;
+            }
+            case NIAVPlayerStatusPlayEnd: {
+                weakSelf.playerControl.playButton.selected = NO;
+                [weakSelf.avPlayer pause];
+                break;
+            }
+            case NIAVPlayerStatusCacheData: {
+                
+                break;
+            }
+            case NIAVPlayerStatusCacheEnd: {
+                
+                break;
+            }
+            case NIAVPlayerStatusPlayStop: {
+                weakSelf.playerControl.playButton.selected = NO;
+                [weakSelf.avPlayer pause];
+                break;
+            }
+            case NIAVPlayerStatusItemFailed: {
+                weakSelf.playerControl.playButton.selected = NO;
+                break;
+            }
+            case NIAVPlayerStatusEnterBack: {
+                if (weakSelf.isFullScreen) {
+                    APP_DELEGATE.allowRotationType = AllowRotationMaskLandscapeLeftOrRight;
+                }
+                break;
+            }
+                
+            case NIAVPlayerStatusBecomeActive: {
+                APP_DELEGATE.allowRotationType = AllowRotationMaskAllButUpsideDown;
+                break;
+            }
+                
+            default:
+                break;
+        }
+
+    };
 }
 
 - (void)p_removeObserver {
@@ -185,10 +202,9 @@
     if (orientation == UIInterfaceOrientationLandscapeRight ||
         orientation ==UIInterfaceOrientationLandscapeLeft) {
         self.isFullScreen = YES;
-        self.playerControl.isFullScreen = _isFullScreen;
+        
     } else {
         self.isFullScreen = NO;
-        self.playerControl.isFullScreen = _isFullScreen;
     }
     
 }
@@ -197,16 +213,55 @@
 - (void)fullScreen:(UIButton *)sender {
     sender.selected = !sender.selected;
     
-    if(sender.selected) {
-        [[UIDevice currentDevice] setValue:[NSNumber numberWithInteger:UIDeviceOrientationLandscapeLeft] forKey:@"orientation"];
-        
+    if (_isPlayOnView) {
+        if (sender.selected) {
+            [self removeFromSuperview];
+            
+            CGFloat height = [[UIScreen mainScreen] bounds].size.width;
+            CGFloat width = [[UIScreen mainScreen] bounds].size.height;
+            [[UIApplication sharedApplication].keyWindow addSubview:self];
+            [UIView animateWithDuration:0.3f animations:^{
+                [self mas_remakeConstraints:^(MASConstraintMaker *make) {
+                    make.left.mas_equalTo((height - width) / 2);
+                    make.top.mas_equalTo((width - height) / 2);
+                    make.width.mas_equalTo(width);
+                    make.height.mas_equalTo(height);
+                }];
+                [self setTransform:CGAffineTransformMakeRotation(M_PI_2)];
+            } completion:^(BOOL finished) {
+                self.isFullScreen = YES;
+            }];
+        } else {
+            [self removeFromSuperview];
+            [self.superView addSubview:self];
+            [UIView animateWithDuration:0.3f animations:^{
+                [self setTransform:CGAffineTransformIdentity];
+                
+                [self mas_remakeConstraints:^(MASConstraintMaker *make) {
+                    make.edges.equalTo(self.superView);
+                }];
+                
+            } completion:^(BOOL finished) {
+                self.isFullScreen = NO;
+            }];
+        }
     } else {
-        [[UIDevice currentDevice] setValue:[NSNumber numberWithInteger:UIDeviceOrientationPortrait] forKey:@"orientation"];
         
+        if(sender.selected) {
+            [[UIDevice currentDevice] setValue:[NSNumber numberWithInteger:UIDeviceOrientationLandscapeLeft] forKey:@"orientation"];
+            self.isFullScreen = YES;
+            
+        } else {
+            [[UIDevice currentDevice] setValue:[NSNumber numberWithInteger:UIDeviceOrientationPortrait] forKey:@"orientation"];
+            self.isFullScreen = NO;
+        }
+        [[[self getCurrentViewController] class] attemptRotationToDeviceOrientation];
     }
-    [[[self getCurrentViewController] class] attemptRotationToDeviceOrientation];
+    
+    
     
 }
+
 
 /** 获取当前View的控制器对象 */
 -(UIViewController *)getCurrentViewController{
@@ -222,5 +277,15 @@
 
 //////////////////////////////////////////////////////////////////////////////
 #pragma mark ------ getter setter
+- (void)setSuperView:(UIView *)superView {
+    _superView = superView;
+    [self mas_remakeConstraints:^(MASConstraintMaker *make) {
+        make.edges.equalTo(self.superView);
+    }];
+}
 
+- (void)setIsFullScreen:(BOOL)isFullScreen {
+    _isFullScreen = isFullScreen;
+    self.playerControl.isFullScreen = _isFullScreen;
+}
 @end
