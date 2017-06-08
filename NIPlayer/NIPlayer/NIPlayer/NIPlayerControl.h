@@ -14,17 +14,23 @@
 - (void)playerControl:(UIView *)control playAction:(UIButton *)sender ;
 - (void)playerControl:(UIView *)control nextAction:(UIButton *)sender ;
 - (void)playerControl:(UIView *)control seekAction:(UISlider *)sender ;
+- (void)playerControl:(UIView *)control sliderValueChangedAction:(UISlider *)sender ;
 
 @end
 
 @interface NIPlayerControl : UIView
 @property (nonatomic, strong) UIButton *fullScreenBtn;
 @property (nonatomic, readonly, strong) UIButton *playButton;
+@property (nonatomic, strong) UILabel *currentTimeLabel;
+@property (nonatomic, strong) UILabel *totalTimeLabel;
 @property (nonatomic, strong) NIPlayerSlider *progressSlider;
+@property (nonatomic, assign) BOOL isDragged;
 
 @property (nonatomic, assign) BOOL isFullScreen;
 
 @property (nonatomic, weak) id<NIPlayerControlDelegate> controlDelegate;
 
+- (void)draggedTime:(double)draggedTime totalTime:(double)totalTime;
+- (void)reset ;
 
 @end

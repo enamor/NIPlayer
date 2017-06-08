@@ -12,14 +12,28 @@
 #import "NIPlayerControl.h"
 #import "NIPlayerMacro.h"
 
+// 枚举值，包含水平移动方向和垂直移动方向
+typedef NS_ENUM(NSInteger, PanDirection){
+    PanDirectionHorizontalMoved, // 横向移动
+    PanDirectionVerticalMoved    // 纵向移动
+};
 
-@interface NIPlayer ()<NIPlayerControlDelegate>
+
+@interface NIPlayer ()<NIPlayerControlDelegate,UIGestureRecognizerDelegate>
 @property (nonatomic, assign) BOOL isFullScreen;
 @property (nonatomic, strong) NIAVPlayer *avPlayer;
 @property (nonatomic, strong) NIPlayerControl *playerControl;
 
 @property (nonatomic, strong) UIView *superView;
 @property (nonatomic, assign) BOOL isPlayOnView;
+
+
+/** 用来保存快进的总时长 */
+@property (nonatomic, assign) double                sumTime;
+/** 定义一个实例变量，保存枚举值 */
+@property (nonatomic, assign) PanDirection           panDirection;
+/** 是否在调节音量*/
+@property (nonatomic, assign) BOOL                   isVolume;
 
 @end
 @implementation NIPlayer
@@ -29,7 +43,6 @@
 - (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
-        APP_DELEGATE.allowRotationType = AllowRotationMaskAllButUpsideDown;
         [self p_initUI];
         [self p_initObserver];
     }
@@ -67,6 +80,11 @@
     NSTimeInterval seekTime = sender.value * self.avPlayer.totalTime;
     [self.avPlayer seekTo:seekTime];
 }
+
+- (void)playerControl:(UIView *)control sliderValueChangedAction:(UISlider *)sender {
+    [self.playerControl draggedTime:sender.value * self.avPlayer.totalTime totalTime:self.avPlayer.totalTime];
+    [self.avPlayer startToSeek];
+}
 #pragma mark ------ UITextFieldDelegate
 #pragma mark ------ UITableViewDataSource
 #pragma mark ------ UITableViewDelegate
@@ -79,14 +97,20 @@
 
 #pragma mark ------ Public
 - (void)playWithUrl:(NSString *)url {
+    [self.playerControl reset];
+    APP_DELEGATE.allowRotationType = AllowRotationMaskAllButUpsideDown;
     [self.avPlayer playWithUrl:url];
+    
     
 }
 
 - (void)playWithUrl:(NSString *)url onView:(UIView *)view {
+    [self.playerControl reset];
     self.superView = view;
     self.isPlayOnView = YES;
-    [self playWithUrl:url];
+    APP_DELEGATE.allowRotationType = AllowRotationMaskPortrait;
+    [self.avPlayer playWithUrl:url];
+    
 }
 
 - (void)play {
@@ -103,7 +127,6 @@
 //////////////////////////////////////////////////////////////////////////////
 #pragma mark ------ Private
 - (void)p_initUI {
-    self.backgroundColor = [UIColor blackColor];
     self.avPlayer = [[NIAVPlayer alloc] init];
     [self addSubview:_avPlayer];
     
@@ -113,7 +136,7 @@
     
     self.playerControl = [[NIPlayerControl alloc] init];
     _playerControl.controlDelegate = self;
-    [_avPlayer addSubview:_playerControl];
+    [self addSubview:_playerControl];
     [self.playerControl mas_makeConstraints:^(MASConstraintMaker *make) {
         make.edges.equalTo(self.avPlayer);
     }];
@@ -132,8 +155,9 @@
     self.avPlayer.progressBlock = ^(CGFloat value, NIAVPlayerProgressType type) {
         if (type == NIAVPlayerProgressCache) {
             weakSelf.playerControl.progressSlider.cacheValue = value;
+        
         } else {
-            weakSelf.playerControl.progressSlider.value = value;
+            [weakSelf.playerControl draggedTime:weakSelf.avPlayer.currentTime totalTime:weakSelf.avPlayer.totalTime];
         }
     };
     
@@ -145,12 +169,13 @@
                 break;
             }
             case NIAVPlayerStatusReadyToPlay: {
-                
-                
+                weakSelf.playerControl.playButton.selected = NO;
+                weakSelf.playerControl.totalTimeLabel.text = [weakSelf convertTime:weakSelf.avPlayer.totalTime];
+                [weakSelf addTap];
                 break;
             }
             case NIAVPlayerStatusPlayEnd: {
-                weakSelf.playerControl.playButton.selected = NO;
+                weakSelf.playerControl.playButton.selected = YES;
                 [weakSelf.avPlayer pause];
                 break;
             }
@@ -163,12 +188,12 @@
                 break;
             }
             case NIAVPlayerStatusPlayStop: {
-                weakSelf.playerControl.playButton.selected = NO;
+                weakSelf.playerControl.playButton.selected = YES;
                 [weakSelf.avPlayer pause];
                 break;
             }
             case NIAVPlayerStatusItemFailed: {
-                weakSelf.playerControl.playButton.selected = NO;
+                weakSelf.playerControl.playButton.selected = YES;
                 break;
             }
             case NIAVPlayerStatusEnterBack: {
@@ -216,23 +241,27 @@
     if (_isPlayOnView) {
         if (sender.selected) {
             [self removeFromSuperview];
-            
             CGFloat height = [[UIScreen mainScreen] bounds].size.width;
             CGFloat width = [[UIScreen mainScreen] bounds].size.height;
             [[UIApplication sharedApplication].keyWindow addSubview:self];
             [UIView animateWithDuration:0.3f animations:^{
+                [self setTransform:CGAffineTransformMakeRotation(M_PI_2)];
+                
                 [self mas_remakeConstraints:^(MASConstraintMaker *make) {
                     make.left.mas_equalTo((height - width) / 2);
                     make.top.mas_equalTo((width - height) / 2);
                     make.width.mas_equalTo(width);
                     make.height.mas_equalTo(height);
                 }];
-                [self setTransform:CGAffineTransformMakeRotation(M_PI_2)];
+                
             } completion:^(BOOL finished) {
                 self.isFullScreen = YES;
             }];
+            APP.statusBarOrientation = UIInterfaceOrientationLandscapeRight;
+            APP.statusBarHidden = NO;
         } else {
             [self removeFromSuperview];
+            
             [self.superView addSubview:self];
             [UIView animateWithDuration:0.3f animations:^{
                 [self setTransform:CGAffineTransformIdentity];
@@ -244,6 +273,8 @@
             } completion:^(BOOL finished) {
                 self.isFullScreen = NO;
             }];
+            APP.statusBarOrientation = UIInterfaceOrientationPortrait;
+            APP.statusBarHidden = NO;
         }
     } else {
         
@@ -262,6 +293,172 @@
     
 }
 
+
+
+
+#pragma mark - UIPanGestureRecognizer手势方法
+
+/**
+ *  pan手势事件
+ *
+ *  @param pan UIPanGestureRecognizer
+ */
+- (void)panDirection:(UIPanGestureRecognizer *)pan {
+    //根据在view上Pan的位置，确定是调音量还是亮度
+    CGPoint locationPoint = [pan locationInView:self];
+    
+    // 我们要响应水平移动和垂直移动
+    // 根据上次和本次移动的位置，算出一个速率的point
+    CGPoint veloctyPoint = [pan velocityInView:self];
+    
+    
+    
+    
+    // 判断是垂直移动还是水平移动
+    switch (pan.state) {
+        case UIGestureRecognizerStateBegan:{ // 开始移动
+            // 使用绝对值来判断移动的方向
+            CGFloat x = fabs(veloctyPoint.x);
+            CGFloat y = fabs(veloctyPoint.y);
+            if (x > y) { // 水平移动
+                // 取消隐藏
+                self.panDirection = PanDirectionHorizontalMoved;
+                // 给sumTime初值
+                self.sumTime       = self.avPlayer.currentTime;
+            }
+            else if (x < y){ // 垂直移动
+                self.panDirection = PanDirectionVerticalMoved;
+                // 开始滑动的时候,状态改为正在控制音量
+                if (locationPoint.x > self.bounds.size.width / 2) {
+                    self.isVolume = YES;
+                }else { // 状态改为显示亮度调节
+                    self.isVolume = NO;
+                }
+            }
+            break;
+        }
+        case UIGestureRecognizerStateChanged:{ // 正在移动
+            switch (self.panDirection) {
+                case PanDirectionHorizontalMoved:{
+                    [self horizontalMoved:veloctyPoint.x]; // 水平移动的方法只要x方向的值
+                    break;
+                }
+                case PanDirectionVerticalMoved:{
+                    [self verticalMoved:veloctyPoint.y]; // 垂直移动方法只要y方向的值
+                    break;
+                }
+                default:
+                    break;
+            }
+            break;
+        }
+        case UIGestureRecognizerStateEnded:{ // 移动停止
+            // 移动结束也需要判断垂直或者平移
+            // 比如水平移动结束时，要快进到指定位置，如果这里没有判断，当我们调节音量完之后，会出现屏幕跳动的bug
+            switch (self.panDirection) {
+                case PanDirectionHorizontalMoved:{
+//                    self.isPauseByUser = NO;
+                    [self.avPlayer seekTo:self.sumTime];
+//                    [self seekToTime:self.sumTime completionHandler:nil];
+                    // 把sumTime滞空，不然会越加越多
+                    self.sumTime = 0;
+                    break;
+                }
+                case PanDirectionVerticalMoved:{
+                    // 垂直移动结束后，把状态改为不再控制音量
+                    self.isVolume = NO;
+                    break;
+                }
+                default:
+                    break;
+            }
+            break;
+        }
+        default:
+            break;
+    }
+}
+
+- (void)addTap {
+    UIPanGestureRecognizer *panRecognizer = [[UIPanGestureRecognizer alloc]initWithTarget:self action:@selector(panDirection:)];
+    panRecognizer.delegate = self;
+    [panRecognizer setMaximumNumberOfTouches:1];
+    [panRecognizer setDelaysTouchesBegan:YES];
+    [panRecognizer setDelaysTouchesEnded:YES];
+    [panRecognizer setCancelsTouchesInView:YES];
+    [self addGestureRecognizer:panRecognizer];
+}
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch {
+    
+//    if (gestureRecognizer == self.shrinkPanGesture && self.isCellVideo) {
+//        if (!self.isBottomVideo || self.isFullScreen) {
+//            return NO;
+//        }
+//    }
+//    if ([gestureRecognizer isKindOfClass:[UIPanGestureRecognizer class]] && gestureRecognizer != self.shrinkPanGesture) {
+//        if ((self.isCellVideo && !self.isFullScreen) || self.playDidEnd || self.isLocked){
+//            return NO;
+//        }
+//    }
+//    if ([gestureRecognizer isKindOfClass:[UITapGestureRecognizer class]]) {
+//        if (self.isBottomVideo && !self.isFullScreen) {
+//            return NO;
+//        }
+//    }
+    if ([touch.view isKindOfClass:[UISlider class]]) {
+        return NO;
+    }
+    
+    return YES;
+}
+
+- (void)horizontalMoved:(CGFloat)value {
+    
+    // 每次滑动需要叠加时间
+    self.sumTime += value / 200;
+    
+    // 需要限定sumTime的范围
+    double totalSeconds = self.avPlayer.totalTime;
+    if (self.sumTime > totalSeconds) { self.sumTime = totalSeconds;}
+    if (self.sumTime < 0) { self.sumTime = 0; }
+    
+    BOOL style = false;
+    if (value > 0) { style = YES; }
+    if (value < 0) { style = NO; }
+    if (value == 0) { return; }
+    
+    [self.playerControl draggedTime:self.sumTime totalTime:totalSeconds];
+    [self.avPlayer startToSeek];
+    
+//    if (value < 0 ) {
+//        double seconds = ABS(value);
+//        double skipSeconds = seconds * 60 /self.frame.size.width;
+//        CGFloat seekSeconds = self.avPlayer.currentTime - skipSeconds;
+//        self.sumTime = MAX(0, seekSeconds);
+//    } else {
+//        double skipSeconds = value * 60 /self.frame.size.width;
+//        CGFloat seekSeconds = self.avPlayer.currentTime + skipSeconds;
+//        self.sumTime = MIN(seekSeconds, self.avPlayer.totalTime);
+//    }
+    
+}
+
+- (void)verticalMoved:(CGFloat)value {
+    
+}
+
+- (NSString *)convertTime:(double)second{
+    NSDate *d = [NSDate dateWithTimeIntervalSince1970:second];
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    if (second/3600 >= 1) {
+        [dateFormatter setDateFormat:@"HH:mm:ss"];
+    } else {
+        [dateFormatter setDateFormat:@"mm:ss"];
+    }
+    NSString *showtimeNew = [dateFormatter stringFromDate:d];
+    return showtimeNew;
+}
 
 /** 获取当前View的控制器对象 */
 -(UIViewController *)getCurrentViewController{

@@ -21,7 +21,7 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        self.continuous = NO ;
+//        self.continuous = NO ;
         self.maximumTrackTintColor = [UIColor clearColor];
         [self p_initUI];
     }

@@ -8,6 +8,7 @@
 
 #import "VideoListViewController.h"
 #import "NIPlayer.h"
+#import "NIPlayerMacro.h"
 
 @interface VideoListViewController ()
 @property (nonatomic, strong) NIPlayer *player;
@@ -21,6 +22,8 @@
     
     _player = [[NIPlayer alloc] init];
     
+    
+    APP_DELEGATE.allowRotationType = AllowRotationMaskPortrait;
     self.dataSource = @[@"http://7xqhmn.media1.z0.glb.clouddn.com/femorning-20161106.mp4",
                         @"http://wvideo.spriteapp.cn/video/2016/0328/56f8ec01d9bfe_wpd.mp4",
                         @"http://baobab.wdjcdn.com/1456117847747a_x264.mp4",
@@ -60,9 +63,10 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    [tableView deselectRowAtIndexPath:indexPath animated:NO];
+    
     [_player removeFromSuperview];
-    [_player setNeedsLayout];
-    [_player layoutIfNeeded];
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     [cell addSubview:_player];
     _player.frame = cell.bounds;
@@ -73,5 +77,6 @@
 - (BOOL)shouldAutorotate {
     return NO;
 }
+
 
 @end

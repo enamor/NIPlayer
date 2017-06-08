@@ -29,11 +29,9 @@
 
 //////////////////////////////////////////////////////////////////////////////
 #pragma mark ------ Lifecycle
-- (instancetype)initWithFrame:(CGRect)frame {
-    self = [super initWithFrame:frame];
+- (instancetype)init {
+    self = [super init];
     if (self) {
-        self.backgroundColor = [UIColor blackColor];
-        
         self.isCanPlay = NO;
         self.needBuffer = NO;
         self.isSeeking = NO;
@@ -53,8 +51,6 @@
 #pragma mark ------ Protocol
 
 
-
-
 //////////////////////////////////////////////////////////////////////////////
 #pragma mark ------ Override
 - (void)layoutSubviews {
@@ -70,29 +66,48 @@
         
     } else if ([keyPath isEqualToString:@"loadedTimeRanges"]) {
         
-        NSArray *array = _playerItem.loadedTimeRanges;
-        CMTimeRange timeRange = [array.firstObject CMTimeRangeValue];//本次缓冲时间范围
-        float startSeconds = CMTimeGetSeconds(timeRange.start);
-        float durationSeconds = CMTimeGetSeconds(timeRange.duration);
-        NSTimeInterval totalBuffer = startSeconds + durationSeconds;//缓冲总长度
-        self.loadRange = totalBuffer;
-        CGFloat value = totalBuffer/self.totalTime;
-        if (_progressBlock) {
-            _progressBlock(value,NIAVPlayerProgressCache);
+        if (!_isSeeking) {
+            NSArray *array = _playerItem.loadedTimeRanges;
+            CMTimeRange timeRange = [array.firstObject CMTimeRangeValue];//本次缓冲时间范围
+            float startSeconds = CMTimeGetSeconds(timeRange.start);
+            float durationSeconds = CMTimeGetSeconds(timeRange.duration);
+            NSTimeInterval totalBuffer = startSeconds + durationSeconds;//缓冲总长度
+            self.loadRange = totalBuffer;
+            CGFloat value = totalBuffer/self.totalTime;
+            if (_progressBlock) {
+                _progressBlock(value,NIAVPlayerProgressCache);
+            }
+
         }
         
     } else if ([keyPath isEqualToString:@"playbackBufferEmpty"]) {
         
-    } else if ([keyPath isEqualToString:@"playbackLikelyToKeepUp"]) {
+        //显示加载动画
+        if (self.isCanPlay) {
+            NSLog(@"跳转后没数据");
+            self.needBuffer = YES;
+            if (_statusBlock) {
+                _statusBlock(NIAVPlayerStatusCacheData);
+            }
+        }
         
+    } else if ([keyPath isEqualToString:@"playbackLikelyToKeepUp"]) {
+        // 隐藏菊花
+        if (self.isCanPlay && self.needBuffer) {
+            NSLog(@"跳转后有数据");
+            self.needBuffer = NO;
+            if (_statusBlock) {
+                _statusBlock(NIAVPlayerStatusCacheEnd);
+            }
+        }
         
     }
-
 }
 
 #pragma mark ------ Public
 #pragma 播放视频
 - (void)playWithUrl:(NSString *)strUrl {
+    self.isCanPlay = NO;
 #warning 需要处理中文路径过会再处理
     NSURL *url;
     int type = 0; //0 本地视频、1 网络视频
@@ -106,7 +121,6 @@
 
     
     [self p_initPlayer:url type:type];
-    [_player play];
     
     if (_statusBlock) {
         _statusBlock(NIAVPlayerStatusLoading);
@@ -139,7 +153,6 @@
     if (!self.isCanPlay) return;
     [self pause];
     [self startToSeek];
-
     __weak typeof(self)weakSelf = self;
     [self.player seekToTime:CMTimeMake(time, 1.0) completionHandler:^(BOOL finished) {
         [weakSelf endSeek];
@@ -186,6 +199,7 @@
     self.player = [AVPlayer playerWithPlayerItem:_playerItem];
     self.playerLayer = [AVPlayerLayer playerLayerWithPlayer:self.player];
     _playerLayer.backgroundColor = [UIColor blackColor].CGColor;
+    _playerLayer.frame = self.bounds;
     
     //设置模式
     NSString *mode;
@@ -232,7 +246,6 @@
     [center addObserver:self selector:@selector(videoPlayError:) name:AVPlayerItemPlaybackStalledNotification object:nil];
     [center addObserver:self selector:@selector(videoPlayEnterBack:) name:UIApplicationWillResignActiveNotification object:nil];
     [center addObserver:self selector:@selector(videoPlayBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
-    [center addObserver:self selector:@selector(videoPlayWillEnterForeground:) name:UIApplicationWillEnterForegroundNotification object:nil];
 }
 - (void)p_removeNotificatObserver {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
@@ -241,7 +254,7 @@
 
 - (void)p_initPlayerObserver {
     __weak typeof(self) weakSelf = self;
-    self.timeObser = [self.player addPeriodicTimeObserverForInterval:CMTimeMake(1.0, 1.0) queue:dispatch_get_global_queue(0, 0) usingBlock:^(CMTime time) {
+    self.timeObser = [self.player addPeriodicTimeObserverForInterval:CMTimeMake(1.0, 1.0) queue:nil usingBlock:^(CMTime time) {
         if (CMTIME_IS_INDEFINITE(weakSelf.playerItem.duration)) {
             return ;
         }
@@ -249,11 +262,14 @@
             return;
         }
         float f = CMTimeGetSeconds(time);
-        float max = CMTimeGetSeconds(weakSelf.playerItem.duration);
+        float max = weakSelf.totalTime;
+        
         if (weakSelf.progressBlock) {
             weakSelf.progressBlock(f/max , NIAVPlayerProgressPlay);
         }
     }];
+
+    
     
 }
 - (void)p_removePlayerObserver {
@@ -346,13 +362,6 @@
     }
 }
 
-- (void)videoPlayWillEnterForeground:(NSNotification *)notic {
-    NSLog(@"返回前台");
-    if (_statusBlock) {
-        _statusBlock(NIAVPlayerStatusWillEnterForeground);
-    }
-}
-
 
 
 /** 跳动中不监听 */
@@ -368,6 +377,10 @@
 #pragma mark ------ getter setter
 - (NSTimeInterval)totalTime {
     return CMTimeGetSeconds(self.playerItem.duration);
+}
+
+- (NSTimeInterval)currentTime {
+    return CMTimeGetSeconds(self.playerItem.currentTime);
 }
 
 - (BOOL)isPlay {

@@ -26,6 +26,11 @@
 @property (nonatomic, strong) UIButton *anthologyBtn;
 @property (nonatomic, strong) UIButton *definitBtn;
 
+
+@property (nonatomic, strong) UILabel *pipCurrentLabel;
+@property (nonatomic, strong) UILabel *pipTotalLabel;
+
+
 @end
 
 @implementation NIPlayerControl
@@ -58,7 +63,10 @@
 #pragma mark ------ Override
 
 #pragma mark ------ Public
-
+- (void)reset {
+    self.progressSlider.cacheValue = 0;
+    self.progressSlider.value = 0;
+}
 #pragma mark ------ IBAction
 
 
@@ -67,6 +75,7 @@
 - (void)p_initUI {
     [self p_initTopBar];
     [self p_initBottomBar];
+    [self p_initPIP];
 }
 
 - (void)p_initDatas {
@@ -220,7 +229,14 @@
     _progressSlider.minimumTrackTintColor = HEX_COLOR(0xF1B795);
     _progressSlider.maximumTrackTintColor = [UIColor blackColor];
     _progressSlider.cacheTrackTintColor = [UIColor lightGrayColor];
-    [_progressSlider addTarget:self action:@selector(seekAction:) forControlEvents:UIControlEventValueChanged];
+
+    // slider开始滑动事件
+//    [_progressSlider addTarget:self action:@selector(progressSliderTouchBegan:) forControlEvents:UIControlEventTouchDown];
+    // slider滑动中事件
+    [_progressSlider addTarget:self action:@selector(sliderValueChangedAction:) forControlEvents:UIControlEventValueChanged];
+    // slider结束滑动事件
+    [_progressSlider addTarget:self action:@selector(seekAction:) forControlEvents:UIControlEventTouchUpInside | UIControlEventTouchCancel | UIControlEventTouchUpOutside];
+    
     [self.bottomBar addSubview:_progressSlider];
     [self.progressSlider mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerY.equalTo(self.bottomBar);
@@ -231,29 +247,24 @@
     }];
     
     
-//    //播放进度 label
-//    UILabel *currentLabel = [[UILabel alloc] init];
-//    currentLabel.font = [UIFont systemFontOfSize:13];
-//    currentLabel.textColor = [UIColor whiteColor];
-//    [self.bottomBar addSubview:currentLabel];
-//    [currentLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.right.equalTo(self.progressSlider.mas_left).offset(-4);
-//        make.centerY.equalTo(self.bottomBar);
-//    }];
-//    currentLabel.text = @"1:89:89";
-//    [currentLabel sizeToFit];
-//    
-//    //总时长 label
-//    UILabel *totalLabel = [[UILabel alloc] init];
-//    totalLabel.font = [UIFont systemFontOfSize:13];
-//    totalLabel.textColor = [UIColor whiteColor];
-//    [self.bottomBar addSubview:totalLabel];
-//    [totalLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.left.equalTo(self.progressSlider.mas_right).offset(4);
-//        make.centerY.equalTo(self.bottomBar);
-//    }];
-//    totalLabel.text = @"1:89:89";
-//    [totalLabel sizeToFit];
+    //播放进度 label
+    self.currentTimeLabel = [UILabel labelWithText:@"00:00" fontSize:13 textColor:[UIColor whiteColor]];
+    _currentTimeLabel.textAlignment = NSTextAlignmentRight;
+    [self.bottomBar addSubview:_currentTimeLabel];
+    [self.currentTimeLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.right.equalTo(self.progressSlider.mas_left).offset(-4);
+        make.centerY.equalTo(self.bottomBar);
+        make.width.mas_equalTo(80);
+    }];
+    
+    //总时长 label
+    self.totalTimeLabel = [UILabel labelWithText:@"00:00:00" fontSize:13 textColor:[UIColor whiteColor]];
+    [self.bottomBar addSubview:_totalTimeLabel];
+    [self.totalTimeLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self.progressSlider.mas_right).offset(4);
+        make.centerY.equalTo(self.bottomBar);
+        make.width.mas_equalTo(80);
+    }];
     
     
     [self.bottomBar mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -261,6 +272,62 @@
         make.height.mas_equalTo(44);
     }];
 
+}
+
+//画中画view
+- (void)p_initPIP {
+    UIView *pipView = [[UIView alloc] init];
+    pipView.backgroundColor = [UIColor grayColor];
+    [self addSubview:pipView];
+    [pipView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.center.equalTo(self);
+        make.width.mas_equalTo(200);
+        make.height.mas_equalTo(100);
+    }];
+    
+    
+    self.pipCurrentLabel = [UILabel labelWithText:@"00:00" fontSize:13 textColor:[UIColor whiteColor]];
+    _pipCurrentLabel.textAlignment = NSTextAlignmentRight;
+    [pipView addSubview:_pipCurrentLabel];
+    [self.pipCurrentLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.top.bottom.equalTo(pipView);
+        make.width.mas_equalTo(80);
+    }];
+    
+    //总时长 label
+    self.pipTotalLabel = [UILabel labelWithText:@"00:00:00" fontSize:13 textColor:[UIColor whiteColor]];
+    [pipView addSubview:_pipTotalLabel];
+    [self.pipTotalLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.right.top.bottom.equalTo(pipView);
+        make.width.mas_equalTo(80);
+    }];
+
+}
+- (void)draggedTime:(double)draggedTime totalTime:(double)totalTime {
+    NSString *time = [self convertTime:draggedTime];
+    NSString *total = [self convertTime:totalTime];
+    self.pipCurrentLabel.text = time;
+    self.pipTotalLabel.text = total;
+    
+    self.currentTimeLabel.text = time;
+    self.totalTimeLabel.text = total;
+    self.progressSlider.value = draggedTime/totalTime;
+    if (!_isDragged) {
+        
+    }
+    
+}
+
+- (NSString *)convertTime:(double)second{
+    NSDate *d = [NSDate dateWithTimeIntervalSince1970:second];
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    if (second/3600 >= 1) {
+        [dateFormatter setDateFormat:@"HH:mm:ss"];
+    } else {
+        [dateFormatter setDateFormat:@"mm:ss"];
+    }
+    NSString *showtimeNew = [dateFormatter stringFromDate:d];
+    return showtimeNew;
 }
 
 - (void)backAction:(UIButton *)sender {
@@ -288,10 +355,18 @@
 }
 
 - (void)seekAction:(UISlider *)sender {
+    _isDragged = NO;
     if ([_controlDelegate respondsToSelector:@selector(playerControl:seekAction:)]) {
         [_controlDelegate playerControl:self seekAction:sender];
     }
 }
+- (void)sliderValueChangedAction:(UISlider *)sender {
+    _isDragged = YES;
+    if ([_controlDelegate respondsToSelector:@selector(playerControl:sliderValueChangedAction:)]) {
+        [_controlDelegate playerControl:self sliderValueChangedAction:sender];
+    }
+}
+
 //////////////////////////////////////////////////////////////////////////////
 #pragma mark ------ getter setter
 - (void)setIsFullScreen:(BOOL)isFullScreen {

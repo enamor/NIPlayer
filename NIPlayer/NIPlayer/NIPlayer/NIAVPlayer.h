@@ -19,7 +19,6 @@ typedef NS_ENUM(NSInteger, NIAVPlayerStatus) {
     NIAVPlayerStatusPlayStop,        // 播放中断 （多是没网）
     NIAVPlayerStatusItemFailed,      // 视频资源问题
     NIAVPlayerStatusEnterBack,       // 进入后台
-    NIAVPlayerStatusWillEnterForeground,    // 从后台返回
     NIAVPlayerStatusBecomeActive,    // 从后台返回
     
 };
@@ -71,6 +70,8 @@ typedef void(^NIAVPlayerProgressBlock)(CGFloat value ,NIAVPlayerProgressType typ
 
 /** 播放视频 */
 - (void)playWithUrl:(NSString *)strUrl;
+
+- (void)startToSeek;
 
 /** 彻底释放播放器 */
 - (void)releasePlayer;

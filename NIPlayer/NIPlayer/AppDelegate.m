@@ -7,8 +7,10 @@
 //
 
 #import "AppDelegate.h"
+#import "NavigationViewController.h"
 #import "VideoListViewController.h"
 #import "ViewController.h"
+#import "TabBarController.h"
 
 @interface AppDelegate ()
 
@@ -71,12 +73,12 @@
     firstVC.title = @"first";
     ViewController *secondVC = [[ViewController alloc] init];
     secondVC.title = @"second";
-    UITabBarController *rootVc = [[UITabBarController alloc] init];
+    TabBarController *rootVc = [[TabBarController alloc] init];
     
     
-    UINavigationController *one = [[UINavigationController alloc]initWithRootViewController:firstVC];
+    NavigationViewController *one = [[NavigationViewController alloc]initWithRootViewController:firstVC];
     
-    UINavigationController *two = [[UINavigationController alloc]initWithRootViewController:secondVC];
+    NavigationViewController *two = [[NavigationViewController alloc]initWithRootViewController:secondVC];
     
     [rootVc addChildViewController:one];
     [rootVc addChildViewController:two];

@@ -8,8 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		9B00F3039823FEA3769E8A94 /* libPods-NIPlayer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D93917337B905F823F762552 /* libPods-NIPlayer.a */; };
+		B80619AB1EE8636D00115654 /* TabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = B80619AA1EE8636D00115654 /* TabBarController.m */; };
 		B89398561EE7B45D00C331BE /* VideoListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B89398551EE7B45D00C331BE /* VideoListViewController.m */; };
 		B89398581EE7D39E00C331BE /* texst.png in Resources */ = {isa = PBXBuildFile; fileRef = B89398571EE7D39E00C331BE /* texst.png */; };
+		B893985B1EE815FC00C331BE /* NavigationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B893985A1EE815FC00C331BE /* NavigationViewController.m */; };
 		B8CAD2BF1EE118FB00E99BD1 /* NIPlayer.bundle in Resources */ = {isa = PBXBuildFile; fileRef = B8CAD2BE1EE118FB00E99BD1 /* NIPlayer.bundle */; };
 		B8CAD2C31EE12AD800E99BD1 /* test.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = B8CAD2C21EE12AD800E99BD1 /* test.mp4 */; };
 		B8CAD2CF1EE1783600E99BD1 /* UIButton+Create.m in Sources */ = {isa = PBXBuildFile; fileRef = B8CAD2CE1EE1783600E99BD1 /* UIButton+Create.m */; };
@@ -34,9 +36,13 @@
 
 /* Begin PBXFileReference section */
 		5A34C09D930CEECE98A98447 /* Pods-NIPlayer.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NIPlayer.release.xcconfig"; path = "Pods/Target Support Files/Pods-NIPlayer/Pods-NIPlayer.release.xcconfig"; sourceTree = "<group>"; };
+		B80619A91EE8636D00115654 /* TabBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TabBarController.h; sourceTree = "<group>"; };
+		B80619AA1EE8636D00115654 /* TabBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TabBarController.m; sourceTree = "<group>"; };
 		B89398541EE7B45D00C331BE /* VideoListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoListViewController.h; sourceTree = "<group>"; };
 		B89398551EE7B45D00C331BE /* VideoListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoListViewController.m; sourceTree = "<group>"; };
 		B89398571EE7D39E00C331BE /* texst.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = texst.png; sourceTree = "<group>"; };
+		B89398591EE815FC00C331BE /* NavigationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NavigationViewController.h; sourceTree = "<group>"; };
+		B893985A1EE815FC00C331BE /* NavigationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NavigationViewController.m; sourceTree = "<group>"; };
 		B8CAD2BE1EE118FB00E99BD1 /* NIPlayer.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = NIPlayer.bundle; sourceTree = "<group>"; };
 		B8CAD2C11EE11A7700E99BD1 /* NIPlayerMacro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIPlayerMacro.h; sourceTree = "<group>"; };
 		B8CAD2C21EE12AD800E99BD1 /* test.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = test.mp4; sourceTree = "<group>"; };
@@ -144,6 +150,10 @@
 				B8F1B5C81EE07470004A1E26 /* LaunchScreen.storyboard */,
 				B8F1B5CB1EE07470004A1E26 /* Info.plist */,
 				B8F1B5BA1EE07470004A1E26 /* Supporting Files */,
+				B89398591EE815FC00C331BE /* NavigationViewController.h */,
+				B893985A1EE815FC00C331BE /* NavigationViewController.m */,
+				B80619A91EE8636D00115654 /* TabBarController.h */,
+				B80619AA1EE8636D00115654 /* TabBarController.m */,
 			);
 			path = NIPlayer;
 			sourceTree = "<group>";
@@ -332,6 +342,7 @@
 				B8F1B5EA1EE074B8004A1E26 /* VideoPlayController.m in Sources */,
 				B8F1B5BF1EE07470004A1E26 /* AppDelegate.m in Sources */,
 				B8F1B5E61EE074B8004A1E26 /* NIAVPlayer.m in Sources */,
+				B893985B1EE815FC00C331BE /* NavigationViewController.m in Sources */,
 				B8CAD2D21EE17D3700E99BD1 /* UILabel+Create.m in Sources */,
 				B8F1B5BC1EE07470004A1E26 /* main.m in Sources */,
 				B8F1B5E71EE074B8004A1E26 /* NIPlayer.m in Sources */,
@@ -341,6 +352,7 @@
 				B89398561EE7B45D00C331BE /* VideoListViewController.m in Sources */,
 				B8F1B5E91EE074B8004A1E26 /* NIPlayerSlider.m in Sources */,
 				B8F1B5EC1EE074B8004A1E26 /* VideoPlaySlider.m in Sources */,
+				B80619AB1EE8636D00115654 /* TabBarController.m in Sources */,
 				B8F1B5ED1EE074B8004A1E26 /* ZNBrightnessView.m in Sources */,
 				B8F1B5EE1EE074B8004A1E26 /* ZNPlayer.m in Sources */,
 			);
