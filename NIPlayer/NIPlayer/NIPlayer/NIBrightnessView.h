@@ -1,6 +1,6 @@
 //
-//  ZNBrightnessView.h
-//  AVPlayer
+//  NIBrightnessView.h
+//  NIPlayer
 //
 //  Created by zhouen on 17/1/4.
 //  Copyright © 2017年 zhouen. All rights reserved.
@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ZNBrightnessView : UIView
+@interface NIBrightnessView : UIView
 
 /** 调用单例记录播放状态是否锁定屏幕方向*/
 @property (nonatomic, assign) BOOL     isLockScreen;

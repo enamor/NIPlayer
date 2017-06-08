@@ -15,6 +15,7 @@
 		B8C48D9E1EE95A1E0066BCC5 /* NSDate+NI_time.m in Sources */ = {isa = PBXBuildFile; fileRef = B8C48D9D1EE95A1E0066BCC5 /* NSDate+NI_time.m */; };
 		B8C48DA11EE95C770066BCC5 /* UINavigationController+NI_allowRote.m in Sources */ = {isa = PBXBuildFile; fileRef = B8C48DA01EE95C770066BCC5 /* UINavigationController+NI_allowRote.m */; };
 		B8C48DA41EE95C9D0066BCC5 /* UITabBarController+NI_allRote.m in Sources */ = {isa = PBXBuildFile; fileRef = B8C48DA31EE95C9D0066BCC5 /* UITabBarController+NI_allRote.m */; };
+		B8C48DA71EE962920066BCC5 /* NIBrightnessView.m in Sources */ = {isa = PBXBuildFile; fileRef = B8C48DA61EE962920066BCC5 /* NIBrightnessView.m */; };
 		B8CAD2BF1EE118FB00E99BD1 /* NIPlayer.bundle in Resources */ = {isa = PBXBuildFile; fileRef = B8CAD2BE1EE118FB00E99BD1 /* NIPlayer.bundle */; };
 		B8CAD2C31EE12AD800E99BD1 /* test.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = B8CAD2C21EE12AD800E99BD1 /* test.mp4 */; };
 		B8CAD2CF1EE1783600E99BD1 /* UIButton+Create.m in Sources */ = {isa = PBXBuildFile; fileRef = B8CAD2CE1EE1783600E99BD1 /* UIButton+Create.m */; };
@@ -29,12 +30,6 @@
 		B8F1B5E71EE074B8004A1E26 /* NIPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = B8F1B5D51EE074B8004A1E26 /* NIPlayer.m */; };
 		B8F1B5E81EE074B8004A1E26 /* NIPlayerControl.m in Sources */ = {isa = PBXBuildFile; fileRef = B8F1B5D71EE074B8004A1E26 /* NIPlayerControl.m */; };
 		B8F1B5E91EE074B8004A1E26 /* NIPlayerSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = B8F1B5D91EE074B8004A1E26 /* NIPlayerSlider.m */; };
-		B8F1B5EA1EE074B8004A1E26 /* VideoPlayController.m in Sources */ = {isa = PBXBuildFile; fileRef = B8F1B5DC1EE074B8004A1E26 /* VideoPlayController.m */; };
-		B8F1B5EB1EE074B8004A1E26 /* VideoPlayer.bundle in Resources */ = {isa = PBXBuildFile; fileRef = B8F1B5DD1EE074B8004A1E26 /* VideoPlayer.bundle */; };
-		B8F1B5EC1EE074B8004A1E26 /* VideoPlaySlider.m in Sources */ = {isa = PBXBuildFile; fileRef = B8F1B5DF1EE074B8004A1E26 /* VideoPlaySlider.m */; };
-		B8F1B5ED1EE074B8004A1E26 /* ZNBrightnessView.m in Sources */ = {isa = PBXBuildFile; fileRef = B8F1B5E11EE074B8004A1E26 /* ZNBrightnessView.m */; };
-		B8F1B5EE1EE074B8004A1E26 /* ZNPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = B8F1B5E31EE074B8004A1E26 /* ZNPlayer.m */; };
-		B8F1B5EF1EE074B8004A1E26 /* ZNVideoPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = B8F1B5E51EE074B8004A1E26 /* ZNVideoPlayer.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -52,6 +47,8 @@
 		B8C48DA01EE95C770066BCC5 /* UINavigationController+NI_allowRote.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UINavigationController+NI_allowRote.m"; sourceTree = "<group>"; };
 		B8C48DA21EE95C9D0066BCC5 /* UITabBarController+NI_allRote.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITabBarController+NI_allRote.h"; sourceTree = "<group>"; };
 		B8C48DA31EE95C9D0066BCC5 /* UITabBarController+NI_allRote.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITabBarController+NI_allRote.m"; sourceTree = "<group>"; };
+		B8C48DA51EE962920066BCC5 /* NIBrightnessView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIBrightnessView.h; sourceTree = "<group>"; };
+		B8C48DA61EE962920066BCC5 /* NIBrightnessView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIBrightnessView.m; sourceTree = "<group>"; };
 		B8CAD2BE1EE118FB00E99BD1 /* NIPlayer.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = NIPlayer.bundle; sourceTree = "<group>"; };
 		B8CAD2C11EE11A7700E99BD1 /* NIPlayerMacro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIPlayerMacro.h; sourceTree = "<group>"; };
 		B8CAD2C21EE12AD800E99BD1 /* test.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = test.mp4; sourceTree = "<group>"; };
@@ -77,17 +74,6 @@
 		B8F1B5D71EE074B8004A1E26 /* NIPlayerControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIPlayerControl.m; sourceTree = "<group>"; };
 		B8F1B5D81EE074B8004A1E26 /* NIPlayerSlider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIPlayerSlider.h; sourceTree = "<group>"; };
 		B8F1B5D91EE074B8004A1E26 /* NIPlayerSlider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIPlayerSlider.m; sourceTree = "<group>"; };
-		B8F1B5DB1EE074B8004A1E26 /* VideoPlayController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoPlayController.h; sourceTree = "<group>"; };
-		B8F1B5DC1EE074B8004A1E26 /* VideoPlayController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoPlayController.m; sourceTree = "<group>"; };
-		B8F1B5DD1EE074B8004A1E26 /* VideoPlayer.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = VideoPlayer.bundle; sourceTree = "<group>"; };
-		B8F1B5DE1EE074B8004A1E26 /* VideoPlaySlider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoPlaySlider.h; sourceTree = "<group>"; };
-		B8F1B5DF1EE074B8004A1E26 /* VideoPlaySlider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoPlaySlider.m; sourceTree = "<group>"; };
-		B8F1B5E01EE074B8004A1E26 /* ZNBrightnessView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZNBrightnessView.h; sourceTree = "<group>"; };
-		B8F1B5E11EE074B8004A1E26 /* ZNBrightnessView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZNBrightnessView.m; sourceTree = "<group>"; };
-		B8F1B5E21EE074B8004A1E26 /* ZNPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZNPlayer.h; sourceTree = "<group>"; };
-		B8F1B5E31EE074B8004A1E26 /* ZNPlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZNPlayer.m; sourceTree = "<group>"; };
-		B8F1B5E41EE074B8004A1E26 /* ZNVideoPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZNVideoPlayer.h; sourceTree = "<group>"; };
-		B8F1B5E51EE074B8004A1E26 /* ZNVideoPlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZNVideoPlayer.m; sourceTree = "<group>"; };
 		D01EA5CA1EF3575BAAF9CE72 /* Pods-NIPlayer.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NIPlayer.debug.xcconfig"; path = "Pods/Target Support Files/Pods-NIPlayer/Pods-NIPlayer.debug.xcconfig"; sourceTree = "<group>"; };
 		D93917337B905F823F762552 /* libPods-NIPlayer.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-NIPlayer.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -153,7 +139,6 @@
 				B89398571EE7D39E00C331BE /* texst.png */,
 				B8CAD2C21EE12AD800E99BD1 /* test.mp4 */,
 				B8F1B5D11EE074B8004A1E26 /* NIPlayer */,
-				B8F1B5DA1EE074B8004A1E26 /* znplayer */,
 				B8F1B5BD1EE07470004A1E26 /* AppDelegate.h */,
 				B8F1B5BE1EE07470004A1E26 /* AppDelegate.m */,
 				B8F1B5C01EE07470004A1E26 /* ViewController.h */,
@@ -195,26 +180,10 @@
 				B8F1B5D81EE074B8004A1E26 /* NIPlayerSlider.h */,
 				B8F1B5D91EE074B8004A1E26 /* NIPlayerSlider.m */,
 				B8CAD2C11EE11A7700E99BD1 /* NIPlayerMacro.h */,
+				B8C48DA51EE962920066BCC5 /* NIBrightnessView.h */,
+				B8C48DA61EE962920066BCC5 /* NIBrightnessView.m */,
 			);
 			path = NIPlayer;
-			sourceTree = "<group>";
-		};
-		B8F1B5DA1EE074B8004A1E26 /* znplayer */ = {
-			isa = PBXGroup;
-			children = (
-				B8F1B5DB1EE074B8004A1E26 /* VideoPlayController.h */,
-				B8F1B5DC1EE074B8004A1E26 /* VideoPlayController.m */,
-				B8F1B5DD1EE074B8004A1E26 /* VideoPlayer.bundle */,
-				B8F1B5DE1EE074B8004A1E26 /* VideoPlaySlider.h */,
-				B8F1B5DF1EE074B8004A1E26 /* VideoPlaySlider.m */,
-				B8F1B5E01EE074B8004A1E26 /* ZNBrightnessView.h */,
-				B8F1B5E11EE074B8004A1E26 /* ZNBrightnessView.m */,
-				B8F1B5E21EE074B8004A1E26 /* ZNPlayer.h */,
-				B8F1B5E31EE074B8004A1E26 /* ZNPlayer.m */,
-				B8F1B5E41EE074B8004A1E26 /* ZNVideoPlayer.h */,
-				B8F1B5E51EE074B8004A1E26 /* ZNVideoPlayer.m */,
-			);
-			path = znplayer;
 			sourceTree = "<group>";
 		};
 		FE426067A8F38E45000AC022 /* Pods */ = {
@@ -292,7 +261,6 @@
 				B8CAD2C31EE12AD800E99BD1 /* test.mp4 in Resources */,
 				B8F1B5C71EE07470004A1E26 /* Assets.xcassets in Resources */,
 				B89398581EE7D39E00C331BE /* texst.png in Resources */,
-				B8F1B5EB1EE074B8004A1E26 /* VideoPlayer.bundle in Resources */,
 				B8CAD2BF1EE118FB00E99BD1 /* NIPlayer.bundle in Resources */,
 				B8F1B5C51EE07470004A1E26 /* Main.storyboard in Resources */,
 			);
@@ -354,7 +322,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				B8F1B5C21EE07470004A1E26 /* ViewController.m in Sources */,
-				B8F1B5EA1EE074B8004A1E26 /* VideoPlayController.m in Sources */,
 				B8F1B5BF1EE07470004A1E26 /* AppDelegate.m in Sources */,
 				B8F1B5E61EE074B8004A1E26 /* NIAVPlayer.m in Sources */,
 				B893985B1EE815FC00C331BE /* NavigationViewController.m in Sources */,
@@ -362,17 +329,14 @@
 				B8C48DA11EE95C770066BCC5 /* UINavigationController+NI_allowRote.m in Sources */,
 				B8F1B5BC1EE07470004A1E26 /* main.m in Sources */,
 				B8F1B5E71EE074B8004A1E26 /* NIPlayer.m in Sources */,
-				B8F1B5EF1EE074B8004A1E26 /* ZNVideoPlayer.m in Sources */,
 				B8CAD2CF1EE1783600E99BD1 /* UIButton+Create.m in Sources */,
 				B8F1B5E81EE074B8004A1E26 /* NIPlayerControl.m in Sources */,
 				B89398561EE7B45D00C331BE /* VideoListViewController.m in Sources */,
 				B8C48D9E1EE95A1E0066BCC5 /* NSDate+NI_time.m in Sources */,
 				B8F1B5E91EE074B8004A1E26 /* NIPlayerSlider.m in Sources */,
-				B8F1B5EC1EE074B8004A1E26 /* VideoPlaySlider.m in Sources */,
+				B8C48DA71EE962920066BCC5 /* NIBrightnessView.m in Sources */,
 				B8C48DA41EE95C9D0066BCC5 /* UITabBarController+NI_allRote.m in Sources */,
 				B80619AB1EE8636D00115654 /* TabBarController.m in Sources */,
-				B8F1B5ED1EE074B8004A1E26 /* ZNBrightnessView.m in Sources */,
-				B8F1B5EE1EE074B8004A1E26 /* ZNPlayer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

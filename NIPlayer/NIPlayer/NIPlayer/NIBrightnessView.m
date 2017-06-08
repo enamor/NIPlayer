@@ -1,18 +1,16 @@
 //
-//  ZNBrightnessView.m
-//  AVPlayer
+//  NIBrightnessView.m
+//  NIPlayer
 //
 //  Created by zhouen on 17/1/4.
 //  Copyright © 2017年 zhouen. All rights reserved.
 //
 
-#import "ZNBrightnessView.h"
+#import "NIBrightnessView.h"
 #import <Masonry.h>
+#import "NIPlayerMacro.h"
 
-#define ScreenWidth ([UIScreen mainScreen].bounds.size.width)
-#define ScreenHeight ([UIScreen mainScreen].bounds.size.height)
-
-@interface ZNBrightnessView ()
+@interface NIBrightnessView ()
 
 @property (nonatomic, strong) UIImageView		*backImage;
 @property (nonatomic, strong) UILabel			*title;
@@ -22,31 +20,45 @@
 
 @end
 
-@implementation ZNBrightnessView
+@implementation NIBrightnessView
 
 + (instancetype)sharedInstance {
-	static ZNBrightnessView *instance;
+	static NIBrightnessView *instance;
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
-		instance = [[ZNBrightnessView alloc] init];
+		instance = [[NIBrightnessView alloc] init];
 	});
 	return instance;
 }
 
 - (void)show {
-    [[UIApplication sharedApplication].keyWindow addSubview:[ZNBrightnessView sharedInstance]];
-    [[UIApplication sharedApplication].keyWindow bringSubviewToFront:[ZNBrightnessView sharedInstance]];
-    [[ZNBrightnessView sharedInstance] mas_makeConstraints:^(MASConstraintMaker *make) {
+    
+    [[UIApplication sharedApplication].keyWindow addSubview:self];
+    [[UIApplication sharedApplication].keyWindow bringSubviewToFront:self];
+    
+    [self mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo([UIApplication sharedApplication].keyWindow);
         make.centerY.equalTo([UIApplication sharedApplication].keyWindow);
         make.width.mas_equalTo(155);
         make.height.mas_equalTo(155);
     }];
+    switch ([UIDevice currentDevice].orientation) {
+        case UIDeviceOrientationPortrait:
+            [self setTransform:CGAffineTransformMakeRotation(M_PI_2)];
+            break;
+        case UIDeviceOrientationLandscapeLeft:
+        case UIDeviceOrientationLandscapeRight:
+            [self setTransform:CGAffineTransformIdentity];
+            break;
+            
+        default:
+            break;
+    }
 }
 
 - (instancetype)init {
 	if (self = [super init]) {
-		self.frame = CGRectMake(ScreenWidth * 0.5, ScreenHeight * 0.5, 155, 155);
+		self.frame = CGRectMake(SCREEN_WIDTH * 0.5, SCREEN_HEIGHT * 0.5, 155, 155);
 		
         self.layer.cornerRadius  = 10;
         self.layer.masksToBounds = YES;
@@ -58,7 +70,7 @@
         
 		self.backImage = ({
             UIImageView *imgView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 79, 76)];
-            imgView.image        =  [self imageWithName:@"player_brightness@2x"];
+            imgView.image        =  BUNDLE_IMAGE(@"NIPlayer_brightness@2x");
 			[self addSubview:imgView];
 			imgView;
 		});
@@ -191,10 +203,5 @@
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-- (UIImage *)imageWithName:(NSString *)name {
-    NSString *path = [[NSBundle mainBundle]pathForResource:@"VideoPlayer" ofType:@"bundle"];
-    NSString *imagePath = [path stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.png",name]];
-    return [UIImage imageWithContentsOfFile:imagePath];
-}
 
 @end

@@ -7,6 +7,7 @@
 //
 
 #import "NIPlayer.h"
+#import <MediaPlayer/MediaPlayer.h>
 
 #import <Masonry.h>
 
@@ -16,6 +17,7 @@
 #import "NIAVPlayer.h"
 #import "NIPlayerControl.h"
 #import "NIPlayerMacro.h"
+#import "NIBrightnessView.h"
 
 // 枚举值，包含水平移动方向和垂直移动方向
 typedef NS_ENUM(NSInteger, PanDirection){
@@ -39,6 +41,7 @@ typedef NS_ENUM(NSInteger, PanDirection){
 @property (nonatomic, assign) PanDirection           panDirection;
 /** 是否在调节音量*/
 @property (nonatomic, assign) BOOL                   isVolume;
+@property (nonatomic, strong) UISlider               *volumeViewSlider;
 
 @end
 @implementation NIPlayer
@@ -105,6 +108,7 @@ typedef NS_ENUM(NSInteger, PanDirection){
     [self.playerControl reset];
     APP_DELEGATE.allowRotationType = AllowRotationMaskAllButUpsideDown;
     [self.avPlayer playWithUrl:url];
+    [self p_configureVolume];
 }
 
 - (void)playWithUrl:(NSString *)url onView:(UIView *)view {
@@ -113,6 +117,7 @@ typedef NS_ENUM(NSInteger, PanDirection){
     self.isPlayOnView = YES;
     APP_DELEGATE.allowRotationType = AllowRotationMaskPortrait;
     [self.avPlayer playWithUrl:url];
+    [self p_configureVolume];
 }
 
 - (void)play {
@@ -151,6 +156,11 @@ typedef NS_ENUM(NSInteger, PanDirection){
 - (void)p_initObserver {
     //监听屏幕方向
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(p_initScreenOrientationChanged:) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(p_initAudioVolumeObserver:) name:@"AVSystemController_SystemVolumeDidChangeNotification" object:nil];
+
+    // 监听耳机插入和拔掉通知
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(p_initaudioRouteChangeObserver:) name:AVAudioSessionRouteChangeNotification object:nil];
     
     //监听播放进度、缓冲进度
     __weak typeof(self) weakSelf = self;
@@ -235,6 +245,60 @@ typedef NS_ENUM(NSInteger, PanDirection){
     
 }
 
+//监听系统音量改变
+- (void)p_initAudioVolumeObserver:(id)notification {
+    float volume = [[[notification userInfo] objectForKey:@"AVSystemController_AudioVolumeNotificationParameter"] floatValue];
+    self.volumeViewSlider.value = volume;
+    
+}
+
+//耳机插入拔出
+- (void)p_initaudioRouteChangeObserver:(id)notification {
+    NSDictionary *interuptionDict = [notification userInfo];
+    NSInteger routeChangeReason = [[interuptionDict valueForKey:AVAudioSessionRouteChangeReasonKey] integerValue];
+    
+    switch (routeChangeReason) {
+            
+        case AVAudioSessionRouteChangeReasonNewDeviceAvailable:
+            // 耳机插入
+            break;
+        case AVAudioSessionRouteChangeReasonOldDeviceUnavailable: {
+            // 耳机拔掉
+            [self play];
+            break;
+        }
+        case AVAudioSessionRouteChangeReasonCategoryChange:
+            // called at start - also when other audio wants to play
+            NSLog(@"AVAudioSessionRouteChangeReasonCategoryChange");
+            break;
+    }
+}
+
+
+/**
+ *  获取系统音量
+ */
+- (void)p_configureVolume {
+    MPVolumeView *volumeView = [[MPVolumeView alloc] init];
+    _volumeViewSlider = nil;
+    for (UIView *view in [volumeView subviews]){
+        if ([view.class.description isEqualToString:@"MPVolumeSlider"]){
+            _volumeViewSlider = (UISlider *)view;
+            break;
+        }
+    }
+    
+    // 使用这个category的应用不会随着手机静音键打开而静音，可在手机静音下播放声音
+    NSError *setCategoryError = nil;
+    BOOL success = [[AVAudioSession sharedInstance]
+                    setCategory: AVAudioSessionCategoryPlayback
+                    error: &setCategoryError];
+    
+    if (!success) { /* handle the error in setCategoryError */ }
+
+    
+}
+
 #pragma mark - Public
 - (void)fullScreen:(UIButton *)sender {
     sender.selected = !sender.selected;
@@ -245,6 +309,7 @@ typedef NS_ENUM(NSInteger, PanDirection){
             CGFloat height = [[UIScreen mainScreen] bounds].size.width;
             CGFloat width = [[UIScreen mainScreen] bounds].size.height;
             [[UIApplication sharedApplication].keyWindow addSubview:self];
+            [[NIBrightnessView sharedInstance] show];
             [UIView animateWithDuration:0.3f animations:^{
                 [self setTransform:CGAffineTransformMakeRotation(M_PI_2)];
                 
@@ -261,6 +326,7 @@ typedef NS_ENUM(NSInteger, PanDirection){
             APP.statusBarHidden = NO;
         } else {
             [self removeFromSuperview];
+            [[NIBrightnessView sharedInstance] removeFromSuperview];
             
             [self.superView addSubview:self];
             [UIView animateWithDuration:0.3f animations:^{
@@ -280,14 +346,15 @@ typedef NS_ENUM(NSInteger, PanDirection){
         if(sender.selected) {
             [[UIDevice currentDevice] setValue:[NSNumber numberWithInteger:UIDeviceOrientationLandscapeLeft] forKey:@"orientation"];
             self.isFullScreen = YES;
+            [[NIBrightnessView sharedInstance] show];
             
         } else {
+            [[NIBrightnessView sharedInstance] removeFromSuperview];
             [[UIDevice currentDevice] setValue:[NSNumber numberWithInteger:UIDeviceOrientationPortrait] forKey:@"orientation"];
             self.isFullScreen = NO;
         }
         [[[self getCurrentViewController] class] attemptRotationToDeviceOrientation];
     }
-    
     
     
 }
@@ -309,9 +376,6 @@ typedef NS_ENUM(NSInteger, PanDirection){
     // 我们要响应水平移动和垂直移动
     // 根据上次和本次移动的位置，算出一个速率的point
     CGPoint veloctyPoint = [pan velocityInView:self];
-    
-    
-    
     
     // 判断是垂直移动还是水平移动
     switch (pan.state) {
@@ -430,7 +494,7 @@ typedef NS_ENUM(NSInteger, PanDirection){
 }
 
 - (void)verticalMoved:(CGFloat)value {
-    
+    self.isVolume ? (self.volumeViewSlider.value -= value / 10000) : ([UIScreen mainScreen].brightness -= value / 10000);
 }
 
 
