@@ -73,12 +73,12 @@
     firstVC.title = @"first";
     ViewController *secondVC = [[ViewController alloc] init];
     secondVC.title = @"second";
-    TabBarController *rootVc = [[TabBarController alloc] init];
+    UITabBarController *rootVc = [[UITabBarController alloc] init];
     
     
-    NavigationViewController *one = [[NavigationViewController alloc]initWithRootViewController:firstVC];
+    UINavigationController *one = [[UINavigationController alloc]initWithRootViewController:firstVC];
     
-    NavigationViewController *two = [[NavigationViewController alloc]initWithRootViewController:secondVC];
+    UINavigationController *two = [[UINavigationController alloc]initWithRootViewController:secondVC];
     
     [rootVc addChildViewController:one];
     [rootVc addChildViewController:two];

@@ -7,7 +7,12 @@
 //
 
 #import "NIPlayer.h"
+
 #import <Masonry.h>
+
+#import "UINavigationController+NI_allowRote.h"
+#import "UITabBarController+NI_allRote.h"
+
 #import "NIAVPlayer.h"
 #import "NIPlayerControl.h"
 #import "NIPlayerMacro.h"
@@ -82,7 +87,7 @@ typedef NS_ENUM(NSInteger, PanDirection){
 }
 
 - (void)playerControl:(UIView *)control sliderValueChangedAction:(UISlider *)sender {
-    [self.playerControl draggedTime:sender.value * self.avPlayer.totalTime totalTime:self.avPlayer.totalTime];
+    [self.playerControl seekTo:sender.value * self.avPlayer.totalTime totalTime:self.avPlayer.totalTime];
     [self.avPlayer startToSeek];
 }
 #pragma mark ------ UITextFieldDelegate
@@ -100,8 +105,6 @@ typedef NS_ENUM(NSInteger, PanDirection){
     [self.playerControl reset];
     APP_DELEGATE.allowRotationType = AllowRotationMaskAllButUpsideDown;
     [self.avPlayer playWithUrl:url];
-    
-    
 }
 
 - (void)playWithUrl:(NSString *)url onView:(UIView *)view {
@@ -110,7 +113,6 @@ typedef NS_ENUM(NSInteger, PanDirection){
     self.isPlayOnView = YES;
     APP_DELEGATE.allowRotationType = AllowRotationMaskPortrait;
     [self.avPlayer playWithUrl:url];
-    
 }
 
 - (void)play {
@@ -157,7 +159,7 @@ typedef NS_ENUM(NSInteger, PanDirection){
             weakSelf.playerControl.progressSlider.cacheValue = value;
         
         } else {
-            [weakSelf.playerControl draggedTime:weakSelf.avPlayer.currentTime totalTime:weakSelf.avPlayer.totalTime];
+            [weakSelf.playerControl seekTo:weakSelf.avPlayer.currentTime totalTime:weakSelf.avPlayer.totalTime];
         }
     };
     
@@ -170,7 +172,6 @@ typedef NS_ENUM(NSInteger, PanDirection){
             }
             case NIAVPlayerStatusReadyToPlay: {
                 weakSelf.playerControl.playButton.selected = NO;
-                weakSelf.playerControl.totalTimeLabel.text = [weakSelf convertTime:weakSelf.avPlayer.totalTime];
                 [weakSelf addTap];
                 break;
             }
@@ -247,15 +248,14 @@ typedef NS_ENUM(NSInteger, PanDirection){
             [UIView animateWithDuration:0.3f animations:^{
                 [self setTransform:CGAffineTransformMakeRotation(M_PI_2)];
                 
-                [self mas_remakeConstraints:^(MASConstraintMaker *make) {
-                    make.left.mas_equalTo((height - width) / 2);
-                    make.top.mas_equalTo((width - height) / 2);
-                    make.width.mas_equalTo(width);
-                    make.height.mas_equalTo(height);
-                }];
-                
             } completion:^(BOOL finished) {
                 self.isFullScreen = YES;
+            }];
+            [self mas_remakeConstraints:^(MASConstraintMaker *make) {
+                make.left.mas_equalTo((height - width) / 2);
+                make.top.mas_equalTo((width - height) / 2);
+                make.width.mas_equalTo(width);
+                make.height.mas_equalTo(height);
             }];
             APP.statusBarOrientation = UIInterfaceOrientationLandscapeRight;
             APP.statusBarHidden = NO;
@@ -266,12 +266,11 @@ typedef NS_ENUM(NSInteger, PanDirection){
             [UIView animateWithDuration:0.3f animations:^{
                 [self setTransform:CGAffineTransformIdentity];
                 
-                [self mas_remakeConstraints:^(MASConstraintMaker *make) {
-                    make.edges.equalTo(self.superView);
-                }];
-                
             } completion:^(BOOL finished) {
                 self.isFullScreen = NO;
+            }];
+            [self mas_remakeConstraints:^(MASConstraintMaker *make) {
+                make.edges.equalTo(self.superView);
             }];
             APP.statusBarOrientation = UIInterfaceOrientationPortrait;
             APP.statusBarHidden = NO;
@@ -320,11 +319,11 @@ typedef NS_ENUM(NSInteger, PanDirection){
             // 使用绝对值来判断移动的方向
             CGFloat x = fabs(veloctyPoint.x);
             CGFloat y = fabs(veloctyPoint.y);
-            if (x > y) { // 水平移动
+            if (x > y) { //水平移动
                 // 取消隐藏
                 self.panDirection = PanDirectionHorizontalMoved;
                 // 给sumTime初值
-                self.sumTime       = self.avPlayer.currentTime;
+                self.sumTime = self.avPlayer.currentTime;
             }
             else if (x < y){ // 垂直移动
                 self.panDirection = PanDirectionVerticalMoved;
@@ -357,10 +356,7 @@ typedef NS_ENUM(NSInteger, PanDirection){
             // 比如水平移动结束时，要快进到指定位置，如果这里没有判断，当我们调节音量完之后，会出现屏幕跳动的bug
             switch (self.panDirection) {
                 case PanDirectionHorizontalMoved:{
-//                    self.isPauseByUser = NO;
                     [self.avPlayer seekTo:self.sumTime];
-//                    [self seekToTime:self.sumTime completionHandler:nil];
-                    // 把sumTime滞空，不然会越加越多
                     self.sumTime = 0;
                     break;
                 }
@@ -428,19 +424,8 @@ typedef NS_ENUM(NSInteger, PanDirection){
     if (value < 0) { style = NO; }
     if (value == 0) { return; }
     
-    [self.playerControl draggedTime:self.sumTime totalTime:totalSeconds];
+    [self.playerControl seekTo:self.sumTime totalTime:totalSeconds];
     [self.avPlayer startToSeek];
-    
-//    if (value < 0 ) {
-//        double seconds = ABS(value);
-//        double skipSeconds = seconds * 60 /self.frame.size.width;
-//        CGFloat seekSeconds = self.avPlayer.currentTime - skipSeconds;
-//        self.sumTime = MAX(0, seekSeconds);
-//    } else {
-//        double skipSeconds = value * 60 /self.frame.size.width;
-//        CGFloat seekSeconds = self.avPlayer.currentTime + skipSeconds;
-//        self.sumTime = MIN(seekSeconds, self.avPlayer.totalTime);
-//    }
     
 }
 
@@ -448,17 +433,7 @@ typedef NS_ENUM(NSInteger, PanDirection){
     
 }
 
-- (NSString *)convertTime:(double)second{
-    NSDate *d = [NSDate dateWithTimeIntervalSince1970:second];
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    if (second/3600 >= 1) {
-        [dateFormatter setDateFormat:@"HH:mm:ss"];
-    } else {
-        [dateFormatter setDateFormat:@"mm:ss"];
-    }
-    NSString *showtimeNew = [dateFormatter stringFromDate:d];
-    return showtimeNew;
-}
+
 
 /** 获取当前View的控制器对象 */
 -(UIViewController *)getCurrentViewController{

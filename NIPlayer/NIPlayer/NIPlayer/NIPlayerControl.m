@@ -12,6 +12,7 @@
 #import <Masonry.h>
 #import "UIButton+Create.h"
 #import "UILabel+Create.h"
+#import "NSDate+NI_time.h"
 
 @interface NIPlayerControl ()
 @property (nonatomic, strong) UIView *topBar;
@@ -66,6 +67,13 @@
 - (void)reset {
     self.progressSlider.cacheValue = 0;
     self.progressSlider.value = 0;
+    
+    self.currentTimeLabel.text = @"00:00";
+    self.totalTimeLabel.text = @"01:00:00";
+    
+    self.pipCurrentLabel.text = @"00:00";
+    self.pipTotalLabel.text = @"01:00:00";
+    
 }
 #pragma mark ------ IBAction
 
@@ -303,32 +311,18 @@
     }];
 
 }
-- (void)draggedTime:(double)draggedTime totalTime:(double)totalTime {
-    NSString *time = [self convertTime:draggedTime];
-    NSString *total = [self convertTime:totalTime];
-    self.pipCurrentLabel.text = time;
-    self.pipTotalLabel.text = total;
+- (void)seekTo:(double)time totalTime:(double)totalTime; {
+    NSString *dtime = [NSDate hourTime:time];
+    NSString *dtotal = [NSDate hourTime:totalTime];
+    self.pipCurrentLabel.text = dtime;
+    self.pipTotalLabel.text = dtotal;
     
-    self.currentTimeLabel.text = time;
-    self.totalTimeLabel.text = total;
-    self.progressSlider.value = draggedTime/totalTime;
-    if (!_isDragged) {
-        
-    }
+    self.currentTimeLabel.text = dtime;
+    self.totalTimeLabel.text = dtotal;
+    self.progressSlider.value = time/totalTime;
     
 }
 
-- (NSString *)convertTime:(double)second{
-    NSDate *d = [NSDate dateWithTimeIntervalSince1970:second];
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    if (second/3600 >= 1) {
-        [dateFormatter setDateFormat:@"HH:mm:ss"];
-    } else {
-        [dateFormatter setDateFormat:@"mm:ss"];
-    }
-    NSString *showtimeNew = [dateFormatter stringFromDate:d];
-    return showtimeNew;
-}
 
 - (void)backAction:(UIButton *)sender {
     if ([_controlDelegate respondsToSelector:@selector(playerControl:backAction:)]) {
@@ -355,13 +349,11 @@
 }
 
 - (void)seekAction:(UISlider *)sender {
-    _isDragged = NO;
     if ([_controlDelegate respondsToSelector:@selector(playerControl:seekAction:)]) {
         [_controlDelegate playerControl:self seekAction:sender];
     }
 }
 - (void)sliderValueChangedAction:(UISlider *)sender {
-    _isDragged = YES;
     if ([_controlDelegate respondsToSelector:@selector(playerControl:sliderValueChangedAction:)]) {
         [_controlDelegate playerControl:self sliderValueChangedAction:sender];
     }

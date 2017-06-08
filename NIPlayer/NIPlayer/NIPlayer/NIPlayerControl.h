@@ -24,13 +24,12 @@
 @property (nonatomic, strong) UILabel *currentTimeLabel;
 @property (nonatomic, strong) UILabel *totalTimeLabel;
 @property (nonatomic, strong) NIPlayerSlider *progressSlider;
-@property (nonatomic, assign) BOOL isDragged;
 
 @property (nonatomic, assign) BOOL isFullScreen;
 
 @property (nonatomic, weak) id<NIPlayerControlDelegate> controlDelegate;
 
-- (void)draggedTime:(double)draggedTime totalTime:(double)totalTime;
+- (void)seekTo:(double)time totalTime:(double)totalTime;
 - (void)reset ;
 
 @end
