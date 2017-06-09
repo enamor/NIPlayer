@@ -10,10 +10,14 @@
 
 @interface NIAVPlayer ()
 /** 播放器 */
-@property (nonatomic, strong) AVPlayer *player;
-@property (nonatomic, strong) AVPlayerLayer *playerLayer;
+@property (nonatomic, strong) AVPlayer          *player;
+@property (nonatomic, strong) AVURLAsset        *urlAsset;
+@property (nonatomic, strong) AVPlayerLayer     *playerLayer;
 /** 视频资源 */
-@property (nonatomic, strong) AVPlayerItem *playerItem;
+@property (nonatomic, strong) AVPlayerItem      *playerItem;
+
+/** 用于获取 */
+@property (nonatomic, strong) AVAssetImageGenerator  *imageGenerator;
 /** 播放器观察者 */
 @property (nonatomic ,strong)  id timeObser;
 // 拖动进度条的时候停止刷新数据
@@ -119,13 +123,10 @@
         url = [NSURL fileURLWithPath:strUrl];
     }
 
-    
     [self p_initPlayer:url type:type];
-    
     if (_statusBlock) {
         _statusBlock(NIAVPlayerStatusLoading);
     }
-    
 }
 
 /**
@@ -170,6 +171,8 @@
     [self.playerLayer removeFromSuperlayer];
     self.playerLayer = nil;
     self.timeObser = nil;
+    self.urlAsset = nil;
+    self.imageGenerator = nil;
 }
 
 #pragma mark ------ IBAction
@@ -189,12 +192,19 @@
         
     }
     
-    if (type == 0) {
-        AVAsset *movieAsset = [AVURLAsset URLAssetWithURL:url options:nil];
-        self.playerItem = [AVPlayerItem playerItemWithAsset:movieAsset];
-    } else {
-        self.playerItem = [AVPlayerItem playerItemWithURL:url];
-    }
+//    if (type == 0) {
+//        AVAsset *movieAsset = [AVURLAsset URLAssetWithURL:url options:nil];
+//        self.playerItem = [AVPlayerItem playerItemWithAsset:movieAsset];
+//    } else {
+//        self.playerItem = [AVPlayerItem playerItemWithURL:url];
+//    }
+    
+    self.urlAsset = [AVURLAsset assetWithURL:url];
+    // 初始化playerItem
+    self.playerItem = [AVPlayerItem playerItemWithAsset:self.urlAsset];
+    
+    _imageGenerator = [AVAssetImageGenerator assetImageGeneratorWithAsset:self.urlAsset];
+    
     
     self.player = [AVPlayer playerWithPlayerItem:_playerItem];
     self.playerLayer = [AVPlayerLayer playerLayerWithPlayer:self.player];
@@ -385,6 +395,33 @@
 
 - (BOOL)isPlay {
     return self.player.rate;
+}
+
+- (void)getCImage:(double)time block:(void (^)(UIImage *image))block {
+    if (!self.isCanPlay) {
+        return;
+    }
+    CMTime dragedCMTime   = CMTimeMake(time, 1);
+    [self.imageGenerator cancelAllCGImageGeneration];
+    self.imageGenerator.appliesPreferredTrackTransform = YES;
+    self.imageGenerator.maximumSize = CGSizeMake(100, 56);
+    AVAssetImageGeneratorCompletionHandler handler = ^(CMTime requestedTime, CGImageRef im, CMTime actualTime, AVAssetImageGeneratorResult result, NSError *error){
+        NSLog(@"%zd",result);
+        if (result != AVAssetImageGeneratorSucceeded) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                
+            });
+        } else {
+            UIImage *image = [UIImage imageWithCGImage:im];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (block) {
+                    block(image);
+                }
+            });
+        }
+    };
+    [self.imageGenerator generateCGImagesAsynchronouslyForTimes:[NSArray arrayWithObject:[NSValue valueWithCMTime:dragedCMTime]] completionHandler:handler];
+
 }
 
 

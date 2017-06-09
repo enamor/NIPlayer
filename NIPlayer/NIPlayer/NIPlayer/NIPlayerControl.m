@@ -30,6 +30,7 @@
 
 @property (nonatomic, strong) UILabel *pipCurrentLabel;
 @property (nonatomic, strong) UILabel *pipTotalLabel;
+@property (nonatomic, strong) UIImageView *pipImageView;
 
 
 @end
@@ -293,12 +294,20 @@
         make.height.mas_equalTo(100);
     }];
     
+    self.pipImageView = [[UIImageView alloc] init];
+    [pipView addSubview:_pipImageView];
+    [self.pipImageView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.top.equalTo(pipView);
+        make.bottom.equalTo(pipView).offset(-20);
+    }];
+    
     
     self.pipCurrentLabel = [UILabel labelWithText:@"00:00" fontSize:13 textColor:[UIColor whiteColor]];
     _pipCurrentLabel.textAlignment = NSTextAlignmentRight;
     [pipView addSubview:_pipCurrentLabel];
     [self.pipCurrentLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.top.bottom.equalTo(pipView);
+        make.top.equalTo(pipView.mas_bottom);
+        make.left.bottom.equalTo(pipView);
         make.width.mas_equalTo(80);
     }];
     
@@ -306,7 +315,8 @@
     self.pipTotalLabel = [UILabel labelWithText:@"00:00:00" fontSize:13 textColor:[UIColor whiteColor]];
     [pipView addSubview:_pipTotalLabel];
     [self.pipTotalLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.right.top.bottom.equalTo(pipView);
+        make.top.equalTo(pipView.mas_bottom);
+        make.right.bottom.equalTo(pipView);
         make.width.mas_equalTo(80);
     }];
 
@@ -320,6 +330,12 @@
     self.currentTimeLabel.text = dtime;
     self.totalTimeLabel.text = dtotal;
     self.progressSlider.value = time/totalTime;
+    
+}
+
+- (void)seekTo:(double)time totalTime:(double)totalTime image:(UIImage *)image {
+    [self seekTo:time totalTime:totalTime];
+    self.pipImageView.image = image;
     
 }
 

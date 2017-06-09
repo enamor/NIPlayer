@@ -76,4 +76,6 @@ typedef void(^NIAVPlayerProgressBlock)(CGFloat value ,NIAVPlayerProgressType typ
 /** 彻底释放播放器 */
 - (void)releasePlayer;
 
+- (void)getCImage:(double)time block:(void (^)(UIImage *image))block;
+
 @end

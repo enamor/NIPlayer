@@ -94,7 +94,10 @@ typedef NS_ENUM(NSInteger, PanDirection){
 }
 
 - (void)playerControl:(UIView *)control sliderValueChangedAction:(UISlider *)sender {
-    [self.playerControl seekTo:sender.value * self.avPlayer.totalTime totalTime:self.avPlayer.totalTime];
+    [self.avPlayer getCImage:sender.value * self.avPlayer.totalTime block:^(UIImage *image) {
+        [self.playerControl seekTo:sender.value * self.avPlayer.totalTime totalTime:self.avPlayer.totalTime image:image];
+    }];
+    
     [self.avPlayer startToSeek];
 }
 #pragma mark ------ UITextFieldDelegate
@@ -368,7 +371,6 @@ typedef NS_ENUM(NSInteger, PanDirection){
     
     
 }
-
 
 
 

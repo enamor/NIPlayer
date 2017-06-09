@@ -30,6 +30,8 @@
 @property (nonatomic, weak) id<NIPlayerControlDelegate> controlDelegate;
 
 - (void)seekTo:(double)time totalTime:(double)totalTime;
+
+- (void)seekTo:(double)time totalTime:(double)totalTime image:(UIImage *)image;
 - (void)reset ;
 
 @end
