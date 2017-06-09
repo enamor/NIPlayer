@@ -23,4 +23,10 @@
     return [self.visibleViewController preferredInterfaceOrientationForPresentation];
 }
 
+- (UIStatusBarStyle)preferredStatusBarStyle {
+    
+    return [self.visibleViewController preferredStatusBarStyle];
+}
+
+
 @end

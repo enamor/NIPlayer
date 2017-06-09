@@ -21,8 +21,7 @@
     [super viewDidLoad];
     
     _player = [[NIPlayer alloc] init];
-    
-    
+    //相对于上面的接口，这个接口可以动画的改变statusBar的前景色
     APP_DELEGATE.allowRotationType = AllowRotationMaskPortrait;
     self.dataSource = @[@"http://7xqhmn.media1.z0.glb.clouddn.com/femorning-20161106.mp4",
                         @"http://wvideo.spriteapp.cn/video/2016/0328/56f8ec01d9bfe_wpd.mp4",

@@ -13,6 +13,7 @@
 
 #import "UINavigationController+NI_allowRote.h"
 #import "UITabBarController+NI_allRote.h"
+#import "UIView+NI_superVC.h"
 
 #import "NIAVPlayer.h"
 #import "NIPlayerControl.h"
@@ -34,6 +35,8 @@ typedef NS_ENUM(NSInteger, PanDirection){
 @property (nonatomic, strong) UIView *superView;
 @property (nonatomic, assign) BOOL isPlayOnView;
 
+@property (nonatomic, assign) UIStatusBarStyle barStyle;
+
 
 /** 用来保存快进的总时长 */
 @property (nonatomic, assign) double                sumTime;
@@ -51,6 +54,7 @@ typedef NS_ENUM(NSInteger, PanDirection){
 - (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
+        self.barStyle = APP.statusBarStyle;
         [self p_initUI];
         [self p_initObserver];
     }
@@ -238,9 +242,11 @@ typedef NS_ENUM(NSInteger, PanDirection){
     if (orientation == UIInterfaceOrientationLandscapeRight ||
         orientation ==UIInterfaceOrientationLandscapeLeft) {
         self.isFullScreen = YES;
+        APP.statusBarStyle = UIStatusBarStyleLightContent;
         
     } else {
         self.isFullScreen = NO;
+        APP.statusBarStyle = _barStyle;
     }
     
 }
@@ -323,6 +329,7 @@ typedef NS_ENUM(NSInteger, PanDirection){
                 make.height.mas_equalTo(height);
             }];
             APP.statusBarOrientation = UIInterfaceOrientationLandscapeRight;
+            APP.statusBarStyle = UIStatusBarStyleLightContent;
             APP.statusBarHidden = NO;
         } else {
             [self removeFromSuperview];
@@ -339,6 +346,7 @@ typedef NS_ENUM(NSInteger, PanDirection){
                 make.edges.equalTo(self.superView);
             }];
             APP.statusBarOrientation = UIInterfaceOrientationPortrait;
+            APP.statusBarStyle = _barStyle;
             APP.statusBarHidden = NO;
         }
     } else {
@@ -347,13 +355,15 @@ typedef NS_ENUM(NSInteger, PanDirection){
             [[UIDevice currentDevice] setValue:[NSNumber numberWithInteger:UIDeviceOrientationLandscapeLeft] forKey:@"orientation"];
             self.isFullScreen = YES;
             [[NIBrightnessView sharedInstance] show];
+            APP.statusBarStyle = UIStatusBarStyleLightContent;
             
         } else {
             [[NIBrightnessView sharedInstance] removeFromSuperview];
             [[UIDevice currentDevice] setValue:[NSNumber numberWithInteger:UIDeviceOrientationPortrait] forKey:@"orientation"];
+            APP.statusBarStyle = _barStyle;
             self.isFullScreen = NO;
         }
-        [[[self getCurrentViewController] class] attemptRotationToDeviceOrientation];
+        [[[self getCurrentVC] class] attemptRotationToDeviceOrientation];
     }
     
     
@@ -495,20 +505,6 @@ typedef NS_ENUM(NSInteger, PanDirection){
 
 - (void)verticalMoved:(CGFloat)value {
     self.isVolume ? (self.volumeViewSlider.value -= value / 10000) : ([UIScreen mainScreen].brightness -= value / 10000);
-}
-
-
-
-/** 获取当前View的控制器对象 */
--(UIViewController *)getCurrentViewController{
-    UIResponder *next = [self nextResponder];
-    do {
-        if ([next isKindOfClass:[UIViewController class]]) {
-            return (UIViewController *)next;
-        }
-        next = [next nextResponder];
-    } while (next != nil);
-    return nil;
 }
 
 //////////////////////////////////////////////////////////////////////////////
