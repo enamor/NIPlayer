@@ -11,6 +11,7 @@
 #import "VideoListViewController.h"
 #import "ViewController.h"
 #import "TabBarController.h"
+#import "PushListViewController.h"
 
 @interface AppDelegate ()
 
@@ -71,7 +72,7 @@
     
     VideoListViewController *firstVC = [[VideoListViewController alloc] init];
     firstVC.title = @"first";
-    ViewController *secondVC = [[ViewController alloc] init];
+    PushListViewController *secondVC = [[PushListViewController alloc] init];
     secondVC.title = @"second";
     UITabBarController *rootVc = [[UITabBarController alloc] init];
     
@@ -85,5 +86,6 @@
     
     _window.rootViewController = rootVc;
 }
+
 
 @end

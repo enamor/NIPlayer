@@ -9,6 +9,7 @@
 #import "ViewController.h"
 #import "NIPlayer.h"
 #import <Masonry.h>
+#import "NIPlayerMacro.h"
 
 @interface ViewController ()
 
@@ -22,22 +23,30 @@
     NIPlayer *avPlayer = [[NIPlayer alloc] init];
     [self.view addSubview:avPlayer];
     
-//    NSString *url = @"http://bos.nj.bpc.baidu.com/tieba-smallvideo/11772_3c435014fb2dd9a5fd56a57cc369f6a0.mp4";
-    
-    NSString *url = @"http://baobab.wdjcdn.com/1456665467509qingshu.mp4";
-    
-//    NSString *url = [[NSBundle mainBundle] pathForResource:@"test.mp4" ofType:nil];
-    [avPlayer playWithUrl:url];
+    [avPlayer playWithUrl:_url];
     
     CGFloat wid = [UIScreen mainScreen].bounds.size.width;
     CGFloat hei = [UIScreen mainScreen].bounds.size.height;
     CGFloat rate = wid < hei ? (wid/hei) : (hei/wid);
     [avPlayer mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.view);
+        make.top.equalTo(self.view).offset(0);
         make.left.right.equalTo(self.view);
         make.height.mas_equalTo(avPlayer.mas_width).multipliedBy(rate);
     }];
 
+}
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    
+    APP.statusBarHidden = NO;
+    self.navigationController.navigationBar.hidden = NO;
+}
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    APP.statusBarHidden = YES;
+    self.navigationController.navigationBar.hidden = YES;
+    
 }
 
 

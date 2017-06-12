@@ -71,8 +71,13 @@ typedef NS_ENUM(NSInteger, PanDirection){
 - (void)playerControl:(UIView *)control backAction:(UIButton *)sender {
     if (_isFullScreen) {
         [self fullScreen:_playerControl.fullScreenBtn];
+    } else {
+        if (self.getCurrentVC.presentingViewController) {
+            [self.getCurrentVC dismissViewControllerAnimated:YES completion:nil];
+        } else {
+            [self.getCurrentNavVC popViewControllerAnimated:YES];
+        }
     }
-    
 }
 - (void)playerControl:(UIView *)control fullScreenAction:(UIButton *)sender {
     [self fullScreen:sender];

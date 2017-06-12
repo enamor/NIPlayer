@@ -21,6 +21,7 @@
 		B8CAD2C31EE12AD800E99BD1 /* test.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = B8CAD2C21EE12AD800E99BD1 /* test.mp4 */; };
 		B8CAD2CF1EE1783600E99BD1 /* UIButton+Create.m in Sources */ = {isa = PBXBuildFile; fileRef = B8CAD2CE1EE1783600E99BD1 /* UIButton+Create.m */; };
 		B8CAD2D21EE17D3700E99BD1 /* UILabel+Create.m in Sources */ = {isa = PBXBuildFile; fileRef = B8CAD2D11EE17D3700E99BD1 /* UILabel+Create.m */; };
+		B8D43E131EEE6D4800C38C02 /* PushListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B8D43E121EEE6D4800C38C02 /* PushListViewController.m */; };
 		B8F1B5BC1EE07470004A1E26 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B8F1B5BB1EE07470004A1E26 /* main.m */; };
 		B8F1B5BF1EE07470004A1E26 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B8F1B5BE1EE07470004A1E26 /* AppDelegate.m */; };
 		B8F1B5C21EE07470004A1E26 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B8F1B5C11EE07470004A1E26 /* ViewController.m */; };
@@ -59,6 +60,8 @@
 		B8CAD2CE1EE1783600E99BD1 /* UIButton+Create.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIButton+Create.m"; sourceTree = "<group>"; };
 		B8CAD2D01EE17D3700E99BD1 /* UILabel+Create.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UILabel+Create.h"; sourceTree = "<group>"; };
 		B8CAD2D11EE17D3700E99BD1 /* UILabel+Create.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UILabel+Create.m"; sourceTree = "<group>"; };
+		B8D43E111EEE6D4800C38C02 /* PushListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PushListViewController.h; sourceTree = "<group>"; };
+		B8D43E121EEE6D4800C38C02 /* PushListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PushListViewController.m; sourceTree = "<group>"; };
 		B8F1B5B71EE07470004A1E26 /* NIPlayer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NIPlayer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B8F1B5BB1EE07470004A1E26 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		B8F1B5BD1EE07470004A1E26 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -159,6 +162,8 @@
 				B893985A1EE815FC00C331BE /* NavigationViewController.m */,
 				B80619A91EE8636D00115654 /* TabBarController.h */,
 				B80619AA1EE8636D00115654 /* TabBarController.m */,
+				B8D43E111EEE6D4800C38C02 /* PushListViewController.h */,
+				B8D43E121EEE6D4800C38C02 /* PushListViewController.m */,
 			);
 			path = NIPlayer;
 			sourceTree = "<group>";
@@ -330,6 +335,7 @@
 				B8F1B5BF1EE07470004A1E26 /* AppDelegate.m in Sources */,
 				B8C53D3C1EEA43E1008955B1 /* UIView+NI_superVC.m in Sources */,
 				B8F1B5E61EE074B8004A1E26 /* NIAVPlayer.m in Sources */,
+				B8D43E131EEE6D4800C38C02 /* PushListViewController.m in Sources */,
 				B893985B1EE815FC00C331BE /* NavigationViewController.m in Sources */,
 				B8CAD2D21EE17D3700E99BD1 /* UILabel+Create.m in Sources */,
 				B8C48DA11EE95C770066BCC5 /* UINavigationController+NI_allowRote.m in Sources */,

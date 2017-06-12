@@ -10,6 +10,6 @@
 
 @interface ViewController : UIViewController
 
-
+@property (nonatomic, copy) NSString *url;
 @end
 
