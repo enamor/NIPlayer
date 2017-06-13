@@ -42,18 +42,18 @@
         make.width.mas_equalTo(155);
         make.height.mas_equalTo(155);
     }];
-    switch ([UIDevice currentDevice].orientation) {
-        case UIDeviceOrientationPortrait:
-            [self setTransform:CGAffineTransformMakeRotation(M_PI_2)];
-            break;
-        case UIDeviceOrientationLandscapeLeft:
-        case UIDeviceOrientationLandscapeRight:
-            [self setTransform:CGAffineTransformIdentity];
-            break;
-            
-        default:
-            break;
-    }
+//    switch ([UIDevice currentDevice].orientation) {
+//        case UIDeviceOrientationPortrait:
+//            [self setTransform:CGAffineTransformMakeRotation(M_PI_2)];
+//            break;
+//        case UIDeviceOrientationLandscapeLeft:
+//        case UIDeviceOrientationLandscapeRight:
+//            [self setTransform:CGAffineTransformIdentity];
+//            break;
+//            
+//        default:
+//            break;
+//    }
 }
 
 - (instancetype)init {

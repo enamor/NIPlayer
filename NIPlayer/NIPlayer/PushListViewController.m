@@ -18,7 +18,6 @@
 @implementation PushListViewController
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    APP_DELEGATE.allowRotationType = AllowRotationMaskPortrait;
 }
 - (void)viewDidLoad {
     [super viewDidLoad];

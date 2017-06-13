@@ -13,6 +13,7 @@
 @interface VideoListViewController ()
 @property (nonatomic, strong) NIPlayer *player;
 @property (nonatomic, strong) NSArray *dataSource;
+
 @end
 
 @implementation VideoListViewController
@@ -22,7 +23,6 @@
     
     _player = [[NIPlayer alloc] init];
     //相对于上面的接口，这个接口可以动画的改变statusBar的前景色
-    APP_DELEGATE.allowRotationType = AllowRotationMaskPortrait;
     self.dataSource = @[@"http://7xqhmn.media1.z0.glb.clouddn.com/femorning-20161106.mp4",
                         @"http://wvideo.spriteapp.cn/video/2016/0328/56f8ec01d9bfe_wpd.mp4",
                         @"http://baobab.wdjcdn.com/1456117847747a_x264.mp4",
@@ -62,9 +62,6 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-    [tableView deselectRowAtIndexPath:indexPath animated:NO];
-    
     [_player removeFromSuperview];
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     [cell addSubview:_player];
@@ -76,6 +73,5 @@
 - (BOOL)shouldAutorotate {
     return NO;
 }
-
 
 @end

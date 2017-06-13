@@ -33,7 +33,7 @@ typedef NS_ENUM(NSInteger, PanDirection){
 @property (nonatomic, strong) NIPlayerControl *playerControl;
 
 @property (nonatomic, strong) UIView *superView;
-@property (nonatomic, assign) BOOL isPlayOnView;
+@property (nonatomic, assign) BOOL isCanPlay;
 
 @property (nonatomic, assign) UIStatusBarStyle barStyle;
 
@@ -70,7 +70,7 @@ typedef NS_ENUM(NSInteger, PanDirection){
 #pragma mark ------ Protocol
 - (void)playerControl:(UIView *)control backAction:(UIButton *)sender {
     if (_isFullScreen) {
-        [self fullScreen:_playerControl.fullScreenBtn];
+        [self fullScreen:UIDeviceOrientationPortrait];
     } else {
         if (self.getCurrentVC.presentingViewController) {
             [self.getCurrentVC dismissViewControllerAnimated:YES completion:nil];
@@ -80,7 +80,7 @@ typedef NS_ENUM(NSInteger, PanDirection){
     }
 }
 - (void)playerControl:(UIView *)control fullScreenAction:(UIButton *)sender {
-    [self fullScreen:sender];
+    [self fullScreen:UIDeviceOrientationLandscapeLeft];
 }
 - (void)playerControl:(UIView *)control playAction:(UIButton *)sender {
     
@@ -118,7 +118,6 @@ typedef NS_ENUM(NSInteger, PanDirection){
 #pragma mark ------ Public
 - (void)playWithUrl:(NSString *)url {
     [self.playerControl reset];
-    APP_DELEGATE.allowRotationType = AllowRotationMaskAllButUpsideDown;
     [self.avPlayer playWithUrl:url];
     [self p_configureVolume];
 }
@@ -126,8 +125,6 @@ typedef NS_ENUM(NSInteger, PanDirection){
 - (void)playWithUrl:(NSString *)url onView:(UIView *)view {
     [self.playerControl reset];
     self.superView = view;
-    self.isPlayOnView = YES;
-    APP_DELEGATE.allowRotationType = AllowRotationMaskPortrait;
     [self.avPlayer playWithUrl:url];
     [self p_configureVolume];
 }
@@ -167,7 +164,7 @@ typedef NS_ENUM(NSInteger, PanDirection){
 
 - (void)p_initObserver {
     //监听屏幕方向
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(p_initScreenOrientationChanged:) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(p_initScreenOrientationChanged:) name:UIDeviceOrientationDidChangeNotification object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(p_initAudioVolumeObserver:) name:@"AVSystemController_SystemVolumeDidChangeNotification" object:nil];
 
@@ -193,6 +190,7 @@ typedef NS_ENUM(NSInteger, PanDirection){
                 break;
             }
             case NIAVPlayerStatusReadyToPlay: {
+                self.isCanPlay = YES;
                 weakSelf.playerControl.playButton.selected = NO;
                 [weakSelf addTap];
                 break;
@@ -221,13 +219,11 @@ typedef NS_ENUM(NSInteger, PanDirection){
             }
             case NIAVPlayerStatusEnterBack: {
                 if (weakSelf.isFullScreen) {
-                    APP_DELEGATE.allowRotationType = AllowRotationMaskLandscapeLeftOrRight;
                 }
                 break;
             }
                 
             case NIAVPlayerStatusBecomeActive: {
-                APP_DELEGATE.allowRotationType = AllowRotationMaskAllButUpsideDown;
                 break;
             }
                 
@@ -246,17 +242,11 @@ typedef NS_ENUM(NSInteger, PanDirection){
 
 #pragma mark 监听屏幕旋转
 - (void)p_initScreenOrientationChanged:(id)notification {
-    UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
-    if (orientation == UIInterfaceOrientationLandscapeRight ||
-        orientation ==UIInterfaceOrientationLandscapeLeft) {
-        self.isFullScreen = YES;
-        APP.statusBarStyle = UIStatusBarStyleLightContent;
-        
-    } else {
-        self.isFullScreen = NO;
-        APP.statusBarStyle = _barStyle;
-    }
     
+    NSLog(@"hh");
+    UIDeviceOrientation dd = [UIDevice currentDevice].orientation;
+    [self fullScreen:dd];
+//    [self fullScreen:nil];
 }
 
 //监听系统音量改变
@@ -314,66 +304,68 @@ typedef NS_ENUM(NSInteger, PanDirection){
 }
 
 #pragma mark - Public
-- (void)fullScreen:(UIButton *)sender {
-    sender.selected = !sender.selected;
+- (void)fullScreen:(UIDeviceOrientation)orientation {
     
-    if (_isPlayOnView) {
-        if (sender.selected) {
-            [self removeFromSuperview];
-            CGFloat height = [[UIScreen mainScreen] bounds].size.width;
-            CGFloat width = [[UIScreen mainScreen] bounds].size.height;
-            [[UIApplication sharedApplication].keyWindow addSubview:self];
-            [[NIBrightnessView sharedInstance] show];
-            [UIView animateWithDuration:0.3f animations:^{
-                [self setTransform:CGAffineTransformMakeRotation(M_PI_2)];
-                
-            } completion:^(BOOL finished) {
-                self.isFullScreen = YES;
-            }];
-            [self mas_remakeConstraints:^(MASConstraintMaker *make) {
-                make.left.mas_equalTo((height - width) / 2);
-                make.top.mas_equalTo((width - height) / 2);
-                make.width.mas_equalTo(width);
-                make.height.mas_equalTo(height);
-            }];
-            APP.statusBarOrientation = UIInterfaceOrientationLandscapeRight;
-            APP.statusBarStyle = UIStatusBarStyleLightContent;
-            APP.statusBarHidden = NO;
-        } else {
-            [self removeFromSuperview];
-            [[NIBrightnessView sharedInstance] removeFromSuperview];
-            
-            [self.superView addSubview:self];
-            [UIView animateWithDuration:0.3f animations:^{
-                [self setTransform:CGAffineTransformIdentity];
-                
-            } completion:^(BOOL finished) {
-                self.isFullScreen = NO;
-            }];
-            [self mas_remakeConstraints:^(MASConstraintMaker *make) {
-                make.edges.equalTo(self.superView);
-            }];
-            APP.statusBarOrientation = UIInterfaceOrientationPortrait;
-            APP.statusBarStyle = _barStyle;
-            APP.statusBarHidden = NO;
-        }
+    if (!_isCanPlay) return;
+    CGAffineTransform tranform = CGAffineTransformIdentity;
+    BOOL isCanFull = YES;;
+    if (orientation ==UIDeviceOrientationLandscapeLeft) {
+        self.isFullScreen = YES;
+        tranform = CGAffineTransformMakeRotation(M_PI_2);
+        APP.statusBarStyle = UIStatusBarStyleLightContent;
+        APP.statusBarOrientation = UIDeviceOrientationLandscapeLeft;
+    } else if (orientation == UIDeviceOrientationLandscapeRight){
+        self.isFullScreen = YES;
+        tranform = CGAffineTransformMakeRotation(-M_PI_2);
+        APP.statusBarOrientation = UIDeviceOrientationLandscapeRight;
+
+    } else if (orientation == UIDeviceOrientationPortrait) {
+        tranform = CGAffineTransformIdentity;
+        APP.statusBarStyle = _barStyle;
+        self.isFullScreen = NO;
     } else {
-        
-        if(sender.selected) {
-            [[UIDevice currentDevice] setValue:[NSNumber numberWithInteger:UIDeviceOrientationLandscapeLeft] forKey:@"orientation"];
-            self.isFullScreen = YES;
-            [[NIBrightnessView sharedInstance] show];
-            APP.statusBarStyle = UIStatusBarStyleLightContent;
-            
-        } else {
-            [[NIBrightnessView sharedInstance] removeFromSuperview];
-            [[UIDevice currentDevice] setValue:[NSNumber numberWithInteger:UIDeviceOrientationPortrait] forKey:@"orientation"];
-            APP.statusBarStyle = _barStyle;
-            self.isFullScreen = NO;
-        }
-        [[[self getCurrentVC] class] attemptRotationToDeviceOrientation];
+        isCanFull = NO;
     }
+    if (!isCanFull) return;
     
+    if (self.isFullScreen) { //全屏
+        [self removeFromSuperview];
+        CGFloat width = [[UIScreen mainScreen] bounds].size.width;
+        CGFloat height = [[UIScreen mainScreen] bounds].size.height;
+        [[UIApplication sharedApplication].keyWindow addSubview:self];
+        
+        [[NIBrightnessView sharedInstance] show];
+        [UIView animateWithDuration:0.3f animations:^{
+            [self setTransform:tranform];
+        } completion:^(BOOL finished) {
+            APP.statusBarHidden = NO;
+        }];
+        [self mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.left.mas_equalTo((height - width) / 2);
+            make.top.mas_equalTo((width - height) / 2);
+            make.width.mas_equalTo(width);
+            make.height.mas_equalTo(height);
+        }];
+        
+        APP.statusBarStyle = UIStatusBarStyleLightContent;
+    } else { //小屏幕
+        [self removeFromSuperview];
+        [[NIBrightnessView sharedInstance] removeFromSuperview];
+        
+        [self.superView addSubview:self];
+        [UIView animateWithDuration:0.3f animations:^{
+            [self setTransform:tranform];
+            
+        } completion:^(BOOL finished) {
+            APP.statusBarHidden = NO;
+        }];
+        [self mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.edges.equalTo(self.superView);
+        }];
+        APP.statusBarOrientation = UIInterfaceOrientationPortrait;
+        APP.statusBarStyle = _barStyle;
+    }
+
     
 }
 
@@ -518,7 +510,7 @@ typedef NS_ENUM(NSInteger, PanDirection){
 #pragma mark ------ getter setter
 - (void)setSuperView:(UIView *)superView {
     _superView = superView;
-    [self mas_remakeConstraints:^(MASConstraintMaker *make) {
+    [self mas_makeConstraints:^(MASConstraintMaker *make) {
         make.edges.equalTo(self.superView);
     }];
 }

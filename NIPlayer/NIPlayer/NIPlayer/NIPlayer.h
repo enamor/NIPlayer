@@ -9,10 +9,8 @@
 #import <UIKit/UIKit.h>
 
 @interface NIPlayer : UIView
-- (void)playWithUrl:(NSString *)url;
-
-- (void)playWithUrl:(NSString *)url onView:(UIView *)view;
-
+- (void)playWithUrl:(NSString *_Nonnull)url onView:(nonnull UIView *)view;
+- (void)fullScreen:(UIDeviceOrientation)orientation ;
 - (void)play;
 - (void)pause;
 @end

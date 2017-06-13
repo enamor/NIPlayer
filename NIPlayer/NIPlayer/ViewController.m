@@ -20,19 +20,17 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    UIView *view = [[UIView alloc ] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 200)];
+    [self.view addSubview:view];
+    
     NIPlayer *avPlayer = [[NIPlayer alloc] init];
     [self.view addSubview:avPlayer];
     
-    [avPlayer playWithUrl:_url];
     
-    CGFloat wid = [UIScreen mainScreen].bounds.size.width;
-    CGFloat hei = [UIScreen mainScreen].bounds.size.height;
-    CGFloat rate = wid < hei ? (wid/hei) : (hei/wid);
-    [avPlayer mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.view).offset(0);
-        make.left.right.equalTo(self.view);
-        make.height.mas_equalTo(avPlayer.mas_width).multipliedBy(rate);
-    }];
+    
+    [avPlayer playWithUrl:_url onView:view];
+    
+
 
 }
 - (void)viewWillDisappear:(BOOL)animated {
