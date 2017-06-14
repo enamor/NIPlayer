@@ -60,6 +60,7 @@ typedef NS_ENUM(NSInteger, PanDirection){
 
 - (void)dealloc {
     NSLog(@"%s",__func__);
+    [self releasePlayer];
 }
 
 

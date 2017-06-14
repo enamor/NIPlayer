@@ -12,7 +12,7 @@
 #import "NIPlayerMacro.h"
 
 @interface ViewController ()
-
+@property (nonatomic, strong) NIPlayer *avPlayer;
 @end
 
 @implementation ViewController
@@ -20,18 +20,12 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    UIView *view = [[UIView alloc ] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 200)];
-    [self.view addSubview:view];
+    UIView *playView = [[UIView alloc ] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 200)];
+    [self.view addSubview:playView];
+    _avPlayer = [[NIPlayer alloc] init];
+    [self.view addSubview:_avPlayer];
+    [_avPlayer playWithUrl:_url onView:playView];
     
-    NIPlayer *avPlayer = [[NIPlayer alloc] init];
-    [self.view addSubview:avPlayer];
-    
-    
-    
-    [avPlayer playWithUrl:_url onView:view];
-    
-
-
 }
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
@@ -45,6 +39,11 @@
     APP.statusBarHidden = YES;
     self.navigationController.navigationBar.hidden = YES;
     
+}
+
+- (void)dealloc {
+//    [_avPlayer releasePlayer];
+
 }
 
 

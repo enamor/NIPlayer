@@ -25,8 +25,7 @@
     
     _player = [[NIPlayer alloc] init];
     //相对于上面的接口，这个接口可以动画的改变statusBar的前景色
-    self.dataSource = @[@"http://7xqhmn.media1.z0.glb.clouddn.com/femorning-20161106.mp4",
-                        @"http://wvideo.spriteapp.cn/video/2016/0328/56f8ec01d9bfe_wpd.mp4",
+    self.dataSource = @[@"http://wvideo.spriteapp.cn/video/2016/0328/56f8ec01d9bfe_wpd.mp4",
                         @"http://baobab.wdjcdn.com/1456117847747a_x264.mp4",
                         @"http://baobab.wdjcdn.com/14525705791193.mp4",
                         @"http://baobab.wdjcdn.com/1456459181808howtoloseweight_x264.mp4",
@@ -64,10 +63,7 @@
         
     }else{
         
-    }
-
-    
-    
+    }    
     return cell;
 }
 

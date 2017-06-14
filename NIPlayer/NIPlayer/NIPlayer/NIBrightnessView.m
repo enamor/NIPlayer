@@ -43,24 +43,13 @@
         make.height.mas_equalTo(155);
     }];
     [self setTransform:transform];
-//    switch ([UIDevice currentDevice].orientation) {
-//        case UIDeviceOrientationPortrait:
-//            [self setTransform:CGAffineTransformMakeRotation(M_PI_2)];
-//            break;
-//        case UIDeviceOrientationLandscapeLeft:
-//        case UIDeviceOrientationLandscapeRight:
-//            [self setTransform:CGAffineTransformIdentity];
-//            break;
-//            
-//        default:
-//            break;
-//    }
+
 }
 
 - (instancetype)init {
 	if (self = [super init]) {
 		self.frame = CGRectMake(SCREEN_WIDTH * 0.5, SCREEN_HEIGHT * 0.5, 155, 155);
-		
+
         self.layer.cornerRadius  = 10;
         self.layer.masksToBounds = YES;
         
