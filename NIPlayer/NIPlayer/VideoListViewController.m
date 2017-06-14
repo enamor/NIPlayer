@@ -60,6 +60,7 @@
     NSArray *indexpaths = [tableView indexPathsForVisibleRows];
     if (![indexpaths containsObject:_playIndexPath]&&_playIndexPath) {//复用
         [_player releasePlayer];
+        _playIndexPath = nil;
         
     }else{
         

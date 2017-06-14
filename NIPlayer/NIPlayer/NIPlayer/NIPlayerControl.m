@@ -142,6 +142,7 @@
     
     //满屏播放 ／ 比例播放
     UIButton *displayBtn = [UIButton buttonWithImage:IMAGE_PATH(@"miniplayer_icon_fullsize")];
+    _definitBtn.hidden = YES;
 //    [displayBtn addTarget:self action:@selector(displayModeChanged:) forControlEvents:UIControlEventTouchUpInside];
     
     [contentView addSubview:displayBtn];
