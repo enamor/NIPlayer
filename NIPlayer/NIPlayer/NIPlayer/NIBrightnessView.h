@@ -17,6 +17,6 @@
 
 + (instancetype)sharedInstance;
 
-- (void)show;
+- (void)showWithTransform:(CGAffineTransform)transform;
 
 @end

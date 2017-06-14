@@ -9,9 +9,11 @@
 #import "VideoListViewController.h"
 #import "NIPlayer.h"
 #import "NIPlayerMacro.h"
+#import "VideoCell.h"
 
 @interface VideoListViewController ()
 @property (nonatomic, strong) NIPlayer *player;
+@property (nonatomic, assign) NSIndexPath *playIndexPath;
 @property (nonatomic, strong) NSArray *dataSource;
 
 @end
@@ -41,7 +43,7 @@
                         @"http://baobab.wdjcdn.com/1456653443902B.mp4",
                         @"http://baobab.wdjcdn.com/1456231710844S(24).mp4"];
     
-    [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"demo"];
+    [self.tableView registerClass:[VideoCell class] forCellReuseIdentifier:@"demo"];
     
 }
 
@@ -49,24 +51,37 @@
     return self.dataSource.count;
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 200;
+    return [VideoCell cellHeight];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"demo" forIndexPath:indexPath];
-    UIImageView *image = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 180)];
-    image.image = [UIImage imageNamed:@"texst.png"];
+    VideoCell *cell = [tableView dequeueReusableCellWithIdentifier:@"demo" forIndexPath:indexPath];
     
-    [cell insertSubview:image atIndex:0];
+    NSArray *indexpaths = [tableView indexPathsForVisibleRows];
+    if (![indexpaths containsObject:_playIndexPath]&&_playIndexPath) {//复用
+        [_player releasePlayer];
+        
+    }else{
+        
+    }
+
+    
+    
     return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    [tableView deselectRowAtIndexPath:indexPath animated:NO];
+    if (_playIndexPath == indexPath) {
+        return;
+    }
     [_player removeFromSuperview];
-    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-    [cell addSubview:_player];
-    _player.frame = cell.bounds;
-    [_player playWithUrl:_dataSource[indexPath.row] onView:cell];
+    self.playIndexPath = indexPath;
+    VideoCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+    [cell.bgImageView addSubview:_player];
+    _player.frame = cell.bgImageView.bounds;
+    [_player playWithUrl:_dataSource[indexPath.row] onView:cell.bgImageView];
     
 }
 

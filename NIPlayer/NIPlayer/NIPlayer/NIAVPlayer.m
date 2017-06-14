@@ -9,23 +9,18 @@
 #import "NIAVPlayer.h"
 
 @interface NIAVPlayer ()
-/** 播放器 */
-@property (nonatomic, strong) AVPlayer          *player;
-@property (nonatomic, strong) AVURLAsset        *urlAsset;
-@property (nonatomic, strong) AVPlayerLayer     *playerLayer;
-/** 视频资源 */
-@property (nonatomic, strong) AVPlayerItem      *playerItem;
 
-/** 用于获取 */
-@property (nonatomic, strong) AVAssetImageGenerator  *imageGenerator;
-/** 播放器观察者 */
-@property (nonatomic ,strong)  id timeObser;
-// 拖动进度条的时候停止刷新数据
-@property (nonatomic ,assign) BOOL isSeeking;
-// 是否需要缓冲
-@property (nonatomic, assign) BOOL isCanPlay;
-// 是否需要缓冲
-@property (nonatomic, assign) BOOL needBuffer;
+@property (nonatomic, strong) AVPlayer              *player;            //播放器
+@property (nonatomic, strong) AVURLAsset            *urlAsset;
+@property (nonatomic, strong) AVPlayerLayer         *playerLayer;
+@property (nonatomic, strong) AVPlayerItem          *playerItem;        //视频资源
+@property (nonatomic, strong) AVAssetImageGenerator *imageGenerator;    //用于获取帧图像
+
+
+@property (nonatomic ,strong) id    timeObserver;    //播放器观察者
+@property (nonatomic ,assign) BOOL  isSeeking;       //拖动进度条的时候停止刷新数据
+@property (nonatomic, assign) BOOL  isCanPlay;       //是否需要缓冲
+@property (nonatomic, assign) BOOL  needBuffer;      //是否需要缓冲
 
 @end
 @implementation NIAVPlayer
@@ -78,8 +73,8 @@
             NSTimeInterval totalBuffer = startSeconds + durationSeconds;//缓冲总长度
             self.loadRange = totalBuffer;
             CGFloat value = totalBuffer/self.totalTime;
-            if (_progressBlock) {
-                _progressBlock(value,NIAVPlayerProgressCache);
+            if (_progressCacheBlock) {
+                _progressCacheBlock(value);
             }
 
         }
@@ -114,16 +109,14 @@
     self.isCanPlay = NO;
 #warning 需要处理中文路径过会再处理
     NSURL *url;
-    int type = 0; //0 本地视频、1 网络视频
     strUrl = [strUrl lowercaseString];
     if ([strUrl hasPrefix:@"http://"] || [strUrl hasPrefix:@"https://"]) {
         url = [NSURL URLWithString:strUrl];
-        type = 1;
     } else { //本地视频 需要完整路径
         url = [NSURL fileURLWithPath:strUrl];
     }
 
-    [self p_initPlayer:url type:type];
+    [self p_initPlayer:url];
     if (_statusBlock) {
         _statusBlock(NIAVPlayerStatusLoading);
     }
@@ -138,6 +131,10 @@
 - (void)play {
     if (self.player.rate == 0) {
         [self.player play];
+        
+        if (_statusBlock) {
+            _statusBlock(NIAVPlayerStatusIsPlaying);
+        }
     }
 }
 
@@ -145,12 +142,15 @@
 - (void)pause {
     if (self.player.rate == 1.0) {
         [self.player pause];
+        if (_statusBlock) {
+            _statusBlock(NIAVPlayerStatusIsPlaying);
+        }
     }
 }
 
 
 /** 拖动视频进度 */
-- (void)seekTo:(NSTimeInterval)time {
+- (void)seekTo:(NSTimeInterval)time completionHandler:(void(^)())complete{
     if (!self.isCanPlay) return;
     [self pause];
     [self startToSeek];
@@ -158,6 +158,10 @@
     [self.player seekToTime:CMTimeMake(time, 1.0) completionHandler:^(BOOL finished) {
         [weakSelf endSeek];
         [weakSelf play];
+        
+        if (complete) {
+            complete();
+        }
     }];
     
 }
@@ -170,7 +174,7 @@
     self.playerItem = nil;
     [self.playerLayer removeFromSuperlayer];
     self.playerLayer = nil;
-    self.timeObser = nil;
+    self.timeObserver = nil;
     self.urlAsset = nil;
     self.imageGenerator = nil;
 }
@@ -185,32 +189,24 @@
 }
 
 //创建AVPlyer
-- (void)p_initPlayer:(NSURL *)url type:(int)type{
+- (void)p_initPlayer:(NSURL *)url{
     if (self.player) {
         //新视频重建播放器有利于内存更好的释放
         [self releasePlayer];
         
     }
-    
-//    if (type == 0) {
-//        AVAsset *movieAsset = [AVURLAsset URLAssetWithURL:url options:nil];
-//        self.playerItem = [AVPlayerItem playerItemWithAsset:movieAsset];
-//    } else {
-//        self.playerItem = [AVPlayerItem playerItemWithURL:url];
-//    }
-    
     self.urlAsset = [AVURLAsset assetWithURL:url];
     // 初始化playerItem
     self.playerItem = [AVPlayerItem playerItemWithAsset:self.urlAsset];
-    
-    _imageGenerator = [AVAssetImageGenerator assetImageGeneratorWithAsset:self.urlAsset];
+    //用于获取帧图像的
+    self.imageGenerator = [AVAssetImageGenerator assetImageGeneratorWithAsset:self.urlAsset];
     
     
     self.player = [AVPlayer playerWithPlayerItem:_playerItem];
+    
     self.playerLayer = [AVPlayerLayer playerLayerWithPlayer:self.player];
     _playerLayer.backgroundColor = [UIColor blackColor].CGColor;
     _playerLayer.frame = self.bounds;
-    
     //设置模式
     NSString *mode;
     switch (_videoGravity) {
@@ -264,7 +260,7 @@
 
 - (void)p_initPlayerObserver {
     __weak typeof(self) weakSelf = self;
-    self.timeObser = [self.player addPeriodicTimeObserverForInterval:CMTimeMake(1.0, 1.0) queue:nil usingBlock:^(CMTime time) {
+    self.timeObserver = [self.player addPeriodicTimeObserverForInterval:CMTimeMake(1.0, 1.0) queue:nil usingBlock:^(CMTime time) {
         if (CMTIME_IS_INDEFINITE(weakSelf.playerItem.duration)) {
             return ;
         }
@@ -274,8 +270,8 @@
         float f = CMTimeGetSeconds(time);
         float max = weakSelf.totalTime;
         
-        if (weakSelf.progressBlock) {
-            weakSelf.progressBlock(f/max , NIAVPlayerProgressPlay);
+        if (weakSelf.progressPlayBlock) {
+            weakSelf.progressPlayBlock(f/max);
         }
     }];
 
@@ -283,7 +279,7 @@
     
 }
 - (void)p_removePlayerObserver {
-    [self.player removeTimeObserver:self.timeObser];
+    [self.player removeTimeObserver:self.timeObserver];
 }
 
 - (void)p_initPlayItemObserver:(AVPlayerItem *)item {
@@ -346,7 +342,7 @@
     if (_statusBlock) {
         _statusBlock(NIAVPlayerStatusPlayEnd);
     }
-    [self.player seekToTime:kCMTimeZero];
+//    [self.player seekToTime:kCMTimeZero];
 }
 /** 视频异常中断 */
 - (void)videoPlayError:(NSNotification *)notic {
@@ -404,7 +400,7 @@
     CMTime dragedCMTime   = CMTimeMake(time, 1);
     [self.imageGenerator cancelAllCGImageGeneration];
     self.imageGenerator.appliesPreferredTrackTransform = YES;
-    self.imageGenerator.maximumSize = CGSizeMake(100, 56);
+    self.imageGenerator.maximumSize = CGSizeMake(150, 85);
     AVAssetImageGeneratorCompletionHandler handler = ^(CMTime requestedTime, CGImageRef im, CMTime actualTime, AVAssetImageGeneratorResult result, NSError *error){
         NSLog(@"%zd",result);
         if (result != AVAssetImageGeneratorSucceeded) {

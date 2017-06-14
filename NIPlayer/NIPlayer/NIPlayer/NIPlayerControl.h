@@ -20,18 +20,22 @@
 
 @interface NIPlayerControl : UIView
 @property (nonatomic, strong) UIButton *fullScreenBtn;
-@property (nonatomic, readonly, strong) UIButton *playButton;
-@property (nonatomic, strong) UILabel *currentTimeLabel;
-@property (nonatomic, strong) UILabel *totalTimeLabel;
+
 @property (nonatomic, strong) NIPlayerSlider *progressSlider;
 
+@property (nonatomic, assign) BOOL isPlay;
 @property (nonatomic, assign) BOOL isFullScreen;
+@property (nonatomic, assign) BOOL isFinishedSeek;
 
 @property (nonatomic, weak) id<NIPlayerControlDelegate> controlDelegate;
 
 - (void)seekTo:(double)time totalTime:(double)totalTime;
 
-- (void)seekTo:(double)time totalTime:(double)totalTime image:(UIImage *)image;
-- (void)reset ;
+
+//这两个方法需要结合使用
+- (void)seekPipTo:(double)time totalTime:(double)totalTime;
+- (void)seekToImage:(UIImage *)image;
+
+- (void)reset;
 
 @end

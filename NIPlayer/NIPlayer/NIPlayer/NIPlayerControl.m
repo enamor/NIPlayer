@@ -22,14 +22,17 @@
 @property (nonatomic, strong) UILabel *titleLabel;
 @property (nonatomic, strong) UIButton *fullBackBtn;
 @property (nonatomic, strong) UIButton *miniBackBtn;
-@property (nonatomic, readwrite, strong) UIButton *playButton;
+@property (nonatomic, strong) UIButton *playButton;
 @property (nonatomic, strong) UIButton *nextButton;
 @property (nonatomic, strong) UIButton *anthologyBtn;
 @property (nonatomic, strong) UIButton *definitBtn;
 
 
-@property (nonatomic, strong) UILabel *pipCurrentLabel;
-@property (nonatomic, strong) UILabel *pipTotalLabel;
+@property (nonatomic, strong) UILabel *currentTimeLabel;
+@property (nonatomic, strong) UILabel *totalTimeLabel;
+
+@property (nonatomic, strong) UIView *pipView;
+@property (nonatomic, strong) UILabel *pipTimeLabel;
 @property (nonatomic, strong) UIImageView *pipImageView;
 
 
@@ -72,8 +75,8 @@
     self.currentTimeLabel.text = @"00:00";
     self.totalTimeLabel.text = @"01:00:00";
     
-    self.pipCurrentLabel.text = @"00:00";
-    self.pipTotalLabel.text = @"01:00:00";
+    self.pipTimeLabel.text = @"00:00";
+    self.pipImageView.image = nil;
     
 }
 #pragma mark ------ IBAction
@@ -137,10 +140,9 @@
         make.edges.equalTo(_fullBackBtn);
     }];
     
-    
     //满屏播放 ／ 比例播放
     UIButton *displayBtn = [UIButton buttonWithImage:IMAGE_PATH(@"miniplayer_icon_fullsize")];
-    [displayBtn addTarget:self action:@selector(displayModeChanged:) forControlEvents:UIControlEventTouchUpInside];
+//    [displayBtn addTarget:self action:@selector(displayModeChanged:) forControlEvents:UIControlEventTouchUpInside];
     
     [contentView addSubview:displayBtn];
     [displayBtn mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -263,16 +265,16 @@
     [self.currentTimeLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.right.equalTo(self.progressSlider.mas_left).offset(-4);
         make.centerY.equalTo(self.bottomBar);
-        make.width.mas_equalTo(80);
+        make.width.mas_equalTo(60);
     }];
     
     //总时长 label
-    self.totalTimeLabel = [UILabel labelWithText:@"00:00:00" fontSize:13 textColor:[UIColor whiteColor]];
+    self.totalTimeLabel = [UILabel labelWithText:@"00:00" fontSize:13 textColor:[UIColor whiteColor]];
     [self.bottomBar addSubview:_totalTimeLabel];
     [self.totalTimeLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.progressSlider.mas_right).offset(4);
         make.centerY.equalTo(self.bottomBar);
-        make.width.mas_equalTo(80);
+        make.width.mas_equalTo(60);
     }];
     
     
@@ -285,47 +287,38 @@
 
 //画中画view
 - (void)p_initPIP {
-    UIView *pipView = [[UIView alloc] init];
-    pipView.backgroundColor = [UIColor grayColor];
-    [self addSubview:pipView];
-    [pipView mas_makeConstraints:^(MASConstraintMaker *make) {
+    
+    self.pipView = [[UIView alloc] init];
+    _pipView.hidden = YES;
+    _pipView.backgroundColor = [UIColor blackColor];
+    [self addSubview:_pipView];
+    [self.pipView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.center.equalTo(self);
-        make.width.mas_equalTo(200);
-        make.height.mas_equalTo(100);
+        make.width.mas_equalTo(150);
+        make.height.mas_equalTo(105);
     }];
     
     self.pipImageView = [[UIImageView alloc] init];
-    [pipView addSubview:_pipImageView];
+    [_pipView addSubview:_pipImageView];
     [self.pipImageView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.right.top.equalTo(pipView);
-        make.bottom.equalTo(pipView).offset(-20);
+        make.left.right.top.equalTo(_pipView);
+        make.bottom.equalTo(_pipView).offset(-20);
     }];
     
     
-    self.pipCurrentLabel = [UILabel labelWithText:@"00:00" fontSize:13 textColor:[UIColor whiteColor]];
-    _pipCurrentLabel.textAlignment = NSTextAlignmentRight;
-    [pipView addSubview:_pipCurrentLabel];
-    [self.pipCurrentLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(pipView.mas_bottom);
-        make.left.bottom.equalTo(pipView);
-        make.width.mas_equalTo(80);
-    }];
-    
-    //总时长 label
-    self.pipTotalLabel = [UILabel labelWithText:@"00:00:00" fontSize:13 textColor:[UIColor whiteColor]];
-    [pipView addSubview:_pipTotalLabel];
-    [self.pipTotalLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(pipView.mas_bottom);
-        make.right.bottom.equalTo(pipView);
-        make.width.mas_equalTo(80);
+    self.pipTimeLabel = [UILabel labelWithText:@"00:00" fontSize:13 textColor:[UIColor whiteColor]];
+    _pipTimeLabel.textAlignment = NSTextAlignmentCenter;
+    [_pipView addSubview:_pipTimeLabel];
+    [self.pipTimeLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(_pipImageView.mas_bottom);
+        make.left.right.bottom.equalTo(_pipView);
     }];
 
+
 }
-- (void)seekTo:(double)time totalTime:(double)totalTime; {
+- (void)seekTo:(double)time totalTime:(double)totalTime {
     NSString *dtime = [NSDate hourTime:time];
     NSString *dtotal = [NSDate hourTime:totalTime];
-    self.pipCurrentLabel.text = dtime;
-    self.pipTotalLabel.text = dtotal;
     
     self.currentTimeLabel.text = dtime;
     self.totalTimeLabel.text = dtotal;
@@ -333,11 +326,18 @@
     
 }
 
-- (void)seekTo:(double)time totalTime:(double)totalTime image:(UIImage *)image {
+- (void)seekPipTo:(double)time totalTime:(double)totalTime {
+    self.pipView.hidden = NO;
     [self seekTo:time totalTime:totalTime];
-    self.pipImageView.image = image;
-    
+    NSString *dtime = [NSDate hourTime:time];
+    NSString *dtotal = [NSDate hourTime:totalTime];
+    self.pipTimeLabel.text = [NSString stringWithFormat:@"%@/%@",dtime,dtotal];
 }
+
+- (void)seekToImage:(UIImage *)image {
+    self.pipImageView.image = image;
+}
+
 
 
 - (void)backAction:(UIButton *)sender {
@@ -389,9 +389,40 @@
     
     if (_isFullScreen) {
         [self.playButton setImage:BUNDLE_IMAGE(@"fullplayer_icon_pause") selectedImage:BUNDLE_IMAGE(@"fullplayer_icon_play")];
+        
+        
+        [self.progressSlider mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.centerY.equalTo(self.bottomBar);
+            make.left.equalTo(self.playButton.mas_right).offset(100);
+            make.right.equalTo(_fullScreenBtn.mas_left).offset(-120);
+            make.height.mas_equalTo(30);
+        }];
+        
+        
     } else {
         [self.playButton setImage:BUNDLE_IMAGE(@"miniplayer_bottom_pause") selectedImage:BUNDLE_IMAGE(@"miniplayer_bottom_play")];
+        
+        [self.progressSlider mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.centerY.equalTo(self.bottomBar);
+            make.left.equalTo(self.playButton.mas_right).offset(60);
+            make.right.equalTo(_fullScreenBtn.mas_left).offset(-60);
+            make.height.mas_equalTo(30);
+        }];
+    }
+}
 
+- (void)setIsPlay:(BOOL)isPlay {
+    _isPlay = isPlay;
+    _playButton.selected = !_isPlay;
+}
+
+- (void)setIsFinishedSeek:(BOOL)isFinishedSeek {
+    _isFinishedSeek = isFinishedSeek;
+    if (_isFinishedSeek) {
+        dispatch_time_t delayTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5/*延迟执行时间*/ * NSEC_PER_SEC));
+        dispatch_after(delayTime, dispatch_get_main_queue(), ^{
+            _pipView.hidden = YES;
+        });
     }
 }
 @end

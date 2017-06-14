@@ -31,7 +31,7 @@
 	return instance;
 }
 
-- (void)show {
+- (void)showWithTransform:(CGAffineTransform)transform {
     
     [[UIApplication sharedApplication].keyWindow addSubview:self];
     [[UIApplication sharedApplication].keyWindow bringSubviewToFront:self];
@@ -42,6 +42,7 @@
         make.width.mas_equalTo(155);
         make.height.mas_equalTo(155);
     }];
+    [self setTransform:transform];
 //    switch ([UIDevice currentDevice].orientation) {
 //        case UIDeviceOrientationPortrait:
 //            [self setTransform:CGAffineTransformMakeRotation(M_PI_2)];

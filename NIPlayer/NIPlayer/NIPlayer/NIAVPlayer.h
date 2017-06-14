@@ -13,6 +13,8 @@
 typedef NS_ENUM(NSInteger, NIAVPlayerStatus) {
     NIAVPlayerStatusLoading = 0,     // 加载视频
     NIAVPlayerStatusReadyToPlay,     // 准备好播放
+    NIAVPlayerStatusIsPlaying,       // 正在播放
+    NIAVPlayerStatusIsPaused,        // 已经暂停
     NIAVPlayerStatusPlayEnd,         // 播放结束
     NIAVPlayerStatusCacheData,       // 缓冲视频
     NIAVPlayerStatusCacheEnd,        // 缓冲结束
@@ -28,32 +30,29 @@ typedef NS_ENUM(NSInteger,NIAVPlayerVideoGravity) {
     NIAVPlayerVideoGravityResizeAspectFill
 };
 
-typedef NS_ENUM(NSInteger,NIAVPlayerProgressType) {
-    NIAVPlayerProgressCache, //缓冲进度
-    NIAVPlayerProgressPlay     //播放进度
-};
-
 //播放状态
 typedef void(^NIAVPlayerStatusBlock)(NIAVPlayerStatus status);
-
-//缓冲进度\播放进度
-typedef void(^NIAVPlayerProgressBlock)(CGFloat value ,NIAVPlayerProgressType type);
+//播放进度
+typedef void(^NIAVPlayerProgressPlayBlock)(CGFloat value);
+//缓冲进度
+typedef void(^NIAVPlayerProgressCacheBlock)(CGFloat value);
 
 
 @interface NIAVPlayer : UIView
 
 
-@property (nonatomic, copy) NIAVPlayerProgressBlock progressBlock;
-@property (nonatomic, copy) NIAVPlayerStatusBlock statusBlock;
+@property (nonatomic, copy) NIAVPlayerProgressPlayBlock   progressPlayBlock;
+@property (nonatomic, copy) NIAVPlayerProgressCacheBlock  progressCacheBlock;
+@property (nonatomic, copy) NIAVPlayerStatusBlock         statusBlock;
 
 
 @property (nonatomic, assign) NIAVPlayerVideoGravity videoGravity;
 // 视频总长度
-@property (nonatomic, assign) NSTimeInterval totalTime;
+@property (nonatomic, assign) NSTimeInterval    totalTime;
 // 当前进度
-@property (nonatomic, assign) NSTimeInterval currentTime;
+@property (nonatomic, assign) NSTimeInterval    currentTime;
 // 缓存数据
-@property (nonatomic, assign) NSTimeInterval loadRange;
+@property (nonatomic, assign) NSTimeInterval    loadRange;
 
 @property (nonatomic, assign) BOOL isPlay;
 
@@ -66,7 +65,7 @@ typedef void(^NIAVPlayerProgressBlock)(CGFloat value ,NIAVPlayerProgressType typ
 
 
 /** 拖动视频进度 */
-- (void)seekTo:(NSTimeInterval)time;
+- (void)seekTo:(NSTimeInterval)time completionHandler:(void(^)())complete;
 
 /** 播放视频 */
 - (void)playWithUrl:(NSString *)strUrl;

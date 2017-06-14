@@ -20,7 +20,7 @@
 #import "NIPlayerMacro.h"
 #import "NIBrightnessView.h"
 
-// 枚举值，包含水平移动方向和垂直移动方向
+//手指滑动方向
 typedef NS_ENUM(NSInteger, PanDirection){
     PanDirectionHorizontalMoved, // 横向移动
     PanDirectionVerticalMoved    // 纵向移动
@@ -28,23 +28,20 @@ typedef NS_ENUM(NSInteger, PanDirection){
 
 
 @interface NIPlayer ()<NIPlayerControlDelegate,UIGestureRecognizerDelegate>
+
 @property (nonatomic, assign) BOOL isFullScreen;
-@property (nonatomic, strong) NIAVPlayer *avPlayer;
-@property (nonatomic, strong) NIPlayerControl *playerControl;
+@property (nonatomic, strong) NIAVPlayer            *avPlayer;         //AVPlayer播放器
+@property (nonatomic, strong) NIPlayerControl       *playerControl;    //播放器控制UI
+@property (nonatomic, strong) UIView                *superPlayView;    //播放的view
+@property (nonatomic, assign) UIStatusBarStyle      barStyle;          //之前StatusBar样式
+@property (nonatomic, assign) BOOL                  isCanPlay;
 
-@property (nonatomic, strong) UIView *superView;
-@property (nonatomic, assign) BOOL isCanPlay;
-
-@property (nonatomic, assign) UIStatusBarStyle barStyle;
-
-
-/** 用来保存快进的总时长 */
-@property (nonatomic, assign) double                sumTime;
-/** 定义一个实例变量，保存枚举值 */
-@property (nonatomic, assign) PanDirection           panDirection;
-/** 是否在调节音量*/
-@property (nonatomic, assign) BOOL                   isVolume;
-@property (nonatomic, strong) UISlider               *volumeViewSlider;
+//手势相关
+@property (nonatomic, strong) UIPanGestureRecognizer *panRecognizer;   //控制手势
+@property (nonatomic, assign) double                 seekSumTime;      //快进总时长
+@property (nonatomic, assign) PanDirection           panDirection;     //手指滑动方向
+@property (nonatomic, assign) BOOL                   isVolume;         //是否调节音量
+@property (nonatomic, strong) UISlider               *volumeSlider;    //系统音量控制
 
 @end
 @implementation NIPlayer
@@ -95,14 +92,16 @@ typedef NS_ENUM(NSInteger, PanDirection){
 }
 - (void)playerControl:(UIView *)control seekAction:(UISlider *)sender {
     NSTimeInterval seekTime = sender.value * self.avPlayer.totalTime;
-    [self.avPlayer seekTo:seekTime];
+    [self.avPlayer seekTo:seekTime completionHandler:^{
+        self.playerControl.isFinishedSeek = YES;
+    }];
 }
 
 - (void)playerControl:(UIView *)control sliderValueChangedAction:(UISlider *)sender {
+    [self.playerControl seekPipTo:sender.value * self.avPlayer.totalTime totalTime:self.avPlayer.totalTime];
     [self.avPlayer getCImage:sender.value * self.avPlayer.totalTime block:^(UIImage *image) {
-        [self.playerControl seekTo:sender.value * self.avPlayer.totalTime totalTime:self.avPlayer.totalTime image:image];
+        [self.playerControl seekToImage:image];
     }];
-    
     [self.avPlayer startToSeek];
 }
 #pragma mark ------ UITextFieldDelegate
@@ -124,7 +123,7 @@ typedef NS_ENUM(NSInteger, PanDirection){
 
 - (void)playWithUrl:(NSString *)url onView:(UIView *)view {
     [self.playerControl reset];
-    self.superView = view;
+    self.superPlayView = view;
     [self.avPlayer playWithUrl:url];
     [self p_configureVolume];
 }
@@ -135,6 +134,11 @@ typedef NS_ENUM(NSInteger, PanDirection){
 
 - (void)pause {
     [self.avPlayer pause];
+}
+
+- (void)releasePlayer {
+    [self removeFromSuperview];
+    [self.avPlayer releasePlayer];
 }
 
 #pragma mark ------ IBAction
@@ -158,28 +162,35 @@ typedef NS_ENUM(NSInteger, PanDirection){
     }];
 }
 
-- (void)p_initDatas {
-    
+- (void)p_initObserver {
+    [self p_initBlockObserver];
+    [self p_initNotificatObserver];
+   
 }
 
-- (void)p_initObserver {
+- (void)p_removeObserver {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (void)p_initNotificatObserver {
     //监听屏幕方向
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(p_initScreenOrientationChanged:) name:UIDeviceOrientationDidChangeNotification object:nil];
-    
+    //监听系统音量
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(p_initAudioVolumeObserver:) name:@"AVSystemController_SystemVolumeDidChangeNotification" object:nil];
-
     // 监听耳机插入和拔掉通知
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(p_initaudioRouteChangeObserver:) name:AVAudioSessionRouteChangeNotification object:nil];
-    
-    //监听播放进度、缓冲进度
+}
+
+- (void)p_initBlockObserver {
     __weak typeof(self) weakSelf = self;
-    self.avPlayer.progressBlock = ^(CGFloat value, NIAVPlayerProgressType type) {
-        if (type == NIAVPlayerProgressCache) {
-            weakSelf.playerControl.progressSlider.cacheValue = value;
-        
-        } else {
-            [weakSelf.playerControl seekTo:weakSelf.avPlayer.currentTime totalTime:weakSelf.avPlayer.totalTime];
-        }
+    //监听播放进度
+    self.avPlayer.progressPlayBlock = ^(CGFloat value) {
+        [weakSelf.playerControl seekTo:weakSelf.avPlayer.currentTime totalTime:weakSelf.avPlayer.totalTime];
+    };
+    
+    //监听缓冲进度
+    self.avPlayer.progressCacheBlock = ^(CGFloat value) {
+        weakSelf.playerControl.progressSlider.cacheValue = value;
     };
     
     //监听播放状态
@@ -190,14 +201,21 @@ typedef NS_ENUM(NSInteger, PanDirection){
                 break;
             }
             case NIAVPlayerStatusReadyToPlay: {
-                self.isCanPlay = YES;
-                weakSelf.playerControl.playButton.selected = NO;
-                [weakSelf addTap];
+                weakSelf.isCanPlay = YES;
+                weakSelf.playerControl.isPlay = YES;
                 break;
             }
             case NIAVPlayerStatusPlayEnd: {
-                weakSelf.playerControl.playButton.selected = YES;
+                weakSelf.playerControl.isPlay = NO;
                 [weakSelf.avPlayer pause];
+                break;
+            }
+            case NIAVPlayerStatusIsPlaying: {
+                weakSelf.playerControl.isPlay = YES;
+                break;
+            }
+            case NIAVPlayerStatusIsPaused: {
+                weakSelf.playerControl.isPlay = NO;
                 break;
             }
             case NIAVPlayerStatusCacheData: {
@@ -209,17 +227,15 @@ typedef NS_ENUM(NSInteger, PanDirection){
                 break;
             }
             case NIAVPlayerStatusPlayStop: {
-                weakSelf.playerControl.playButton.selected = YES;
+                weakSelf.playerControl.isPlay = NO;
                 [weakSelf.avPlayer pause];
                 break;
             }
             case NIAVPlayerStatusItemFailed: {
-                weakSelf.playerControl.playButton.selected = YES;
+                weakSelf.playerControl.isPlay = NO;
                 break;
             }
             case NIAVPlayerStatusEnterBack: {
-                if (weakSelf.isFullScreen) {
-                }
                 break;
             }
                 
@@ -230,29 +246,23 @@ typedef NS_ENUM(NSInteger, PanDirection){
             default:
                 break;
         }
-
+        
     };
 }
 
-- (void)p_removeObserver {
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-}
 
 
 
 #pragma mark 监听屏幕旋转
 - (void)p_initScreenOrientationChanged:(id)notification {
-    
-    NSLog(@"hh");
-    UIDeviceOrientation dd = [UIDevice currentDevice].orientation;
-    [self fullScreen:dd];
-//    [self fullScreen:nil];
+    UIDeviceOrientation orientation = [UIDevice currentDevice].orientation;
+    [self fullScreen:orientation];
 }
 
 //监听系统音量改变
 - (void)p_initAudioVolumeObserver:(id)notification {
     float volume = [[[notification userInfo] objectForKey:@"AVSystemController_AudioVolumeNotificationParameter"] floatValue];
-    self.volumeViewSlider.value = volume;
+    self.volumeSlider.value = volume;
     
 }
 
@@ -284,10 +294,10 @@ typedef NS_ENUM(NSInteger, PanDirection){
  */
 - (void)p_configureVolume {
     MPVolumeView *volumeView = [[MPVolumeView alloc] init];
-    _volumeViewSlider = nil;
+    _volumeSlider = nil;
     for (UIView *view in [volumeView subviews]){
         if ([view.class.description isEqualToString:@"MPVolumeSlider"]){
-            _volumeViewSlider = (UISlider *)view;
+            _volumeSlider = (UISlider *)view;
             break;
         }
     }
@@ -301,6 +311,14 @@ typedef NS_ENUM(NSInteger, PanDirection){
     if (!success) { /* handle the error in setCategoryError */ }
 
     
+}
+
+/** 添加播放器控制手势 */
+- (void)p_addPanRecognizer {
+    [self addGestureRecognizer:self.panRecognizer];
+}
+- (void)p_removePanRecognizer {
+    [self removeGestureRecognizer:self.panRecognizer];
 }
 
 #pragma mark - Public
@@ -334,7 +352,7 @@ typedef NS_ENUM(NSInteger, PanDirection){
         CGFloat height = [[UIScreen mainScreen] bounds].size.height;
         [[UIApplication sharedApplication].keyWindow addSubview:self];
         
-        [[NIBrightnessView sharedInstance] show];
+        [[NIBrightnessView sharedInstance] showWithTransform:tranform];
         [UIView animateWithDuration:0.3f animations:^{
             [self setTransform:tranform];
         } completion:^(BOOL finished) {
@@ -348,11 +366,15 @@ typedef NS_ENUM(NSInteger, PanDirection){
         }];
         
         APP.statusBarStyle = UIStatusBarStyleLightContent;
+        
+        //添加手势控制
+        [self p_addPanRecognizer];
+        
     } else { //小屏幕
         [self removeFromSuperview];
         [[NIBrightnessView sharedInstance] removeFromSuperview];
         
-        [self.superView addSubview:self];
+        [self.superPlayView addSubview:self];
         [UIView animateWithDuration:0.3f animations:^{
             [self setTransform:tranform];
             
@@ -360,24 +382,20 @@ typedef NS_ENUM(NSInteger, PanDirection){
             APP.statusBarHidden = NO;
         }];
         [self mas_remakeConstraints:^(MASConstraintMaker *make) {
-            make.edges.equalTo(self.superView);
+            make.edges.equalTo(self.superPlayView);
         }];
         APP.statusBarOrientation = UIInterfaceOrientationPortrait;
         APP.statusBarStyle = _barStyle;
+        
+        
+        //删除手势控制
+        [self p_removePanRecognizer];
     }
 
     
 }
 
-
-
-#pragma mark - UIPanGestureRecognizer手势方法
-
-/**
- *  pan手势事件
- *
- *  @param pan UIPanGestureRecognizer
- */
+//控制手势
 - (void)panDirection:(UIPanGestureRecognizer *)pan {
     //根据在view上Pan的位置，确定是调音量还是亮度
     CGPoint locationPoint = [pan locationInView:self];
@@ -396,7 +414,7 @@ typedef NS_ENUM(NSInteger, PanDirection){
                 // 取消隐藏
                 self.panDirection = PanDirectionHorizontalMoved;
                 // 给sumTime初值
-                self.sumTime = self.avPlayer.currentTime;
+                self.seekSumTime = self.avPlayer.currentTime;
             }
             else if (x < y){ // 垂直移动
                 self.panDirection = PanDirectionVerticalMoved;
@@ -429,8 +447,10 @@ typedef NS_ENUM(NSInteger, PanDirection){
             // 比如水平移动结束时，要快进到指定位置，如果这里没有判断，当我们调节音量完之后，会出现屏幕跳动的bug
             switch (self.panDirection) {
                 case PanDirectionHorizontalMoved:{
-                    [self.avPlayer seekTo:self.sumTime];
-                    self.sumTime = 0;
+                    [self.avPlayer seekTo:self.seekSumTime completionHandler:^{
+                        self.playerControl.isFinishedSeek = YES;
+                    }];
+                    self.seekSumTime = 0;
                     break;
                 }
                 case PanDirectionVerticalMoved:{
@@ -446,16 +466,6 @@ typedef NS_ENUM(NSInteger, PanDirection){
         default:
             break;
     }
-}
-
-- (void)addTap {
-    UIPanGestureRecognizer *panRecognizer = [[UIPanGestureRecognizer alloc]initWithTarget:self action:@selector(panDirection:)];
-    panRecognizer.delegate = self;
-    [panRecognizer setMaximumNumberOfTouches:1];
-    [panRecognizer setDelaysTouchesBegan:YES];
-    [panRecognizer setDelaysTouchesEnded:YES];
-    [panRecognizer setCancelsTouchesInView:YES];
-    [self addGestureRecognizer:panRecognizer];
 }
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch {
@@ -483,35 +493,49 @@ typedef NS_ENUM(NSInteger, PanDirection){
 }
 
 - (void)horizontalMoved:(CGFloat)value {
-    
     // 每次滑动需要叠加时间
-    self.sumTime += value / 200;
+    self.seekSumTime += value / 200;
     
     // 需要限定sumTime的范围
     double totalSeconds = self.avPlayer.totalTime;
-    if (self.sumTime > totalSeconds) { self.sumTime = totalSeconds;}
-    if (self.sumTime < 0) { self.sumTime = 0; }
+    if (self.seekSumTime > totalSeconds) { self.seekSumTime = totalSeconds;}
+    if (self.seekSumTime < 0) { self.seekSumTime = 0; }
     
     BOOL style = false;
     if (value > 0) { style = YES; }
     if (value < 0) { style = NO; }
     if (value == 0) { return; }
     
-    [self.playerControl seekTo:self.sumTime totalTime:totalSeconds];
+    [self.playerControl seekPipTo:self.seekSumTime totalTime:totalSeconds];
+    [self.avPlayer getCImage:self.seekSumTime block:^(UIImage *image) {
+        [self.playerControl seekToImage:image];
+    }];
     [self.avPlayer startToSeek];
     
 }
 
 - (void)verticalMoved:(CGFloat)value {
-    self.isVolume ? (self.volumeViewSlider.value -= value / 10000) : ([UIScreen mainScreen].brightness -= value / 10000);
+    self.isVolume ? (self.volumeSlider.value -= value / 10000) : ([UIScreen mainScreen].brightness -= value / 10000);
 }
 
 //////////////////////////////////////////////////////////////////////////////
 #pragma mark ------ getter setter
-- (void)setSuperView:(UIView *)superView {
-    _superView = superView;
+- (UIPanGestureRecognizer *)panRecognizer {
+    if (!_panRecognizer) {
+        _panRecognizer = [[UIPanGestureRecognizer alloc]initWithTarget:self action:@selector(panDirection:)];
+        _panRecognizer.delegate = self;
+        [_panRecognizer setMaximumNumberOfTouches:1];
+        [_panRecognizer setDelaysTouchesBegan:YES];
+        [_panRecognizer setDelaysTouchesEnded:YES];
+        [_panRecognizer setCancelsTouchesInView:YES];
+    }
+    return _panRecognizer;
+}
+
+- (void)setSuperPlayView:(UIView *)superPlayView {
+    _superPlayView = superPlayView;
     [self mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.edges.equalTo(self.superView);
+        make.edges.equalTo(self.superPlayView);
     }];
 }
 
@@ -519,4 +543,5 @@ typedef NS_ENUM(NSInteger, PanDirection){
     _isFullScreen = isFullScreen;
     self.playerControl.isFullScreen = _isFullScreen;
 }
+
 @end
