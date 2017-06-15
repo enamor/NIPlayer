@@ -22,12 +22,12 @@ typedef NS_ENUM(NSInteger, NIAVPlayerStatus) {
     NIAVPlayerStatusItemFailed,      // 视频资源问题
     NIAVPlayerStatusEnterBack,       // 进入后台
     NIAVPlayerStatusBecomeActive,    // 从后台返回
-    
 };
 
 typedef NS_ENUM(NSInteger,NIAVPlayerVideoGravity) {
-    NIAVPlayerVideoGravityResizeAspect,
-    NIAVPlayerVideoGravityResizeAspectFill
+    NIAVPlayerVideoGravityResizeAspect,        //原视频比例
+    NIAVPlayerVideoGravityResizeAspectFill,    //原比例拉伸到两边占满屏幕
+    NIAVPlayerVideoGravityResize               //不按照比例拉伸
 };
 
 //播放状态
@@ -63,7 +63,6 @@ typedef void(^NIAVPlayerProgressCacheBlock)(CGFloat value);
 /** 暂停 */
 - (void)pause;
 
-
 /** 拖动视频进度 */
 - (void)seekTo:(NSTimeInterval)time completionHandler:(void(^)())complete;
 
@@ -75,6 +74,7 @@ typedef void(^NIAVPlayerProgressCacheBlock)(CGFloat value);
 /** 彻底释放播放器 */
 - (void)releasePlayer;
 
+/** 获取时间点的图片 */
 - (void)getCImage:(double)time block:(void (^)(UIImage *image))block;
 
 @end

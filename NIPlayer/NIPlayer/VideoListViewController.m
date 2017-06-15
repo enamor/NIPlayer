@@ -55,16 +55,18 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     VideoCell *cell = [tableView dequeueReusableCellWithIdentifier:@"demo" forIndexPath:indexPath];
-    
-    NSArray *indexpaths = [tableView indexPathsForVisibleRows];
+    return cell;
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    NSArray *indexpaths = [self.tableView indexPathsForVisibleRows];
     if (![indexpaths containsObject:_playIndexPath]&&_playIndexPath) {//复用
         [_player releasePlayer];
         _playIndexPath = nil;
         
     }else{
         
-    }    
-    return cell;
+    }
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {

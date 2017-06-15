@@ -81,22 +81,44 @@
         
     } else if ([keyPath isEqualToString:@"playbackBufferEmpty"]) {
         
-        //显示加载动画
-        if (self.isCanPlay) {
-            NSLog(@"跳转后没数据");
-            self.needBuffer = YES;
+        if (self.playerItem.playbackBufferEmpty) {
             if (_statusBlock) {
                 _statusBlock(NIAVPlayerStatusCacheData);
             }
         }
+        //显示加载动画
+//        if (self.isCanPlay) {
+//            NSLog(@"跳转后没数据");
+//            self.needBuffer = YES;
+//            if (_statusBlock) {
+//                _statusBlock(NIAVPlayerStatusCacheData);
+//            }
+//        }
         
     } else if ([keyPath isEqualToString:@"playbackLikelyToKeepUp"]) {
         // 隐藏菊花
-        if (self.isCanPlay && self.needBuffer) {
-            NSLog(@"跳转后有数据");
-            self.needBuffer = NO;
+//        if (self.isCanPlay && self.needBuffer) {
+//            NSLog(@"跳转后有数据");
+//            self.needBuffer = NO;
+//            if (_statusBlock) {
+//                _statusBlock(NIAVPlayerStatusCacheEnd);
+//            }
+//        }
+        
+        if (self.playerItem.playbackLikelyToKeepUp)
+        {
+            // hide loading indicator
             if (_statusBlock) {
                 _statusBlock(NIAVPlayerStatusCacheEnd);
+            }
+            if (_playerItem.status == AVPlayerItemStatusReadyToPlay) {
+                // start playing
+            }
+            else if (_playerItem.status == AVPlayerStatusFailed) {
+                // handle failed
+            }
+            else if (_playerItem.status == AVPlayerStatusUnknown) {
+                // handle unknown
             }
         }
         
@@ -201,23 +223,11 @@
     //用于获取帧图像的
     self.imageGenerator = [AVAssetImageGenerator assetImageGeneratorWithAsset:self.urlAsset];
     
-    
     self.player = [AVPlayer playerWithPlayerItem:_playerItem];
-    
     self.playerLayer = [AVPlayerLayer playerLayerWithPlayer:self.player];
     _playerLayer.backgroundColor = [UIColor blackColor].CGColor;
     _playerLayer.frame = self.bounds;
-    //设置模式
-    NSString *mode;
-    switch (_videoGravity) {
-        case NIAVPlayerVideoGravityResizeAspect:
-            mode = AVLayerVideoGravityResizeAspect;
-            break;
-        default:
-            mode = AVLayerVideoGravityResizeAspectFill;
-            break;
-    }
-    _playerLayer.videoGravity = mode;
+    _playerLayer.videoGravity = [self p_getVideoGravity];
     _playerLayer.contentsScale = [UIScreen mainScreen].scale;
     [self.layer insertSublayer:_playerLayer atIndex:0];
 
@@ -294,6 +304,26 @@
     [item removeObserver:self forKeyPath:@"loadedTimeRanges"];
     [item removeObserver:self forKeyPath:@"playbackBufferEmpty"];
     [item removeObserver:self forKeyPath:@"playbackLikelyToKeepUp"];
+}
+
+
+- (NSString *)p_getVideoGravity {
+    NSString *mode;
+    switch (_videoGravity) {
+        case NIAVPlayerVideoGravityResizeAspect:
+            mode = AVLayerVideoGravityResizeAspect;
+            break;
+        case NIAVPlayerVideoGravityResizeAspectFill:
+            mode = AVLayerVideoGravityResizeAspectFill;
+            break;
+        case NIAVPlayerVideoGravityResize:
+            mode = AVLayerVideoGravityResize;
+            break;
+        default:
+            mode = AVLayerVideoGravityResizeAspect;
+            break;
+    }
+    return mode;
 }
 
 
@@ -388,10 +418,10 @@
 - (NSTimeInterval)currentTime {
     return CMTimeGetSeconds(self.playerItem.currentTime);
 }
-
 - (BOOL)isPlay {
     return self.player.rate;
 }
+
 
 - (void)getCImage:(double)time block:(void (^)(UIImage *image))block {
     if (!self.isCanPlay) {

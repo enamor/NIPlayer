@@ -19,13 +19,17 @@
 @property (nonatomic, strong) UIView *bottomBar;
 
 
-@property (nonatomic, strong) UILabel *titleLabel;
-@property (nonatomic, strong) UIButton *fullBackBtn;
-@property (nonatomic, strong) UIButton *miniBackBtn;
-@property (nonatomic, strong) UIButton *playButton;
-@property (nonatomic, strong) UIButton *nextButton;
-@property (nonatomic, strong) UIButton *anthologyBtn;
-@property (nonatomic, strong) UIButton *definitBtn;
+@property (nonatomic, strong) UILabel           *titleLabel;         //标题
+@property (nonatomic, strong) UIButton          *fullBackBtn;        //全屏时返回
+@property (nonatomic, strong) UIButton          *miniBackBtn;        //小屏时返回
+@property (nonatomic, strong) UIButton          *playButton;         //播放
+@property (nonatomic, strong) UIButton          *nextButton;         //下一集
+@property (nonatomic, strong) UIButton          *anthologyBtn;       //选集
+@property (nonatomic, strong) UIButton          *definitBtn;         //清晰度
+@property (nonatomic, strong) UIButton          *errorBtn;           //播放失败展示
+
+
+@property (nonatomic, strong) UIActivityIndicatorView *indicator;     //菊花
 
 
 @property (nonatomic, strong) UILabel *currentTimeLabel;
@@ -68,6 +72,32 @@
 #pragma mark ------ Override
 
 #pragma mark ------ Public
+- (void)startLoading {
+    [self addSubview:self.indicator];
+    [_indicator mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.center.equalTo(self);
+    }];
+    
+    [self.indicator startAnimating];
+}
+- (void)endLoading {
+    [self.indicator stopAnimating];
+    [self.indicator removeFromSuperview];
+}
+
+- (void)playError {
+    [self addSubview:_errorBtn];
+    [_errorBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.center.equalTo(self);
+        make.height.mas_equalTo(40);
+        make.width.mas_equalTo(128);
+    }];
+}
+
+- (void)removeError {
+    [self.errorBtn removeFromSuperview];
+}
+
 - (void)reset {
     self.progressSlider.cacheValue = 0;
     self.progressSlider.value = 0;
@@ -78,6 +108,9 @@
     self.pipTimeLabel.text = @"00:00";
     self.pipImageView.image = nil;
     
+    [self endLoading];
+    [self removeError];
+    
 }
 #pragma mark ------ IBAction
 
@@ -87,6 +120,7 @@
 - (void)p_initUI {
     [self p_initTopBar];
     [self p_initBottomBar];
+    [self p_initErrorUI];
     [self p_initPIP];
 }
 
@@ -141,8 +175,7 @@
     }];
     
     //满屏播放 ／ 比例播放
-    UIButton *displayBtn = [UIButton buttonWithImage:IMAGE_PATH(@"miniplayer_icon_fullsize")];
-    _definitBtn.hidden = YES;
+    UIButton *displayBtn = [UIButton buttonWithImage:IMAGE_PATH(@"fullplayer_icon_more")];
 //    [displayBtn addTarget:self action:@selector(displayModeChanged:) forControlEvents:UIControlEventTouchUpInside];
     
     [contentView addSubview:displayBtn];
@@ -314,8 +347,14 @@
         make.top.equalTo(_pipImageView.mas_bottom);
         make.left.right.bottom.equalTo(_pipView);
     }];
+}
 
-
+- (void)p_initErrorUI {
+    self.errorBtn = [UIButton buttonWithTitle:@"播放失败" fontSize:14 textColor:[UIColor whiteColor] image:IMAGE_PATH(@"play_error")];
+    _errorBtn.titleEdgeInsets = UIEdgeInsetsMake(0, 10, 0, 0);
+    _errorBtn.imageEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 10);
+    [_errorBtn addTarget:self action:@selector(errorAction:) forControlEvents:UIControlEventTouchUpInside];
+    
 }
 - (void)seekTo:(double)time totalTime:(double)totalTime {
     NSString *dtime = [NSDate hourTime:time];
@@ -359,6 +398,13 @@
     }
 }
 
+- (void)errorAction:(UIButton *)sender {
+    _errorBtn.hidden = YES;
+    if ([_controlDelegate respondsToSelector:@selector(playerControl:errorAction:)]) {
+        [_controlDelegate playerControl:self errorAction:sender];
+    }
+}
+
 - (void)nextAction:(UIButton *)sender {
     if ([_controlDelegate respondsToSelector:@selector(playerControl:nextAction:)]) {
         [_controlDelegate playerControl:self nextAction:sender];
@@ -377,6 +423,15 @@
 }
 
 //////////////////////////////////////////////////////////////////////////////
+
+- (UIActivityIndicatorView *)indicator {
+    if (!_indicator) {
+        _indicator = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
+    }
+    return _indicator;
+}
+
+
 #pragma mark ------ getter setter
 - (void)setIsFullScreen:(BOOL)isFullScreen {
     _isFullScreen = isFullScreen;

@@ -12,6 +12,7 @@
 - (void)playerControl:(UIView *)control backAction:(UIButton *)sender ;
 - (void)playerControl:(UIView *)control fullScreenAction:(UIButton *)sender ;
 - (void)playerControl:(UIView *)control playAction:(UIButton *)sender ;
+- (void)playerControl:(UIView *)control errorAction:(UIButton *)sender ;
 - (void)playerControl:(UIView *)control nextAction:(UIButton *)sender ;
 - (void)playerControl:(UIView *)control seekAction:(UISlider *)sender ;
 - (void)playerControl:(UIView *)control sliderValueChangedAction:(UISlider *)sender ;
@@ -35,6 +36,11 @@
 //这两个方法需要结合使用
 - (void)seekPipTo:(double)time totalTime:(double)totalTime;
 - (void)seekToImage:(UIImage *)image;
+
+- (void)startLoading;
+- (void)endLoading;
+
+- (void)playError;
 
 - (void)reset;
 

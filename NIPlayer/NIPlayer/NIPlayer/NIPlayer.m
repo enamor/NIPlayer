@@ -72,8 +72,10 @@ typedef NS_ENUM(NSInteger, PanDirection){
     } else {
         if (self.getCurrentVC.presentingViewController) {
             [self.getCurrentVC dismissViewControllerAnimated:YES completion:nil];
-        } else {
+        } else if (self.getCurrentNavVC.topViewController == self.getCurrentNavVC) {
             [self.getCurrentNavVC popViewControllerAnimated:YES];
+        } else {
+//            [self releasePlayer];
         }
     }
 }
@@ -105,6 +107,7 @@ typedef NS_ENUM(NSInteger, PanDirection){
     }];
     [self.avPlayer startToSeek];
 }
+
 #pragma mark ------ UITextFieldDelegate
 #pragma mark ------ UITableViewDataSource
 #pragma mark ------ UITableViewDelegate
@@ -198,10 +201,11 @@ typedef NS_ENUM(NSInteger, PanDirection){
     self.avPlayer.statusBlock = ^(NIAVPlayerStatus status) {
         switch (status) {
             case NIAVPlayerStatusLoading: {
-                
+                [weakSelf.playerControl startLoading];
                 break;
             }
             case NIAVPlayerStatusReadyToPlay: {
+                [weakSelf.playerControl endLoading];
                 weakSelf.isCanPlay = YES;
                 weakSelf.playerControl.isPlay = YES;
                 break;
@@ -220,11 +224,11 @@ typedef NS_ENUM(NSInteger, PanDirection){
                 break;
             }
             case NIAVPlayerStatusCacheData: {
-                
+                [weakSelf.playerControl startLoading];
                 break;
             }
             case NIAVPlayerStatusCacheEnd: {
-                
+                [weakSelf.playerControl endLoading];
                 break;
             }
             case NIAVPlayerStatusPlayStop: {
@@ -234,6 +238,8 @@ typedef NS_ENUM(NSInteger, PanDirection){
             }
             case NIAVPlayerStatusItemFailed: {
                 weakSelf.playerControl.isPlay = NO;
+                [weakSelf.playerControl endLoading];
+                [weakSelf.playerControl playError];
                 break;
             }
             case NIAVPlayerStatusEnterBack: {

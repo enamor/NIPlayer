@@ -42,7 +42,6 @@
 }
 
 - (void)dealloc {
-//    [_avPlayer releasePlayer];
 
 }
 
