@@ -63,7 +63,7 @@
 
 + (CGFloat)cellHeight {
     CGFloat bgH = [UIScreen mainScreen].bounds.size.width * 9 / 16;
-    return bgH + 30;
+    return bgH + 30 + 15;
 }
 
 @end
