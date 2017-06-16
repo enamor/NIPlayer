@@ -41,7 +41,6 @@ typedef NS_ENUM(NSInteger, NIAVPlayerStatus) {
 
 **预览：**
 ![](https://raw.githubusercontent.com/enamor/ScreenImage/master/NIPlayer/show-how1.PNG)
-![](https://raw.githubusercontent.com/enamor/ScreenImage/master/NIPlayer/show-how2.PNG)
 ![](https://raw.githubusercontent.com/enamor/ScreenImage/master/NIPlayer/show-how3.PNG)
 ![](https://raw.githubusercontent.com/enamor/ScreenImage/master/NIPlayer/show-how4.PNG)
 
