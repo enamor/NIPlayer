@@ -30,7 +30,7 @@
     
     //背景颜色
     CGFloat rgb = 0.1;
-    [self.tabBar setBarTintColor:[UIColor colorWithRed:rgb green:rgb blue:rgb alpha:0.9]];
+    [self.tabBar setBarTintColor:[UIColor colorWithRed:rgb green:rgb blue:rgb alpha:0.8]];
     //取消tabBar的透明效果。
     self.tabBar.translucent = NO;
     

@@ -19,15 +19,8 @@
 		B80AAA721EF3D08900A94280 /* VideoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B80AAA711EF3D08900A94280 /* VideoViewController.m */; };
 		B80AAA761EF3D2D300A94280 /* PlayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B80AAA751EF3D2D300A94280 /* PlayViewController.m */; };
 		B80AAA781EF3D56E00A94280 /* local_one.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = B80AAA771EF3D56E00A94280 /* local_one.mp4 */; };
-		B835CCF01EF273B3004A996C /* UIImage+NI_Extension.m in Sources */ = {isa = PBXBuildFile; fileRef = B835CCEF1EF273B3004A996C /* UIImage+NI_Extension.m */; };
-		B8C48D9E1EE95A1E0066BCC5 /* NSDate+NI_time.m in Sources */ = {isa = PBXBuildFile; fileRef = B8C48D9D1EE95A1E0066BCC5 /* NSDate+NI_time.m */; };
-		B8C48DA11EE95C770066BCC5 /* UINavigationController+NI_allowRote.m in Sources */ = {isa = PBXBuildFile; fileRef = B8C48DA01EE95C770066BCC5 /* UINavigationController+NI_allowRote.m */; };
-		B8C48DA41EE95C9D0066BCC5 /* UITabBarController+NI_allRote.m in Sources */ = {isa = PBXBuildFile; fileRef = B8C48DA31EE95C9D0066BCC5 /* UITabBarController+NI_allRote.m */; };
 		B8C48DA71EE962920066BCC5 /* NIBrightnessView.m in Sources */ = {isa = PBXBuildFile; fileRef = B8C48DA61EE962920066BCC5 /* NIBrightnessView.m */; };
-		B8C53D3C1EEA43E1008955B1 /* UIView+NI_superVC.m in Sources */ = {isa = PBXBuildFile; fileRef = B8C53D3B1EEA43E1008955B1 /* UIView+NI_superVC.m */; };
 		B8CAD2BF1EE118FB00E99BD1 /* NIPlayer.bundle in Resources */ = {isa = PBXBuildFile; fileRef = B8CAD2BE1EE118FB00E99BD1 /* NIPlayer.bundle */; };
-		B8CAD2CF1EE1783600E99BD1 /* UIButton+Create.m in Sources */ = {isa = PBXBuildFile; fileRef = B8CAD2CE1EE1783600E99BD1 /* UIButton+Create.m */; };
-		B8CAD2D21EE17D3700E99BD1 /* UILabel+Create.m in Sources */ = {isa = PBXBuildFile; fileRef = B8CAD2D11EE17D3700E99BD1 /* UILabel+Create.m */; };
 		B8F1B5BC1EE07470004A1E26 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B8F1B5BB1EE07470004A1E26 /* main.m */; };
 		B8F1B5BF1EE07470004A1E26 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B8F1B5BE1EE07470004A1E26 /* AppDelegate.m */; };
 		B8F1B5C51EE07470004A1E26 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B8F1B5C31EE07470004A1E26 /* Main.storyboard */; };
@@ -45,6 +38,13 @@
 		B8F6AA731EF44C8900FEA205 /* tabbar_video_HL@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = B8F6AA6F1EF44C8900FEA205 /* tabbar_video_HL@3x.png */; };
 		B8F6AA741EF44C8900FEA205 /* tabbar_video@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B8F6AA701EF44C8900FEA205 /* tabbar_video@2x.png */; };
 		B8F6AA751EF44C8900FEA205 /* tabbar_video@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = B8F6AA711EF44C8900FEA205 /* tabbar_video@3x.png */; };
+		B8F6AA851EF455EE00FEA205 /* NSDate+NI_time.m in Sources */ = {isa = PBXBuildFile; fileRef = B8F6AA781EF455EE00FEA205 /* NSDate+NI_time.m */; };
+		B8F6AA861EF455EE00FEA205 /* UIButton+Create.m in Sources */ = {isa = PBXBuildFile; fileRef = B8F6AA7A1EF455EE00FEA205 /* UIButton+Create.m */; };
+		B8F6AA871EF455EE00FEA205 /* UIImage+NI_Extension.m in Sources */ = {isa = PBXBuildFile; fileRef = B8F6AA7C1EF455EE00FEA205 /* UIImage+NI_Extension.m */; };
+		B8F6AA881EF455EE00FEA205 /* UILabel+Create.m in Sources */ = {isa = PBXBuildFile; fileRef = B8F6AA7E1EF455EE00FEA205 /* UILabel+Create.m */; };
+		B8F6AA891EF455EE00FEA205 /* UINavigationController+NI_allowRote.m in Sources */ = {isa = PBXBuildFile; fileRef = B8F6AA801EF455EE00FEA205 /* UINavigationController+NI_allowRote.m */; };
+		B8F6AA8A1EF455EE00FEA205 /* UITabBarController+NI_allRote.m in Sources */ = {isa = PBXBuildFile; fileRef = B8F6AA821EF455EE00FEA205 /* UITabBarController+NI_allRote.m */; };
+		B8F6AA8B1EF455EE00FEA205 /* UIView+NI_superVC.m in Sources */ = {isa = PBXBuildFile; fileRef = B8F6AA841EF455EE00FEA205 /* UIView+NI_superVC.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -69,24 +69,10 @@
 		B80AAA741EF3D2D300A94280 /* PlayViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayViewController.h; sourceTree = "<group>"; };
 		B80AAA751EF3D2D300A94280 /* PlayViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlayViewController.m; sourceTree = "<group>"; };
 		B80AAA771EF3D56E00A94280 /* local_one.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = local_one.mp4; sourceTree = "<group>"; };
-		B835CCEE1EF273B3004A996C /* UIImage+NI_Extension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+NI_Extension.h"; sourceTree = "<group>"; };
-		B835CCEF1EF273B3004A996C /* UIImage+NI_Extension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+NI_Extension.m"; sourceTree = "<group>"; };
-		B8C48D9C1EE95A1E0066BCC5 /* NSDate+NI_time.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+NI_time.h"; sourceTree = "<group>"; };
-		B8C48D9D1EE95A1E0066BCC5 /* NSDate+NI_time.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+NI_time.m"; sourceTree = "<group>"; };
-		B8C48D9F1EE95C770066BCC5 /* UINavigationController+NI_allowRote.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UINavigationController+NI_allowRote.h"; sourceTree = "<group>"; };
-		B8C48DA01EE95C770066BCC5 /* UINavigationController+NI_allowRote.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UINavigationController+NI_allowRote.m"; sourceTree = "<group>"; };
-		B8C48DA21EE95C9D0066BCC5 /* UITabBarController+NI_allRote.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITabBarController+NI_allRote.h"; sourceTree = "<group>"; };
-		B8C48DA31EE95C9D0066BCC5 /* UITabBarController+NI_allRote.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITabBarController+NI_allRote.m"; sourceTree = "<group>"; };
 		B8C48DA51EE962920066BCC5 /* NIBrightnessView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIBrightnessView.h; sourceTree = "<group>"; };
 		B8C48DA61EE962920066BCC5 /* NIBrightnessView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIBrightnessView.m; sourceTree = "<group>"; };
-		B8C53D3A1EEA43E1008955B1 /* UIView+NI_superVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+NI_superVC.h"; sourceTree = "<group>"; };
-		B8C53D3B1EEA43E1008955B1 /* UIView+NI_superVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+NI_superVC.m"; sourceTree = "<group>"; };
 		B8CAD2BE1EE118FB00E99BD1 /* NIPlayer.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = NIPlayer.bundle; sourceTree = "<group>"; };
 		B8CAD2C11EE11A7700E99BD1 /* NIPlayerMacro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIPlayerMacro.h; sourceTree = "<group>"; };
-		B8CAD2CD1EE1783600E99BD1 /* UIButton+Create.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIButton+Create.h"; sourceTree = "<group>"; };
-		B8CAD2CE1EE1783600E99BD1 /* UIButton+Create.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIButton+Create.m"; sourceTree = "<group>"; };
-		B8CAD2D01EE17D3700E99BD1 /* UILabel+Create.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UILabel+Create.h"; sourceTree = "<group>"; };
-		B8CAD2D11EE17D3700E99BD1 /* UILabel+Create.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UILabel+Create.m"; sourceTree = "<group>"; };
 		B8F1B5B71EE07470004A1E26 /* NIPlayer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NIPlayer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B8F1B5BB1EE07470004A1E26 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		B8F1B5BD1EE07470004A1E26 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = NIPlayer/AppDelegate.h; sourceTree = SOURCE_ROOT; };
@@ -111,6 +97,20 @@
 		B8F6AA6F1EF44C8900FEA205 /* tabbar_video_HL@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tabbar_video_HL@3x.png"; sourceTree = "<group>"; };
 		B8F6AA701EF44C8900FEA205 /* tabbar_video@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tabbar_video@2x.png"; sourceTree = "<group>"; };
 		B8F6AA711EF44C8900FEA205 /* tabbar_video@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tabbar_video@3x.png"; sourceTree = "<group>"; };
+		B8F6AA771EF455EE00FEA205 /* NSDate+NI_time.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+NI_time.h"; sourceTree = "<group>"; };
+		B8F6AA781EF455EE00FEA205 /* NSDate+NI_time.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+NI_time.m"; sourceTree = "<group>"; };
+		B8F6AA791EF455EE00FEA205 /* UIButton+Create.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIButton+Create.h"; sourceTree = "<group>"; };
+		B8F6AA7A1EF455EE00FEA205 /* UIButton+Create.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIButton+Create.m"; sourceTree = "<group>"; };
+		B8F6AA7B1EF455EE00FEA205 /* UIImage+NI_Extension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+NI_Extension.h"; sourceTree = "<group>"; };
+		B8F6AA7C1EF455EE00FEA205 /* UIImage+NI_Extension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+NI_Extension.m"; sourceTree = "<group>"; };
+		B8F6AA7D1EF455EE00FEA205 /* UILabel+Create.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UILabel+Create.h"; sourceTree = "<group>"; };
+		B8F6AA7E1EF455EE00FEA205 /* UILabel+Create.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UILabel+Create.m"; sourceTree = "<group>"; };
+		B8F6AA7F1EF455EE00FEA205 /* UINavigationController+NI_allowRote.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UINavigationController+NI_allowRote.h"; sourceTree = "<group>"; };
+		B8F6AA801EF455EE00FEA205 /* UINavigationController+NI_allowRote.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UINavigationController+NI_allowRote.m"; sourceTree = "<group>"; };
+		B8F6AA811EF455EE00FEA205 /* UITabBarController+NI_allRote.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITabBarController+NI_allRote.h"; sourceTree = "<group>"; };
+		B8F6AA821EF455EE00FEA205 /* UITabBarController+NI_allRote.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITabBarController+NI_allRote.m"; sourceTree = "<group>"; };
+		B8F6AA831EF455EE00FEA205 /* UIView+NI_superVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+NI_superVC.h"; sourceTree = "<group>"; };
+		B8F6AA841EF455EE00FEA205 /* UIView+NI_superVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+NI_superVC.m"; sourceTree = "<group>"; };
 		D01EA5CA1EF3575BAAF9CE72 /* Pods-NIPlayer.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NIPlayer.debug.xcconfig"; path = "Pods/Target Support Files/Pods-NIPlayer/Pods-NIPlayer.debug.xcconfig"; sourceTree = "<group>"; };
 		D93917337B905F823F762552 /* libPods-NIPlayer.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-NIPlayer.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -327,27 +327,6 @@
 			path = Home;
 			sourceTree = "<group>";
 		};
-		B8CAD2CC1EE1780800E99BD1 /* category */ = {
-			isa = PBXGroup;
-			children = (
-				B835CCEE1EF273B3004A996C /* UIImage+NI_Extension.h */,
-				B835CCEF1EF273B3004A996C /* UIImage+NI_Extension.m */,
-				B8CAD2CD1EE1783600E99BD1 /* UIButton+Create.h */,
-				B8CAD2CE1EE1783600E99BD1 /* UIButton+Create.m */,
-				B8CAD2D01EE17D3700E99BD1 /* UILabel+Create.h */,
-				B8CAD2D11EE17D3700E99BD1 /* UILabel+Create.m */,
-				B8C48D9C1EE95A1E0066BCC5 /* NSDate+NI_time.h */,
-				B8C48D9D1EE95A1E0066BCC5 /* NSDate+NI_time.m */,
-				B8C48D9F1EE95C770066BCC5 /* UINavigationController+NI_allowRote.h */,
-				B8C48DA01EE95C770066BCC5 /* UINavigationController+NI_allowRote.m */,
-				B8C48DA21EE95C9D0066BCC5 /* UITabBarController+NI_allRote.h */,
-				B8C48DA31EE95C9D0066BCC5 /* UITabBarController+NI_allRote.m */,
-				B8C53D3A1EEA43E1008955B1 /* UIView+NI_superVC.h */,
-				B8C53D3B1EEA43E1008955B1 /* UIView+NI_superVC.m */,
-			);
-			path = category;
-			sourceTree = "<group>";
-		};
 		B8F1B5AE1EE07470004A1E26 = {
 			isa = PBXGroup;
 			children = (
@@ -396,7 +375,7 @@
 		B8F1B5D11EE074B8004A1E26 /* NIPlayer */ = {
 			isa = PBXGroup;
 			children = (
-				B8CAD2CC1EE1780800E99BD1 /* category */,
+				B8F6AA761EF455EE00FEA205 /* Category */,
 				B8CAD2BE1EE118FB00E99BD1 /* NIPlayer.bundle */,
 				B8F1B5D21EE074B8004A1E26 /* NIAVPlayer.h */,
 				B8F1B5D31EE074B8004A1E26 /* NIAVPlayer.m */,
@@ -411,6 +390,27 @@
 				B8C48DA61EE962920066BCC5 /* NIBrightnessView.m */,
 			);
 			path = NIPlayer;
+			sourceTree = "<group>";
+		};
+		B8F6AA761EF455EE00FEA205 /* Category */ = {
+			isa = PBXGroup;
+			children = (
+				B8F6AA771EF455EE00FEA205 /* NSDate+NI_time.h */,
+				B8F6AA781EF455EE00FEA205 /* NSDate+NI_time.m */,
+				B8F6AA791EF455EE00FEA205 /* UIButton+Create.h */,
+				B8F6AA7A1EF455EE00FEA205 /* UIButton+Create.m */,
+				B8F6AA7B1EF455EE00FEA205 /* UIImage+NI_Extension.h */,
+				B8F6AA7C1EF455EE00FEA205 /* UIImage+NI_Extension.m */,
+				B8F6AA7D1EF455EE00FEA205 /* UILabel+Create.h */,
+				B8F6AA7E1EF455EE00FEA205 /* UILabel+Create.m */,
+				B8F6AA7F1EF455EE00FEA205 /* UINavigationController+NI_allowRote.h */,
+				B8F6AA801EF455EE00FEA205 /* UINavigationController+NI_allowRote.m */,
+				B8F6AA811EF455EE00FEA205 /* UITabBarController+NI_allRote.h */,
+				B8F6AA821EF455EE00FEA205 /* UITabBarController+NI_allRote.m */,
+				B8F6AA831EF455EE00FEA205 /* UIView+NI_superVC.h */,
+				B8F6AA841EF455EE00FEA205 /* UIView+NI_superVC.m */,
+			);
+			path = Category;
 			sourceTree = "<group>";
 		};
 		FE426067A8F38E45000AC022 /* Pods */ = {
@@ -556,29 +556,29 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B8F6AA861EF455EE00FEA205 /* UIButton+Create.m in Sources */,
 				B80AAA6D1EF38F5000A94280 /* HomeVideoModel.m in Sources */,
 				B80AAA521EF3860200A94280 /* TabBarController.m in Sources */,
 				B8F1B5BF1EE07470004A1E26 /* AppDelegate.m in Sources */,
 				B80AAA721EF3D08900A94280 /* VideoViewController.m in Sources */,
-				B8C53D3C1EEA43E1008955B1 /* UIView+NI_superVC.m in Sources */,
+				B8F6AA8A1EF455EE00FEA205 /* UITabBarController+NI_allRote.m in Sources */,
+				B8F6AA871EF455EE00FEA205 /* UIImage+NI_Extension.m in Sources */,
+				B8F6AA8B1EF455EE00FEA205 /* UIView+NI_superVC.m in Sources */,
 				B8F1B5E61EE074B8004A1E26 /* NIAVPlayer.m in Sources */,
 				B80AAA761EF3D2D300A94280 /* PlayViewController.m in Sources */,
-				B8CAD2D21EE17D3700E99BD1 /* UILabel+Create.m in Sources */,
-				B8C48DA11EE95C770066BCC5 /* UINavigationController+NI_allowRote.m in Sources */,
 				B8F1B5BC1EE07470004A1E26 /* main.m in Sources */,
+				B8F6AA891EF455EE00FEA205 /* UINavigationController+NI_allowRote.m in Sources */,
 				B80AAA641EF38A2000A94280 /* HttpRequest.m in Sources */,
 				B80AAA591EF3876800A94280 /* BaseNavController.m in Sources */,
 				B80AAA691EF38D6500A94280 /* HomeTableViewCell.m in Sources */,
 				B8F1B5E71EE074B8004A1E26 /* NIPlayer.m in Sources */,
-				B8CAD2CF1EE1783600E99BD1 /* UIButton+Create.m in Sources */,
 				B80AAA561EF3869200A94280 /* BaseViewController.m in Sources */,
 				B8F1B5E81EE074B8004A1E26 /* NIPlayerControl.m in Sources */,
-				B8C48D9E1EE95A1E0066BCC5 /* NSDate+NI_time.m in Sources */,
-				B835CCF01EF273B3004A996C /* UIImage+NI_Extension.m in Sources */,
+				B8F6AA851EF455EE00FEA205 /* NSDate+NI_time.m in Sources */,
 				B8F1B5E91EE074B8004A1E26 /* NIPlayerSlider.m in Sources */,
 				B8C48DA71EE962920066BCC5 /* NIBrightnessView.m in Sources */,
-				B8C48DA41EE95C9D0066BCC5 /* UITabBarController+NI_allRote.m in Sources */,
 				B80AAA5E1EF388EA00A94280 /* HomeViewController.m in Sources */,
+				B8F6AA881EF455EE00FEA205 /* UILabel+Create.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

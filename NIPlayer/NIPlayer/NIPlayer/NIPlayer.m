@@ -117,7 +117,7 @@ typedef NS_ENUM(NSInteger, PanDirection){
 - (void)playerControl:(UIView *)control sliderValueChangedAction:(UISlider *)sender {
     NSTimeInterval seekTime = sender.value * self.avPlayer.totalTime;
     NSTimeInterval totalTime = self.avPlayer.totalTime;
-    if (_isFullScreen) {
+    if (!_isFullScreen) {
         [self.playerControl seekTo:seekTime totalTime:totalTime];
     } else {
         [self.playerControl seekPipTo:sender.value * self.avPlayer.totalTime totalTime:self.avPlayer.totalTime];
