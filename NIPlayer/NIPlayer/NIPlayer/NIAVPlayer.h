@@ -25,9 +25,9 @@ typedef NS_ENUM(NSInteger, NIAVPlayerStatus) {
 };
 
 typedef NS_ENUM(NSInteger,NIAVPlayerVideoGravity) {
-    NIAVPlayerVideoGravityResizeAspect,        //原视频比例
-    NIAVPlayerVideoGravityResizeAspectFill,    //原比例拉伸到两边占满屏幕
-    NIAVPlayerVideoGravityResize               //不按照比例拉伸
+    NIAVPlayerVideoGravityResizeAspect,        // 原视频比例
+    NIAVPlayerVideoGravityResizeAspectFill,    // 原比例拉伸到两边占满屏幕
+    NIAVPlayerVideoGravityResize               // 不按照比例拉伸
 };
 
 //播放状态

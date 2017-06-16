@@ -16,6 +16,8 @@
 #define kImgKey     @"imageName"
 #define kSelImgKey  @"selectedImageName"
 
+#define HEX_COLOR(rgbValue) [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/255.0 alpha:1]
+
 @interface TabBarController ()
 
 @end
@@ -27,7 +29,8 @@
     [self p_setupSubviews];
     
     //背景颜色
-    [self.tabBar setBarTintColor:[UIColor whiteColor]];
+    CGFloat rgb = 0.1;
+    [self.tabBar setBarTintColor:[UIColor colorWithRed:rgb green:rgb blue:rgb alpha:0.9]];
     //取消tabBar的透明效果。
     self.tabBar.translucent = NO;
     
@@ -55,13 +58,13 @@
     NSArray *childItemsArray = @[
                                  @{kClassKey  : @"HomeViewController",
                                    kTitleKey  : @"首页",
-                                   kImgKey    : @"tabbar_mainframe",
-                                   kSelImgKey : @"tabbar_mainframeHL"},
+                                   kImgKey    : @"tabbar_home",
+                                   kSelImgKey : @"tabbar_home_HL"},
                                  
                                  @{kClassKey  : @"VideoViewController",
                                    kTitleKey  : @"视频",
-                                   kImgKey    : @"tabbar_contacts",
-                                   kSelImgKey : @"tabbar_contactsHL"} ];
+                                   kImgKey    : @"tabbar_video",
+                                   kSelImgKey : @"tabbar_video_HL"} ];
     
     
     [childItemsArray enumerateObjectsUsingBlock:^(NSDictionary *dict, NSUInteger idx, BOOL *stop) {
@@ -77,9 +80,9 @@
         item.imageInsets = UIEdgeInsetsMake(-2, 0, 2, 0);
         
         //默认状态下文字颜色
-        //        [item setTitleTextAttributes:@{NSForegroundColorAttributeName : kThemeColor} forState:UIControlStateNormal];
+        [item setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor whiteColor]} forState:UIControlStateNormal];
         //选中状态下文字颜色
-        [item setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor orangeColor]} forState:UIControlStateSelected];
+        [item setTitleTextAttributes:@{NSForegroundColorAttributeName : HEX_COLOR(0xd4237a)} forState:UIControlStateSelected];
         [self addChildViewController:nav];
         
     }];
