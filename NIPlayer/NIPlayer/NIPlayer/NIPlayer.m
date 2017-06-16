@@ -27,14 +27,19 @@ typedef NS_ENUM(NSInteger, PanDirection){
 };
 
 
+
 @interface NIPlayer ()<NIPlayerControlDelegate,UIGestureRecognizerDelegate>
 
-@property (nonatomic, assign) BOOL isFullScreen;
 @property (nonatomic, strong) NIAVPlayer            *avPlayer;         //AVPlayer播放器
 @property (nonatomic, strong) NIPlayerControl       *playerControl;    //播放器控制UI
 @property (nonatomic, strong) UIView                *superPlayView;    //播放的view
 @property (nonatomic, assign) UIStatusBarStyle      barStyle;          //之前StatusBar样式
-@property (nonatomic, assign) BOOL                  isCanPlay;
+
+@property (nonatomic, assign) BOOL                  isCanPlay;         //视频是否可以播放
+@property (nonatomic, assign) BOOL                  isLock;            //锁定(旋转、手势)
+@property (nonatomic, assign) BOOL                  isFullScreen;      //当前是否全屏
+@property (nonatomic, assign) UIDeviceOrientation   currentOrientiation; //当前屏幕方向
+
 
 //手势相关
 @property (nonatomic, strong) UIPanGestureRecognizer *panRecognizer;   //控制手势
@@ -48,12 +53,20 @@ typedef NS_ENUM(NSInteger, PanDirection){
 
 //////////////////////////////////////////////////////////////////////////////
 #pragma mark ------ Lifecycle
++ (NIPlayer *)sharedPlayer {
+    static NIPlayer *player;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        player = [[NIPlayer alloc] init];
+    });
+    return player;
+}
+
 - (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
         self.barStyle = APP.statusBarStyle;
         [self p_initUI];
-        [self p_initObserver];
     }
     return self;
 }
@@ -68,14 +81,15 @@ typedef NS_ENUM(NSInteger, PanDirection){
 #pragma mark ------ Protocol
 - (void)playerControl:(UIView *)control backAction:(UIButton *)sender {
     if (_isFullScreen) {
+        _isLock = NO;
         [self fullScreen:UIDeviceOrientationPortrait];
+        
     } else {
         if (self.getCurrentVC.presentingViewController) {
             [self.getCurrentVC dismissViewControllerAnimated:YES completion:nil];
-        } else if (self.getCurrentNavVC.topViewController == self.getCurrentNavVC) {
-            [self.getCurrentNavVC popViewControllerAnimated:YES];
         } else {
-//            [self releasePlayer];
+            [self.getCurrentNavVC popViewControllerAnimated:YES];
+            //[self releasePlayer];
         }
     }
 }
@@ -101,11 +115,18 @@ typedef NS_ENUM(NSInteger, PanDirection){
 }
 
 - (void)playerControl:(UIView *)control sliderValueChangedAction:(UISlider *)sender {
-    [self.playerControl seekPipTo:sender.value * self.avPlayer.totalTime totalTime:self.avPlayer.totalTime];
-    [self.avPlayer getCImage:sender.value * self.avPlayer.totalTime block:^(UIImage *image) {
-        [self.playerControl seekToImage:image];
-    }];
-    [self.avPlayer startToSeek];
+    NSTimeInterval seekTime = sender.value * self.avPlayer.totalTime;
+    NSTimeInterval totalTime = self.avPlayer.totalTime;
+    if (_isFullScreen) {
+        [self.playerControl seekTo:seekTime totalTime:totalTime];
+    } else {
+        [self.playerControl seekPipTo:sender.value * self.avPlayer.totalTime totalTime:self.avPlayer.totalTime];
+        [self.avPlayer getCImage:sender.value * self.avPlayer.totalTime block:^(UIImage *image) {
+            [self.playerControl seekToImage:image];
+        }];
+        [self.avPlayer startToSeek];
+    }
+    
 }
 
 #pragma mark ------ UITextFieldDelegate
@@ -119,17 +140,14 @@ typedef NS_ENUM(NSInteger, PanDirection){
 #pragma mark ------ Override
 
 #pragma mark ------ Public
-- (void)playWithUrl:(NSString *)url {
-    [self.playerControl reset];
-    [self.avPlayer playWithUrl:url];
-    [self p_configureVolume];
-}
-
 - (void)playWithUrl:(NSString *)url onView:(UIView *)view {
+    [self removeFromSuperview];
+    [view addSubview:self];
     [self.playerControl reset];
     self.superPlayView = view;
     [self.avPlayer playWithUrl:url];
     [self p_configureVolume];
+    [self p_initObserver];
 }
 
 - (void)play {
@@ -153,16 +171,14 @@ typedef NS_ENUM(NSInteger, PanDirection){
 - (void)p_initUI {
     self.avPlayer = [[NIAVPlayer alloc] init];
     [self addSubview:_avPlayer];
-    
     [self.avPlayer mas_makeConstraints:^(MASConstraintMaker *make) {
         make.edges.equalTo(self);
     }];
-    
     self.playerControl = [[NIPlayerControl alloc] init];
     _playerControl.controlDelegate = self;
     [self addSubview:_playerControl];
     [self.playerControl mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.edges.equalTo(self.avPlayer);
+        make.edges.equalTo(self);
     }];
 }
 
@@ -243,10 +259,22 @@ typedef NS_ENUM(NSInteger, PanDirection){
                 break;
             }
             case NIAVPlayerStatusEnterBack: {
+                if (weakSelf.isFullScreen) {
+                    [weakSelf p_removeObserver];
+                    
+                    /** 全屏进入后台 竖屏状态回到前台 默认是全屏状态
+                     *  不加下面默认是小屏进入后转到大屏效果不好
+                     */
+                    APP_DELEGATE.allowRotationType = AllowRotationMaskLandscapeLeftOrRight;
+                }
                 break;
             }
                 
             case NIAVPlayerStatusBecomeActive: {
+                if (weakSelf.isFullScreen) {
+                    APP_DELEGATE.allowRotationType = AllowRotationMaskAllButUpsideDown;
+                    [weakSelf p_initNotificatObserver];
+                }
                 break;
             }
                 
@@ -330,40 +358,36 @@ typedef NS_ENUM(NSInteger, PanDirection){
 
 #pragma mark - Public
 - (void)fullScreen:(UIDeviceOrientation)orientation {
+    if (![self judgeIfCanRotate:orientation]) return;
     
-    if (!_isCanPlay) return;
-    CGAffineTransform tranform = CGAffineTransformIdentity;
-    BOOL isCanFull = YES;;
-    if (orientation ==UIDeviceOrientationLandscapeLeft) {
-        self.isFullScreen = YES;
-        tranform = CGAffineTransformMakeRotation(M_PI_2);
-        APP.statusBarStyle = UIStatusBarStyleLightContent;
-        APP.statusBarOrientation = UIDeviceOrientationLandscapeLeft;
-    } else if (orientation == UIDeviceOrientationLandscapeRight){
-        self.isFullScreen = YES;
-        tranform = CGAffineTransformMakeRotation(-M_PI_2);
-        APP.statusBarOrientation = UIDeviceOrientationLandscapeRight;
-
-    } else if (orientation == UIDeviceOrientationPortrait) {
-        tranform = CGAffineTransformIdentity;
-        APP.statusBarStyle = _barStyle;
-        self.isFullScreen = NO;
-    } else {
-        isCanFull = NO;
-    }
-    if (!isCanFull) return;
+    CGAffineTransform tranform = [self getRotateTransform:orientation];
+    _currentOrientiation = orientation;
     
-    if (self.isFullScreen) { //全屏
+    if (orientation == UIDeviceOrientationLandscapeLeft
+        ||orientation ==UIDeviceOrientationLandscapeRight ) { //全屏
+        self.isFullScreen = YES;
         [self removeFromSuperview];
-        CGFloat width = [[UIScreen mainScreen] bounds].size.width;
-        CGFloat height = [[UIScreen mainScreen] bounds].size.height;
         [[UIApplication sharedApplication].keyWindow addSubview:self];
+        if ( _avPlayer.videoSize.width < _avPlayer.videoSize.height) {
+            //竖屏视频
+            [self mas_remakeConstraints:^(MASConstraintMaker *make) {
+                make.edges.equalTo([UIApplication sharedApplication].keyWindow);
+            }];
+            [self updateConstraintsIfNeeded];
+            [self layoutIfNeeded];
+            
+            _isLock = YES;
+            APP.statusBarStyle = UIStatusBarStyleLightContent;
+            return;
+        }
         
+        CGFloat sw = [[UIScreen mainScreen] bounds].size.width;
+        CGFloat sh = [[UIScreen mainScreen] bounds].size.height;
+        CGFloat width = sw > sh ? sw : sh;
+        CGFloat height = sh > sw ? sw : sh;
         [[NIBrightnessView sharedInstance] showWithTransform:tranform];
         [UIView animateWithDuration:0.3f animations:^{
             [self setTransform:tranform];
-        } completion:^(BOOL finished) {
-            APP.statusBarHidden = NO;
         }];
         [self mas_remakeConstraints:^(MASConstraintMaker *make) {
             make.left.mas_equalTo((height - width) / 2);
@@ -371,35 +395,68 @@ typedef NS_ENUM(NSInteger, PanDirection){
             make.width.mas_equalTo(width);
             make.height.mas_equalTo(height);
         }];
+        [self updateConstraintsIfNeeded];
+        [self layoutIfNeeded];
         
+        APP.statusBarOrientation = (UIInterfaceOrientation)orientation;
         APP.statusBarStyle = UIStatusBarStyleLightContent;
+        APP.statusBarHidden = NO;
         
         //添加手势控制
         [self p_addPanRecognizer];
         
-    } else { //小屏幕
+    } else if (orientation == UIDeviceOrientationPortrait) { //小屏幕
         [self removeFromSuperview];
-        [[NIBrightnessView sharedInstance] removeFromSuperview];
         
+        self.isFullScreen = NO;
+        //移除亮度控制
+        [[NIBrightnessView sharedInstance] removeFromSuperview];
         [self.superPlayView addSubview:self];
         [UIView animateWithDuration:0.3f animations:^{
             [self setTransform:tranform];
-            
-        } completion:^(BOOL finished) {
-            APP.statusBarHidden = NO;
         }];
         [self mas_remakeConstraints:^(MASConstraintMaker *make) {
             make.edges.equalTo(self.superPlayView);
         }];
+        [self updateConstraintsIfNeeded];
+        [self layoutIfNeeded];
+        
         APP.statusBarOrientation = UIInterfaceOrientationPortrait;
         APP.statusBarStyle = _barStyle;
-        
+        APP.statusBarHidden = NO;
         
         //删除手势控制
         [self p_removePanRecognizer];
     }
 
     
+}
+//判断是否可以旋转
+- (BOOL)judgeIfCanRotate:(UIDeviceOrientation)orientation {
+    //视频不能播放禁止旋转
+    if (!_isCanPlay) return NO;
+    //屏幕方向未改变无需旋转
+    if (_currentOrientiation == orientation) return NO;
+    //竖屏视频锁定/全屏屏幕锁定时
+    if (_isLock) return NO;
+    if (orientation == UIDeviceOrientationPortrait ||
+        orientation == UIDeviceOrientationLandscapeLeft ||
+        orientation == UIDeviceOrientationLandscapeRight) {
+    } else {
+        return NO;
+    }
+    return YES;
+}
+
+//获取旋转角度
+- (CGAffineTransform)getRotateTransform:(UIDeviceOrientation)orientation {
+    CGAffineTransform tranform = CGAffineTransformIdentity;
+    if (orientation == UIDeviceOrientationLandscapeLeft) {
+        tranform = CGAffineTransformMakeRotation(M_PI_2);
+    } else if (orientation == UIDeviceOrientationLandscapeRight){
+        tranform = CGAffineTransformMakeRotation(-M_PI_2);
+    }
+    return tranform;
 }
 
 //控制手势

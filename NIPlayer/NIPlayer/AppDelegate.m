@@ -7,11 +7,7 @@
 //
 
 #import "AppDelegate.h"
-#import "NavigationViewController.h"
-#import "VideoListViewController.h"
-#import "ViewController.h"
 #import "TabBarController.h"
-#import "PushListViewController.h"
 
 @interface AppDelegate ()
 
@@ -52,16 +48,16 @@
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
 
-//- (UIInterfaceOrientationMask)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window {
-//    
-//    if (self.allowRotationType == AllowRotationMaskPortrait) {
-//        return UIInterfaceOrientationMaskPortrait;
-//    }else if (self.allowRotationType == AllowRotationMaskAllButUpsideDown) {
-//        return  UIInterfaceOrientationMaskAllButUpsideDown;
-//    }else {
-//        return UIInterfaceOrientationMaskLandscapeLeft | UIInterfaceOrientationMaskLandscapeRight;
-//    }
-//}
+- (UIInterfaceOrientationMask)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window {
+    
+    if (self.allowRotationType == AllowRotationMaskPortrait) {
+        return UIInterfaceOrientationMaskPortrait;
+    }else if (self.allowRotationType == AllowRotationMaskAllButUpsideDown) {
+        return  UIInterfaceOrientationMaskAllButUpsideDown;
+    }else {
+        return UIInterfaceOrientationMaskLandscapeLeft | UIInterfaceOrientationMaskLandscapeRight;
+    }
+}
 
 
 -(void)setupWindow{
@@ -70,20 +66,7 @@
     //背景色
     _window.backgroundColor = [UIColor whiteColor];
     
-    VideoListViewController *firstVC = [[VideoListViewController alloc] init];
-    firstVC.title = @"first";
-    PushListViewController *secondVC = [[PushListViewController alloc] init];
-    secondVC.title = @"second";
-    UITabBarController *rootVc = [[UITabBarController alloc] init];
-    
-    
-    UINavigationController *one = [[UINavigationController alloc]initWithRootViewController:firstVC];
-    
-    UINavigationController *two = [[UINavigationController alloc]initWithRootViewController:secondVC];
-    
-    [rootVc addChildViewController:one];
-    [rootVc addChildViewController:two];
-    
+    TabBarController *rootVc = [[TabBarController alloc] init];
     _window.rootViewController = rootVc;
 }
 

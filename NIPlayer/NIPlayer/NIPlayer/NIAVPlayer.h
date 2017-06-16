@@ -48,11 +48,13 @@ typedef void(^NIAVPlayerProgressCacheBlock)(CGFloat value);
 
 @property (nonatomic, assign) NIAVPlayerVideoGravity videoGravity;
 // 视频总长度
-@property (nonatomic, assign) NSTimeInterval    totalTime;
+@property (nonatomic, readonly, assign) NSTimeInterval    totalTime;
 // 当前进度
-@property (nonatomic, assign) NSTimeInterval    currentTime;
+@property (nonatomic, readonly, assign) NSTimeInterval    currentTime;
 // 缓存数据
-@property (nonatomic, assign) NSTimeInterval    loadRange;
+@property (nonatomic, readonly, assign) NSTimeInterval    loadRange;
+// 视频尺寸
+@property (nonatomic, readonly, assign) CGSize videoSize;
 
 @property (nonatomic, assign) BOOL isPlay;
 

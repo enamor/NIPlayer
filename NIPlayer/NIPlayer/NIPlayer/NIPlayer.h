@@ -9,8 +9,9 @@
 #import <UIKit/UIKit.h>
 
 @interface NIPlayer : UIView
++ (NIPlayer *_Nonnull)sharedPlayer;
 
-- (void)playWithUrl:(NSString *_Nonnull)url onView:(nonnull UIView *)view;
+- (void)playWithUrl:(NSString *_Nonnull)url onView:(UIView *_Nonnull)view;
 
 - (void)play;
 - (void)pause;

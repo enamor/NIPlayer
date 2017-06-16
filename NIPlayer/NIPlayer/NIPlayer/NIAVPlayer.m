@@ -17,6 +17,12 @@
 @property (nonatomic, strong) AVAssetImageGenerator *imageGenerator;    //用于获取帧图像
 
 
+@property (nonatomic, readwrite, assign) NSTimeInterval    totalTime;    //视频总长度
+@property (nonatomic, readwrite, assign) NSTimeInterval    currentTime;  //当前进度
+@property (nonatomic, readwrite, assign) NSTimeInterval    loadRange;    //缓存数据
+@property (nonatomic, readwrite, assign) CGSize            videoSize;    //视频尺寸
+
+
 @property (nonatomic ,strong) id    timeObserver;    //播放器观察者
 @property (nonatomic ,assign) BOOL  isSeeking;       //拖动进度条的时候停止刷新数据
 @property (nonatomic, assign) BOOL  isCanPlay;       //是否需要缓冲
@@ -128,10 +134,12 @@
 #pragma mark ------ Public
 #pragma 播放视频
 - (void)playWithUrl:(NSString *)strUrl {
+    if (!strUrl) {
+        NSAssert(1<0, @"视频URL为空");
+    }
     self.isCanPlay = NO;
 #warning 需要处理中文路径过会再处理
     NSURL *url;
-    strUrl = [strUrl lowercaseString];
     if ([strUrl hasPrefix:@"http://"] || [strUrl hasPrefix:@"https://"]) {
         url = [NSURL URLWithString:strUrl];
     } else { //本地视频 需要完整路径
@@ -215,7 +223,6 @@
     if (self.player) {
         //新视频重建播放器有利于内存更好的释放
         [self releasePlayer];
-        
     }
     self.urlAsset = [AVURLAsset assetWithURL:url];
     // 初始化playerItem
@@ -234,6 +241,25 @@
     //添加监听
     [self p_initObserver];
     
+    
+    //获取视频尺寸
+    [_urlAsset loadValuesAsynchronouslyForKeys:@[@"tracks"] completionHandler:^{
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (_urlAsset.playable) {
+                [self p_getVideoSize];
+            }
+        });
+    }];
+}
+
+//获取视频尺寸
+- (void)p_getVideoSize{
+    NSArray *array = self.urlAsset.tracks;
+    for (AVAssetTrack *track in array) {
+        if ([track.mediaType isEqualToString:AVMediaTypeVideo]) {
+            _videoSize = track.naturalSize;
+        }
+    }
 }
 
 

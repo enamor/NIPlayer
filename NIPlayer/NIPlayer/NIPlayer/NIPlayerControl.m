@@ -13,10 +13,11 @@
 #import "UIButton+Create.h"
 #import "UILabel+Create.h"
 #import "NSDate+NI_time.h"
+#import "UIImage+NI_Extension.h"
 
 @interface NIPlayerControl ()
-@property (nonatomic, strong) UIView *topBar;
-@property (nonatomic, strong) UIView *bottomBar;
+@property (nonatomic, strong) UIImageView *topBar;
+@property (nonatomic, strong) UIImageView *bottomBar;
 
 
 @property (nonatomic, strong) UILabel           *titleLabel;         //标题
@@ -133,17 +134,22 @@
 }
 
 - (void)p_initTopBar {
-    self.topBar = [[UIView alloc] init];
+    self.topBar = [[UIImageView alloc] init];
+    _topBar.userInteractionEnabled = YES;
+    _topBar.image = [UIImage resizedImageWithName:IMAGE_PATH(@"miniplayer_mask_top")];
     self.topBar.tag = 100;
-    self.topBar.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.4];
     [self addSubview:self.topBar];
+    [self.topBar mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.left.right.equalTo(self);
+        make.height.mas_equalTo(64);
+    }];
     
     //占位
     UIView *spaceView = [[UIView alloc] init];
     [self.topBar addSubview:spaceView];
     [spaceView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.left.right.equalTo(self.topBar);
-        make.height.mas_equalTo(20);
+        make.height.mas_equalTo(0);
     }];
     
     //导航view
@@ -166,6 +172,8 @@
     }];
     _fullBackBtn.hidden = YES;
     
+    
+    return;
     //小屏退出
     self.miniBackBtn = [UIButton buttonWithImage:IMAGE_PATH(@"fullplayer_icon_back")];
     [_miniBackBtn addTarget:self action:@selector(backAction:) forControlEvents:UIControlEventTouchUpInside];
@@ -173,6 +181,8 @@
     [_miniBackBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.edges.equalTo(_fullBackBtn);
     }];
+    
+    
     
     //满屏播放 ／ 比例播放
     UIButton *displayBtn = [UIButton buttonWithImage:IMAGE_PATH(@"fullplayer_icon_more")];
@@ -183,11 +193,6 @@
         make.centerY.equalTo(contentView);
         make.right.mas_equalTo(-8);
         make.width.mas_equalTo(28);
-    }];
-    
-    [self.topBar mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.left.right.equalTo(self);
-        make.height.mas_equalTo(64);
     }];
     
     
@@ -203,9 +208,14 @@
 }
 
 - (void)p_initBottomBar {
-    self.bottomBar = [[UIView alloc]init];
-    self.bottomBar.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.4];
+    self.bottomBar = [[UIImageView alloc]init];
+    _bottomBar.userInteractionEnabled = YES;
+    _bottomBar.image = [UIImage resizedImageWithName:IMAGE_PATH(@"miniplayer_mask_bottom")];
     [self addSubview:self.bottomBar];
+    [self.bottomBar mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.bottom.equalTo(self);
+        make.height.mas_equalTo(50);
+    }];
     
     //播放
     self.playButton = [UIButton buttonWithImage:IMAGE_PATH(@"miniplayer_bottom_pause") selectedImage:IMAGE_PATH(@"miniplayer_bottom_play")];
@@ -309,12 +319,6 @@
         make.left.equalTo(self.progressSlider.mas_right).offset(4);
         make.centerY.equalTo(self.bottomBar);
         make.width.mas_equalTo(60);
-    }];
-    
-    
-    [self.bottomBar mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.right.bottom.equalTo(self);
-        make.height.mas_equalTo(44);
     }];
 
 }
@@ -446,7 +450,6 @@
     if (_isFullScreen) {
         [self.playButton setImage:BUNDLE_IMAGE(@"fullplayer_icon_pause") selectedImage:BUNDLE_IMAGE(@"fullplayer_icon_play")];
         
-        
         [self.progressSlider mas_remakeConstraints:^(MASConstraintMaker *make) {
             make.centerY.equalTo(self.bottomBar);
             make.left.equalTo(self.playButton.mas_right).offset(100);
@@ -465,6 +468,8 @@
             make.height.mas_equalTo(30);
         }];
     }
+    [self updateConstraintsIfNeeded];
+    [self layoutIfNeeded];
 }
 
 - (void)setIsPlay:(BOOL)isPlay {
