@@ -18,6 +18,15 @@ description: 由于近期项目和视频相关的比较多，而项目中别人�
 [[NIPlayer sharedPlayer] playWithUrl:_url onView:playView];
 ~~~
 
+*状态栏旋转需要控制器中重写方法 且需要在info.Plist 添加 View controller-based status bar appearance 设置成No，默认为Yes*
+
+~~~objective-c
+
+- (BOOL)shouldAutorotate {
+    return NO;
+}
+~~~
+
 
 
 ~~~objective-c
