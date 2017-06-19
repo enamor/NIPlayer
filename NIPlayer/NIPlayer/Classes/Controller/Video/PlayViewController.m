@@ -24,10 +24,8 @@
     UIView *playView = [[UIView alloc] initWithFrame:CGRectMake(0, 64, self.view.frame.size.width, 245)];
     [self.view addSubview:playView];
     
-//    _player = [[NIPlayer alloc] init];
-//    [_player playWithUrl:_url onView:playView];
-    
-    [[NIPlayer sharedPlayer] playWithUrl:_url onView:playView];
+    _player = [[NIPlayer alloc] init];
+    [_player playWithUrl:_url onView:playView];
     
 }
 
@@ -37,7 +35,6 @@
 }
 
 - (void)dealloc {
-    [[NIPlayer sharedPlayer] releasePlayer];
 }
 
 - (BOOL)shouldAutorotate {
