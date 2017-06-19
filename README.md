@@ -18,9 +18,12 @@ description: 由于近期项目和视频相关的比较多，而项目中别人�
 ~~~objective-c
 //此次一句话即可实现播放 同时适配横竖屏、竖立的视频
 [[NIPlayer sharedPlayer] playWithUrl:_url onView:playView];
+
+//单例需要手动释放
+[[NIPlayer sharedPlayer] releasePlayer];
 ~~~
 
-* 普通模式
+* 普通模式（自动释放内存）
 
 ~~~objective-c
 _player = [[NIPlayer alloc] init];

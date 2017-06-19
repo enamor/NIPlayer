@@ -150,6 +150,7 @@
     if (_statusBlock) {
         _statusBlock(NIAVPlayerStatusLoading);
     }
+    
 }
 
 /**
@@ -198,7 +199,11 @@
 
 /** 销毁并释放内存 */
 - (void)releasePlayer {
+    
     [self.player pause];
+    [self.playerItem cancelPendingSeeks];
+    [self.playerItem.asset cancelLoading];
+    
     [self p_removeObserver];
     self.player = nil;
     self.playerItem = nil;
@@ -243,10 +248,11 @@
     
     
     //获取视频尺寸
+    __weak typeof(self) weakSelf = self;
     [_urlAsset loadValuesAsynchronouslyForKeys:@[@"tracks"] completionHandler:^{
         dispatch_async(dispatch_get_main_queue(), ^{
-            if (_urlAsset.playable) {
-                [self p_getVideoSize];
+            if (weakSelf.urlAsset.playable) {
+                [weakSelf p_getVideoSize];
             }
         });
     }];
@@ -261,6 +267,8 @@
         }
     }
 }
+
+
 
 
 /**

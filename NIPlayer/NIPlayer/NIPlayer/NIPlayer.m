@@ -32,7 +32,7 @@ typedef NS_ENUM(NSInteger, PanDirection){
 
 @property (nonatomic, strong) NIAVPlayer            *avPlayer;         //AVPlayer播放器
 @property (nonatomic, strong) NIPlayerControl       *playerControl;    //播放器控制UI
-@property (nonatomic, strong) UIView                *superPlayView;    //播放的view
+@property (nonatomic, weak)   UIView                *superPlayView;    //播放的view
 @property (nonatomic, assign) UIStatusBarStyle      barStyle;          //之前StatusBar样式
 
 @property (nonatomic, assign) BOOL                  isCanPlay;         //视频是否可以播放
@@ -49,13 +49,15 @@ typedef NS_ENUM(NSInteger, PanDirection){
 @property (nonatomic, strong) UISlider               *volumeSlider;    //系统音量控制
 
 @end
+
+static NIPlayer *player;
+static dispatch_once_t onceToken;
+
 @implementation NIPlayer
 
 //////////////////////////////////////////////////////////////////////////////
 #pragma mark ------ Lifecycle
 + (NIPlayer *)sharedPlayer {
-    static NIPlayer *player;
-    static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         player = [[NIPlayer alloc] init];
     });
@@ -89,7 +91,6 @@ typedef NS_ENUM(NSInteger, PanDirection){
             [self.getCurrentVC dismissViewControllerAnimated:YES completion:nil];
         } else {
             [self.getCurrentNavVC popViewControllerAnimated:YES];
-            //[self releasePlayer];
         }
     }
 }
@@ -109,8 +110,9 @@ typedef NS_ENUM(NSInteger, PanDirection){
 }
 - (void)playerControl:(UIView *)control seekAction:(UISlider *)sender {
     NSTimeInterval seekTime = sender.value * self.avPlayer.totalTime;
+    __weak typeof(self) weakSelf = self;
     [self.avPlayer seekTo:seekTime completionHandler:^{
-        self.playerControl.isFinishedSeek = YES;
+        weakSelf.playerControl.isFinishedSeek = YES;
     }];
 }
 
@@ -120,9 +122,10 @@ typedef NS_ENUM(NSInteger, PanDirection){
     if (!_isFullScreen) {
         [self.playerControl seekTo:seekTime totalTime:totalTime];
     } else {
+        __weak typeof(self) weakSelf = self;
         [self.playerControl seekPipTo:sender.value * self.avPlayer.totalTime totalTime:self.avPlayer.totalTime];
         [self.avPlayer getCImage:sender.value * self.avPlayer.totalTime block:^(UIImage *image) {
-            [self.playerControl seekToImage:image];
+            [weakSelf.playerControl seekToImage:image];
         }];
         [self.avPlayer startToSeek];
     }
@@ -161,6 +164,9 @@ typedef NS_ENUM(NSInteger, PanDirection){
 - (void)releasePlayer {
     [self removeFromSuperview];
     [self.avPlayer releasePlayer];
+    onceToken = 0;
+    player = nil;
+    
 }
 
 #pragma mark ------ IBAction
@@ -187,6 +193,7 @@ typedef NS_ENUM(NSInteger, PanDirection){
     [self p_initNotificatObserver];
    
 }
+
 
 - (void)p_removeObserver {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
@@ -415,6 +422,7 @@ typedef NS_ENUM(NSInteger, PanDirection){
         [UIView animateWithDuration:0.3f animations:^{
             [self setTransform:tranform];
         }];
+        
         [self mas_remakeConstraints:^(MASConstraintMaker *make) {
             make.edges.equalTo(self.superPlayView);
         }];
@@ -509,10 +517,11 @@ typedef NS_ENUM(NSInteger, PanDirection){
         case UIGestureRecognizerStateEnded:{ // 移动停止
             // 移动结束也需要判断垂直或者平移
             // 比如水平移动结束时，要快进到指定位置，如果这里没有判断，当我们调节音量完之后，会出现屏幕跳动的bug
+            __weak typeof(self) weakSelf = self;
             switch (self.panDirection) {
                 case PanDirectionHorizontalMoved:{
                     [self.avPlayer seekTo:self.seekSumTime completionHandler:^{
-                        self.playerControl.isFinishedSeek = YES;
+                        weakSelf.playerControl.isFinishedSeek = YES;
                     }];
                     self.seekSumTime = 0;
                     break;
@@ -570,9 +579,10 @@ typedef NS_ENUM(NSInteger, PanDirection){
     if (value < 0) { style = NO; }
     if (value == 0) { return; }
     
+    __weak typeof(self) weakSelf = self;
     [self.playerControl seekPipTo:self.seekSumTime totalTime:totalSeconds];
     [self.avPlayer getCImage:self.seekSumTime block:^(UIImage *image) {
-        [self.playerControl seekToImage:image];
+        [weakSelf.playerControl seekToImage:image];
     }];
     [self.avPlayer startToSeek];
     
@@ -598,9 +608,7 @@ typedef NS_ENUM(NSInteger, PanDirection){
 
 - (void)setSuperPlayView:(UIView *)superPlayView {
     _superPlayView = superPlayView;
-    [self mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.edges.equalTo(self.superPlayView);
-    }];
+    self.frame = _superPlayView.bounds;
 }
 
 - (void)setIsFullScreen:(BOOL)isFullScreen {
