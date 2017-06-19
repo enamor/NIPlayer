@@ -13,10 +13,25 @@ description: 由于近期项目和视频相关的比较多，而项目中别人�
 
 *播放器需要传入一view 自动适应view的尺寸 为了简化全屏模式统一使用屏幕旋转的方式进行适配全屏、目前控制层UI未做详细拆分，后期将逐步优化、只为做最简单的视频播放器*
 
+* 单利模式
+
 ~~~objective-c
 //此次一句话即可实现播放 同时适配横竖屏、竖立的视频
 [[NIPlayer sharedPlayer] playWithUrl:_url onView:playView];
 ~~~
+
+* 普通模式
+
+~~~objective-c
+_player = [[NIPlayer alloc] init];
+[_player playWithUrl:_url onView:playView];
+~~~
+
+* 第三方法依赖
+
+布局：Masonry
+
+
 
 *状态栏旋转需要控制器中重写方法 且需要在info.Plist 添加 View controller-based status bar appearance 设置成No，默认为Yes*
 
