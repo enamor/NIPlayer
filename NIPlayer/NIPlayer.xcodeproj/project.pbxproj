@@ -19,6 +19,7 @@
 		B80AAA721EF3D08900A94280 /* VideoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B80AAA711EF3D08900A94280 /* VideoViewController.m */; };
 		B80AAA761EF3D2D300A94280 /* PlayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B80AAA751EF3D2D300A94280 /* PlayViewController.m */; };
 		B80AAA781EF3D56E00A94280 /* local_one.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = B80AAA771EF3D56E00A94280 /* local_one.mp4 */; };
+		B898CB6F1EF7E7DC00D29D66 /* AppDelegate+NI_Extension.m in Sources */ = {isa = PBXBuildFile; fileRef = B898CB6E1EF7E7DC00D29D66 /* AppDelegate+NI_Extension.m */; };
 		B8C48DA71EE962920066BCC5 /* NIBrightnessView.m in Sources */ = {isa = PBXBuildFile; fileRef = B8C48DA61EE962920066BCC5 /* NIBrightnessView.m */; };
 		B8CAD2BF1EE118FB00E99BD1 /* NIPlayer.bundle in Resources */ = {isa = PBXBuildFile; fileRef = B8CAD2BE1EE118FB00E99BD1 /* NIPlayer.bundle */; };
 		B8F1B5BC1EE07470004A1E26 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B8F1B5BB1EE07470004A1E26 /* main.m */; };
@@ -69,6 +70,8 @@
 		B80AAA741EF3D2D300A94280 /* PlayViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayViewController.h; sourceTree = "<group>"; };
 		B80AAA751EF3D2D300A94280 /* PlayViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlayViewController.m; sourceTree = "<group>"; };
 		B80AAA771EF3D56E00A94280 /* local_one.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = local_one.mp4; sourceTree = "<group>"; };
+		B898CB6D1EF7E7DC00D29D66 /* AppDelegate+NI_Extension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "AppDelegate+NI_Extension.h"; sourceTree = "<group>"; };
+		B898CB6E1EF7E7DC00D29D66 /* AppDelegate+NI_Extension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "AppDelegate+NI_Extension.m"; sourceTree = "<group>"; };
 		B8C48DA51EE962920066BCC5 /* NIBrightnessView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIBrightnessView.h; sourceTree = "<group>"; };
 		B8C48DA61EE962920066BCC5 /* NIBrightnessView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIBrightnessView.m; sourceTree = "<group>"; };
 		B8CAD2BE1EE118FB00E99BD1 /* NIPlayer.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = NIPlayer.bundle; sourceTree = "<group>"; };
@@ -409,6 +412,8 @@
 				B8F6AA821EF455EE00FEA205 /* UITabBarController+NI_allRote.m */,
 				B8F6AA831EF455EE00FEA205 /* UIView+NI_superVC.h */,
 				B8F6AA841EF455EE00FEA205 /* UIView+NI_superVC.m */,
+				B898CB6D1EF7E7DC00D29D66 /* AppDelegate+NI_Extension.h */,
+				B898CB6E1EF7E7DC00D29D66 /* AppDelegate+NI_Extension.m */,
 			);
 			path = Category;
 			sourceTree = "<group>";
@@ -563,6 +568,7 @@
 				B80AAA721EF3D08900A94280 /* VideoViewController.m in Sources */,
 				B8F6AA8A1EF455EE00FEA205 /* UITabBarController+NI_allRote.m in Sources */,
 				B8F6AA871EF455EE00FEA205 /* UIImage+NI_Extension.m in Sources */,
+				B898CB6F1EF7E7DC00D29D66 /* AppDelegate+NI_Extension.m in Sources */,
 				B8F6AA8B1EF455EE00FEA205 /* UIView+NI_superVC.m in Sources */,
 				B8F1B5E61EE074B8004A1E26 /* NIAVPlayer.m in Sources */,
 				B80AAA761EF3D2D300A94280 /* PlayViewController.m in Sources */,

@@ -13,6 +13,7 @@
 
 #import "UINavigationController+NI_allowRote.h"
 #import "UITabBarController+NI_allRote.h"
+#import "AppDelegate+NI_Extension.h"
 #import "UIView+NI_superVC.h"
 
 #import "NIAVPlayer.h"

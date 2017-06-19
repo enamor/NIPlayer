@@ -8,16 +8,13 @@
 
 #import <UIKit/UIKit.h>
 
-typedef NS_ENUM(NSInteger , AllowRotationType){
-    AllowRotationMaskPortrait = 0,          //竖屏
-    AllowRotationMaskAllButUpsideDown,      //所有
-    AllowRotationMaskLandscapeLeftOrRight,  //左右横屏
-};
+
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
-@property (nonatomic,assign) AllowRotationType allowRotationType;
+
+
 
 @end
 

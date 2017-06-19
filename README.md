@@ -34,8 +34,6 @@ _player = [[NIPlayer alloc] init];
 
 布局：Masonry
 
-
-
 *状态栏旋转需要控制器中重写方法 且需要在info.Plist 添加 View controller-based status bar appearance 设置成No，默认为Yes*
 
 ~~~objective-c
@@ -66,8 +64,42 @@ typedef NS_ENUM(NSInteger, NIAVPlayerStatus) {
 
 
 
+**温馨提示:**
+
+1、为了处理视频全屏模式后台进入前台可以平滑的进入（无启动页）对AppDelegate 添加了分类处理 重写了以下方法
+
+~~~objective-c
+//一般状态此处用户无需处理
+- (UIInterfaceOrientationMask)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window {
+    
+    if (self.allowRotationType == AllowRotationMaskPortrait) {
+        return UIInterfaceOrientationMaskPortrait;
+    }else if (self.allowRotationType == AllowRotationMaskAllButUpsideDown) {
+        return  UIInterfaceOrientationMaskAllButUpsideDown;
+    }else {
+        return UIInterfaceOrientationMaskLandscapeLeft | UIInterfaceOrientationMaskLandscapeRight;
+    }
+}
+~~~
+
+2、APP支持方向设置为竖屏即可
+
+![](https://raw.githubusercontent.com/enamor/ScreenImage/master/NIPlayer/show-waring.png)
+
+
+
+
+
 **预览：**
 ![](https://raw.githubusercontent.com/enamor/ScreenImage/master/NIPlayer/show-how1.PNG)
 ![](https://raw.githubusercontent.com/enamor/ScreenImage/master/NIPlayer/show-how3.PNG)
 ![](https://raw.githubusercontent.com/enamor/ScreenImage/master/NIPlayer/show-how4.PNG)
+
+
+
+
+
+**QQ交流群：518557977**
+
+**博客地址：http://oxy.pub**
 
