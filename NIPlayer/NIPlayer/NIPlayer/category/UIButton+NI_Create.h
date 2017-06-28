@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface UIButton (Create)
+@interface UIButton (NI_Create)
 + (UIButton *)buttonWithTitle:(NSString *)title
                fontSize:(CGFloat)fontSize
               textColor:(UIColor *)color;

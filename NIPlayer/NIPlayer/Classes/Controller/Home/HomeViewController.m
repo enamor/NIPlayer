@@ -51,7 +51,6 @@ static NSString *const reuseIdentifier = @"homeCell";
             NSArray *data = [HomeVideoModel mj_objectArrayWithKeyValuesArray:array];
             [weakSelf.dataSource addObjectsFromArray:data];
             [weakSelf.tableView reloadData];
-            
             [weakSelf.tableView.mj_header endRefreshing];
         } failure:^(id error) {
             [weakSelf.tableView.mj_header endRefreshing];

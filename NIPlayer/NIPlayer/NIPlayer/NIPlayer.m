@@ -167,7 +167,6 @@ static dispatch_once_t onceToken;
     [self.avPlayer releasePlayer];
     onceToken = 0;
     player = nil;
-    
 }
 
 #pragma mark ------ IBAction
@@ -397,11 +396,11 @@ static dispatch_once_t onceToken;
         [UIView animateWithDuration:0.3f animations:^{
             [self setTransform:tranform];
         }];
+        
         [self mas_remakeConstraints:^(MASConstraintMaker *make) {
-            make.left.mas_equalTo((height - width) / 2);
-            make.top.mas_equalTo((width - height) / 2);
-            make.width.mas_equalTo(width);
-            make.height.mas_equalTo(height);
+            make.width.equalTo(@(width));
+            make.height.equalTo(@(height));
+            make.center.equalTo([UIApplication sharedApplication].keyWindow);
         }];
         [self updateConstraintsIfNeeded];
         [self layoutIfNeeded];
@@ -609,7 +608,9 @@ static dispatch_once_t onceToken;
 
 - (void)setSuperPlayView:(UIView *)superPlayView {
     _superPlayView = superPlayView;
-    self.frame = _superPlayView.bounds;
+    [self mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.edges.equalTo(_superPlayView);
+    }];
 }
 
 - (void)setIsFullScreen:(BOOL)isFullScreen {

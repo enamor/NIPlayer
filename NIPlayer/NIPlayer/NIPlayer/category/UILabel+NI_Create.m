@@ -6,9 +6,9 @@
 //  Copyright © 2017年 zhouen. All rights reserved.
 //
 
-#import "UILabel+Create.h"
+#import "UILabel+NI_Create.h"
 
-@implementation UILabel (Create)
+@implementation UILabel (NI_Create)
 + (UILabel *)labelWithText:(NSString *)text fontSize:(CGFloat)fontSize textColor:(UIColor *)textColor {
     UILabel *label = [[UILabel alloc] init];
     label.textColor = textColor;

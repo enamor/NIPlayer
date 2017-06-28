@@ -10,8 +10,8 @@
 #import "NIPlayerMacro.h"
 #import "NIPlayerSlider.h"
 #import <Masonry.h>
-#import "UIButton+Create.h"
-#import "UILabel+Create.h"
+#import "UIButton+NI_Create.h"
+#import "UILabel+NI_Create.h"
 #import "NSDate+NI_time.h"
 #import "UIImage+NI_Extension.h"
 

@@ -40,9 +40,9 @@
 		B8F6AA741EF44C8900FEA205 /* tabbar_video@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B8F6AA701EF44C8900FEA205 /* tabbar_video@2x.png */; };
 		B8F6AA751EF44C8900FEA205 /* tabbar_video@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = B8F6AA711EF44C8900FEA205 /* tabbar_video@3x.png */; };
 		B8F6AA851EF455EE00FEA205 /* NSDate+NI_time.m in Sources */ = {isa = PBXBuildFile; fileRef = B8F6AA781EF455EE00FEA205 /* NSDate+NI_time.m */; };
-		B8F6AA861EF455EE00FEA205 /* UIButton+Create.m in Sources */ = {isa = PBXBuildFile; fileRef = B8F6AA7A1EF455EE00FEA205 /* UIButton+Create.m */; };
+		B8F6AA861EF455EE00FEA205 /* UIButton+NI_Create.m in Sources */ = {isa = PBXBuildFile; fileRef = B8F6AA7A1EF455EE00FEA205 /* UIButton+NI_Create.m */; };
 		B8F6AA871EF455EE00FEA205 /* UIImage+NI_Extension.m in Sources */ = {isa = PBXBuildFile; fileRef = B8F6AA7C1EF455EE00FEA205 /* UIImage+NI_Extension.m */; };
-		B8F6AA881EF455EE00FEA205 /* UILabel+Create.m in Sources */ = {isa = PBXBuildFile; fileRef = B8F6AA7E1EF455EE00FEA205 /* UILabel+Create.m */; };
+		B8F6AA881EF455EE00FEA205 /* UILabel+NI_Create.m in Sources */ = {isa = PBXBuildFile; fileRef = B8F6AA7E1EF455EE00FEA205 /* UILabel+NI_Create.m */; };
 		B8F6AA891EF455EE00FEA205 /* UINavigationController+NI_allowRote.m in Sources */ = {isa = PBXBuildFile; fileRef = B8F6AA801EF455EE00FEA205 /* UINavigationController+NI_allowRote.m */; };
 		B8F6AA8A1EF455EE00FEA205 /* UITabBarController+NI_allRote.m in Sources */ = {isa = PBXBuildFile; fileRef = B8F6AA821EF455EE00FEA205 /* UITabBarController+NI_allRote.m */; };
 		B8F6AA8B1EF455EE00FEA205 /* UIView+NI_superVC.m in Sources */ = {isa = PBXBuildFile; fileRef = B8F6AA841EF455EE00FEA205 /* UIView+NI_superVC.m */; };
@@ -102,12 +102,12 @@
 		B8F6AA711EF44C8900FEA205 /* tabbar_video@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tabbar_video@3x.png"; sourceTree = "<group>"; };
 		B8F6AA771EF455EE00FEA205 /* NSDate+NI_time.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+NI_time.h"; sourceTree = "<group>"; };
 		B8F6AA781EF455EE00FEA205 /* NSDate+NI_time.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+NI_time.m"; sourceTree = "<group>"; };
-		B8F6AA791EF455EE00FEA205 /* UIButton+Create.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIButton+Create.h"; sourceTree = "<group>"; };
-		B8F6AA7A1EF455EE00FEA205 /* UIButton+Create.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIButton+Create.m"; sourceTree = "<group>"; };
+		B8F6AA791EF455EE00FEA205 /* UIButton+NI_Create.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIButton+NI_Create.h"; sourceTree = "<group>"; };
+		B8F6AA7A1EF455EE00FEA205 /* UIButton+NI_Create.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIButton+NI_Create.m"; sourceTree = "<group>"; };
 		B8F6AA7B1EF455EE00FEA205 /* UIImage+NI_Extension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+NI_Extension.h"; sourceTree = "<group>"; };
 		B8F6AA7C1EF455EE00FEA205 /* UIImage+NI_Extension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+NI_Extension.m"; sourceTree = "<group>"; };
-		B8F6AA7D1EF455EE00FEA205 /* UILabel+Create.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UILabel+Create.h"; sourceTree = "<group>"; };
-		B8F6AA7E1EF455EE00FEA205 /* UILabel+Create.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UILabel+Create.m"; sourceTree = "<group>"; };
+		B8F6AA7D1EF455EE00FEA205 /* UILabel+NI_Create.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UILabel+NI_Create.h"; sourceTree = "<group>"; };
+		B8F6AA7E1EF455EE00FEA205 /* UILabel+NI_Create.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UILabel+NI_Create.m"; sourceTree = "<group>"; };
 		B8F6AA7F1EF455EE00FEA205 /* UINavigationController+NI_allowRote.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UINavigationController+NI_allowRote.h"; sourceTree = "<group>"; };
 		B8F6AA801EF455EE00FEA205 /* UINavigationController+NI_allowRote.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UINavigationController+NI_allowRote.m"; sourceTree = "<group>"; };
 		B8F6AA811EF455EE00FEA205 /* UITabBarController+NI_allRote.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITabBarController+NI_allRote.h"; sourceTree = "<group>"; };
@@ -400,12 +400,12 @@
 			children = (
 				B8F6AA771EF455EE00FEA205 /* NSDate+NI_time.h */,
 				B8F6AA781EF455EE00FEA205 /* NSDate+NI_time.m */,
-				B8F6AA791EF455EE00FEA205 /* UIButton+Create.h */,
-				B8F6AA7A1EF455EE00FEA205 /* UIButton+Create.m */,
+				B8F6AA791EF455EE00FEA205 /* UIButton+NI_Create.h */,
+				B8F6AA7A1EF455EE00FEA205 /* UIButton+NI_Create.m */,
 				B8F6AA7B1EF455EE00FEA205 /* UIImage+NI_Extension.h */,
 				B8F6AA7C1EF455EE00FEA205 /* UIImage+NI_Extension.m */,
-				B8F6AA7D1EF455EE00FEA205 /* UILabel+Create.h */,
-				B8F6AA7E1EF455EE00FEA205 /* UILabel+Create.m */,
+				B8F6AA7D1EF455EE00FEA205 /* UILabel+NI_Create.h */,
+				B8F6AA7E1EF455EE00FEA205 /* UILabel+NI_Create.m */,
 				B8F6AA7F1EF455EE00FEA205 /* UINavigationController+NI_allowRote.h */,
 				B8F6AA801EF455EE00FEA205 /* UINavigationController+NI_allowRote.m */,
 				B8F6AA811EF455EE00FEA205 /* UITabBarController+NI_allRote.h */,
@@ -561,7 +561,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B8F6AA861EF455EE00FEA205 /* UIButton+Create.m in Sources */,
+				B8F6AA861EF455EE00FEA205 /* UIButton+NI_Create.m in Sources */,
 				B80AAA6D1EF38F5000A94280 /* HomeVideoModel.m in Sources */,
 				B80AAA521EF3860200A94280 /* TabBarController.m in Sources */,
 				B8F1B5BF1EE07470004A1E26 /* AppDelegate.m in Sources */,
@@ -584,7 +584,7 @@
 				B8F1B5E91EE074B8004A1E26 /* NIPlayerSlider.m in Sources */,
 				B8C48DA71EE962920066BCC5 /* NIBrightnessView.m in Sources */,
 				B80AAA5E1EF388EA00A94280 /* HomeViewController.m in Sources */,
-				B8F6AA881EF455EE00FEA205 /* UILabel+Create.m in Sources */,
+				B8F6AA881EF455EE00FEA205 /* UILabel+NI_Create.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

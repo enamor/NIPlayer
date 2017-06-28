@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface UILabel (Create)
+@interface UILabel (NI_Create)
 + (UILabel *)labelWithFontSize:(CGFloat)fontSize
                       textColor:(UIColor *)textColor ;
 

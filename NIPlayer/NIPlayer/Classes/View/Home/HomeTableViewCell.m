@@ -7,8 +7,8 @@
 //
 
 #import "HomeTableViewCell.h"
-#import "UILabel+Create.h"
-#import "UIButton+Create.h"
+#import "UILabel+NI_Create.h"
+#import "UIButton+NI_Create.h"
 #import "HomeVideoModel.h"
 #import <SDWebImage/UIImageView+WebCache.h>
 @interface HomeTableViewCell ()

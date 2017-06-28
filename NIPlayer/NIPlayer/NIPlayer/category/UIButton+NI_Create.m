@@ -6,9 +6,9 @@
 //  Copyright © 2017年 zhouen. All rights reserved.
 //
 
-#import "UIButton+Create.h"
+#import "UIButton+NI_Create.h"
 
-@implementation UIButton (Create)
+@implementation UIButton (NI_Create)
 + (UIButton *)buttonWithTitle:(NSString *)title
                fontSize:(CGFloat)fontSize
               textColor:(UIColor *)color {
@@ -30,7 +30,7 @@
     UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
     [btn setTitle:title forState:UIControlStateNormal];
     btn.titleLabel.font = [UIFont systemFontOfSize:fontSize];
-    btn.titleLabel.textColor = color;
+    [btn setTitleColor:color forState:UIControlStateNormal];
     [btn setImage:[UIImage imageNamed:img] forState:UIControlStateNormal];
     [btn setImage:[UIImage imageNamed:selImg] forState:UIControlStateSelected];
     [btn sizeToFit];
