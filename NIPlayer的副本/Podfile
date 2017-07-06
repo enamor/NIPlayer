@@ -1,0 +1,11 @@
+platform :ios, '7.0'
+
+target 'NIPlayer' do
+pod 'Masonry'
+pod 'MJRefresh'
+pod 'SDWebImage', '~>3.7'
+pod 'MJExtension'
+pod 'AFNetworking', '~> 3.0'
+
+end
+
